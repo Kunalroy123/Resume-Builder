@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@angular/animations": "^20.2.3",
+    "@angular/cdk": "^20.2.1",
+    "@angular/common": "^20.2.3",
+    "@angular/forms": "^20.2.3",
+    "@angular/material": "^20.2.1",
+    "@apollo/client": "^3.14.0",
+    "apollo-angular": "^11.0.0",
+    "graphql": "^16.11.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12"
+  }
+}
