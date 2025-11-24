@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"resume-builder-backend/ent/achievement"
 	"resume-builder-backend/ent/certification"
-	"resume-builder-backend/ent/course"
 	"resume-builder-backend/ent/education"
 	"resume-builder-backend/ent/experience"
 	"resume-builder-backend/ent/headercontactinfo"
@@ -87,7 +86,6 @@ func checkColumn(t, c string) error {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
 			achievement.Table:         achievement.ValidColumn,
 			certification.Table:       certification.ValidColumn,
-			course.Table:              course.ValidColumn,
 			education.Table:           education.ValidColumn,
 			experience.Table:          experience.ValidColumn,
 			headercontactinfo.Table:   headercontactinfo.ValidColumn,
