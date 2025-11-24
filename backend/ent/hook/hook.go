@@ -32,18 +32,6 @@ func (f CertificationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Valu
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CertificationMutation", m)
 }
 
-// The CourseFunc type is an adapter to allow the use of ordinary
-// function as Course mutator.
-type CourseFunc func(context.Context, *ent.CourseMutation) (ent.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f CourseFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.CourseMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.CourseMutation", m)
-}
-
 // The EducationFunc type is an adapter to allow the use of ordinary
 // function as Education mutator.
 type EducationFunc func(context.Context, *ent.EducationMutation) (ent.Value, error)

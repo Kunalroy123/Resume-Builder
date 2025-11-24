@@ -16,8 +16,6 @@ type Tx struct {
 	Achievement *AchievementClient
 	// Certification is the client for interacting with the Certification builders.
 	Certification *CertificationClient
-	// Course is the client for interacting with the Course builders.
-	Course *CourseClient
 	// Education is the client for interacting with the Education builders.
 	Education *EducationClient
 	// Experience is the client for interacting with the Experience builders.
@@ -171,7 +169,6 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.Achievement = NewAchievementClient(tx.config)
 	tx.Certification = NewCertificationClient(tx.config)
-	tx.Course = NewCourseClient(tx.config)
 	tx.Education = NewEducationClient(tx.config)
 	tx.Experience = NewExperienceClient(tx.config)
 	tx.HeaderContactInfo = NewHeaderContactInfoClient(tx.config)
