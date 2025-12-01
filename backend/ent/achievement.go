@@ -5,18 +5,59 @@ package ent
 import (
 	"fmt"
 	"resume-builder-backend/ent/achievement"
+	"resume-builder-backend/ent/resume"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Achievement is the model entity for the Achievement schema.
 type Achievement struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID uuid.UUID `json:"id,omitempty"`
+	// Discription holds the value of the "discription" field.
+	Discription string `json:"discription,omitempty"`
+	// DateAchieved holds the value of the "dateAchieved" field.
+	DateAchieved *time.Time `json:"dateAchieved,omitempty"`
+	// IssuingOrganization holds the value of the "issuingOrganization" field.
+	IssuingOrganization string `json:"issuingOrganization,omitempty"`
+	// AchievementType holds the value of the "achievementType" field.
+	AchievementType achievement.AchievementType `json:"achievementType,omitempty"`
+	// AchievementUrl holds the value of the "achievementUrl" field.
+	AchievementUrl string `json:"achievementUrl,omitempty"`
+	// ImpactMetrics holds the value of the "impactMetrics" field.
+	ImpactMetrics string `json:"impactMetrics,omitempty"`
+	// OrderIndex holds the value of the "orderIndex" field.
+	OrderIndex int `json:"orderIndex,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the AchievementQuery when eager-loading is set.
+	Edges               AchievementEdges `json:"edges"`
+	resume_achievements *uuid.UUID
+	selectValues        sql.SelectValues
+}
+
+// AchievementEdges holds the relations/edges for other nodes in the graph.
+type AchievementEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AchievementEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +65,16 @@ func (*Achievement) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case achievement.FieldID:
+		case achievement.FieldOrderIndex:
 			values[i] = new(sql.NullInt64)
+		case achievement.FieldDiscription, achievement.FieldIssuingOrganization, achievement.FieldAchievementType, achievement.FieldAchievementUrl, achievement.FieldImpactMetrics:
+			values[i] = new(sql.NullString)
+		case achievement.FieldDateAchieved:
+			values[i] = new(sql.NullTime)
+		case achievement.FieldID:
+			values[i] = new(uuid.UUID)
+		case achievement.ForeignKeys[0]: // resume_achievements
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +91,61 @@ func (_m *Achievement) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case achievement.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case achievement.FieldDiscription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field discription", values[i])
+			} else if value.Valid {
+				_m.Discription = value.String
+			}
+		case achievement.FieldDateAchieved:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field dateAchieved", values[i])
+			} else if value.Valid {
+				_m.DateAchieved = new(time.Time)
+				*_m.DateAchieved = value.Time
+			}
+		case achievement.FieldIssuingOrganization:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field issuingOrganization", values[i])
+			} else if value.Valid {
+				_m.IssuingOrganization = value.String
+			}
+		case achievement.FieldAchievementType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field achievementType", values[i])
+			} else if value.Valid {
+				_m.AchievementType = achievement.AchievementType(value.String)
+			}
+		case achievement.FieldAchievementUrl:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field achievementUrl", values[i])
+			} else if value.Valid {
+				_m.AchievementUrl = value.String
+			}
+		case achievement.FieldImpactMetrics:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field impactMetrics", values[i])
+			} else if value.Valid {
+				_m.ImpactMetrics = value.String
+			}
+		case achievement.FieldOrderIndex:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field orderIndex", values[i])
+			} else if value.Valid {
+				_m.OrderIndex = int(value.Int64)
+			}
+		case achievement.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field resume_achievements", values[i])
+			} else if value.Valid {
+				_m.resume_achievements = new(uuid.UUID)
+				*_m.resume_achievements = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +157,11 @@ func (_m *Achievement) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Achievement) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the Achievement entity.
+func (_m *Achievement) QueryResume() *ResumeQuery {
+	return NewAchievementClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this Achievement.
@@ -82,7 +186,29 @@ func (_m *Achievement) Unwrap() *Achievement {
 func (_m *Achievement) String() string {
 	var builder strings.Builder
 	builder.WriteString("Achievement(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("discription=")
+	builder.WriteString(_m.Discription)
+	builder.WriteString(", ")
+	if v := _m.DateAchieved; v != nil {
+		builder.WriteString("dateAchieved=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("issuingOrganization=")
+	builder.WriteString(_m.IssuingOrganization)
+	builder.WriteString(", ")
+	builder.WriteString("achievementType=")
+	builder.WriteString(fmt.Sprintf("%v", _m.AchievementType))
+	builder.WriteString(", ")
+	builder.WriteString("achievementUrl=")
+	builder.WriteString(_m.AchievementUrl)
+	builder.WriteString(", ")
+	builder.WriteString("impactMetrics=")
+	builder.WriteString(_m.ImpactMetrics)
+	builder.WriteString(", ")
+	builder.WriteString("orderIndex=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OrderIndex))
 	builder.WriteByte(')')
 	return builder.String()
 }

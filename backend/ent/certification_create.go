@@ -4,11 +4,15 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"resume-builder-backend/ent/certification"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // CertificationCreate is the builder for creating a Certification entity.
@@ -18,6 +22,143 @@ type CertificationCreate struct {
 	hooks    []Hook
 }
 
+// SetName sets the "name" field.
+func (_c *CertificationCreate) SetName(v string) *CertificationCreate {
+	_c.mutation.SetName(v)
+	return _c
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableName(v *string) *CertificationCreate {
+	if v != nil {
+		_c.SetName(*v)
+	}
+	return _c
+}
+
+// SetIssuingOrganization sets the "issuingOrganization" field.
+func (_c *CertificationCreate) SetIssuingOrganization(v string) *CertificationCreate {
+	_c.mutation.SetIssuingOrganization(v)
+	return _c
+}
+
+// SetNillableIssuingOrganization sets the "issuingOrganization" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableIssuingOrganization(v *string) *CertificationCreate {
+	if v != nil {
+		_c.SetIssuingOrganization(*v)
+	}
+	return _c
+}
+
+// SetIssueDate sets the "issueDate" field.
+func (_c *CertificationCreate) SetIssueDate(v time.Time) *CertificationCreate {
+	_c.mutation.SetIssueDate(v)
+	return _c
+}
+
+// SetNillableIssueDate sets the "issueDate" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableIssueDate(v *time.Time) *CertificationCreate {
+	if v != nil {
+		_c.SetIssueDate(*v)
+	}
+	return _c
+}
+
+// SetExpiryDate sets the "expiryDate" field.
+func (_c *CertificationCreate) SetExpiryDate(v time.Time) *CertificationCreate {
+	_c.mutation.SetExpiryDate(v)
+	return _c
+}
+
+// SetNillableExpiryDate sets the "expiryDate" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableExpiryDate(v *time.Time) *CertificationCreate {
+	if v != nil {
+		_c.SetExpiryDate(*v)
+	}
+	return _c
+}
+
+// SetCredentialId sets the "credentialId" field.
+func (_c *CertificationCreate) SetCredentialId(v string) *CertificationCreate {
+	_c.mutation.SetCredentialId(v)
+	return _c
+}
+
+// SetNillableCredentialId sets the "credentialId" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableCredentialId(v *string) *CertificationCreate {
+	if v != nil {
+		_c.SetCredentialId(*v)
+	}
+	return _c
+}
+
+// SetCredentialUrl sets the "credentialUrl" field.
+func (_c *CertificationCreate) SetCredentialUrl(v string) *CertificationCreate {
+	_c.mutation.SetCredentialUrl(v)
+	return _c
+}
+
+// SetNillableCredentialUrl sets the "credentialUrl" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableCredentialUrl(v *string) *CertificationCreate {
+	if v != nil {
+		_c.SetCredentialUrl(*v)
+	}
+	return _c
+}
+
+// SetDescription sets the "description" field.
+func (_c *CertificationCreate) SetDescription(v string) *CertificationCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableDescription(v *string) *CertificationCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
+	return _c
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_c *CertificationCreate) SetOrderIndex(v int) *CertificationCreate {
+	_c.mutation.SetOrderIndex(v)
+	return _c
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableOrderIndex(v *int) *CertificationCreate {
+	if v != nil {
+		_c.SetOrderIndex(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *CertificationCreate) SetID(v uuid.UUID) *CertificationCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *CertificationCreate) SetNillableID(v *uuid.UUID) *CertificationCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *CertificationCreate) SetResumeID(id uuid.UUID) *CertificationCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *CertificationCreate) SetResume(v *Resume) *CertificationCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the CertificationMutation object of the builder.
 func (_c *CertificationCreate) Mutation() *CertificationMutation {
 	return _c.mutation
@@ -25,6 +166,7 @@ func (_c *CertificationCreate) Mutation() *CertificationMutation {
 
 // Save creates the Certification in the database.
 func (_c *CertificationCreate) Save(ctx context.Context) (*Certification, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +192,26 @@ func (_c *CertificationCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *CertificationCreate) defaults() {
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		v := certification.DefaultOrderIndex
+		_c.mutation.SetOrderIndex(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := certification.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *CertificationCreate) check() error {
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		return &ValidationError{Name: "orderIndex", err: errors.New(`ent: missing required field "Certification.orderIndex"`)}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "Certification.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +226,13 @@ func (_c *CertificationCreate) sqlSave(ctx context.Context) (*Certification, err
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +241,61 @@ func (_c *CertificationCreate) sqlSave(ctx context.Context) (*Certification, err
 func (_c *CertificationCreate) createSpec() (*Certification, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Certification{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(certification.Table, sqlgraph.NewFieldSpec(certification.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(certification.Table, sqlgraph.NewFieldSpec(certification.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Name(); ok {
+		_spec.SetField(certification.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
+	if value, ok := _c.mutation.IssuingOrganization(); ok {
+		_spec.SetField(certification.FieldIssuingOrganization, field.TypeString, value)
+		_node.IssuingOrganization = value
+	}
+	if value, ok := _c.mutation.IssueDate(); ok {
+		_spec.SetField(certification.FieldIssueDate, field.TypeTime, value)
+		_node.IssueDate = &value
+	}
+	if value, ok := _c.mutation.ExpiryDate(); ok {
+		_spec.SetField(certification.FieldExpiryDate, field.TypeTime, value)
+		_node.ExpiryDate = &value
+	}
+	if value, ok := _c.mutation.CredentialId(); ok {
+		_spec.SetField(certification.FieldCredentialId, field.TypeString, value)
+		_node.CredentialId = value
+	}
+	if value, ok := _c.mutation.CredentialUrl(); ok {
+		_spec.SetField(certification.FieldCredentialUrl, field.TypeString, value)
+		_node.CredentialUrl = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(certification.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := _c.mutation.OrderIndex(); ok {
+		_spec.SetField(certification.FieldOrderIndex, field.TypeInt, value)
+		_node.OrderIndex = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   certification.ResumeTable,
+			Columns: []string{certification.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.resume_certifications = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +317,7 @@ func (_c *CertificationCreateBulk) Save(ctx context.Context) ([]*Certification, 
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*CertificationMutation)
 				if !ok {
@@ -125,10 +344,6 @@ func (_c *CertificationCreateBulk) Save(ctx context.Context) ([]*Certification, 
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

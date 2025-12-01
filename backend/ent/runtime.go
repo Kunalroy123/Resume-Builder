@@ -2,8 +2,247 @@
 
 package ent
 
+import (
+	"resume-builder-backend/ent/achievement"
+	"resume-builder-backend/ent/certification"
+	"resume-builder-backend/ent/education"
+	"resume-builder-backend/ent/experience"
+	"resume-builder-backend/ent/headercontactinfo"
+	"resume-builder-backend/ent/hobby"
+	"resume-builder-backend/ent/professionalsummary"
+	"resume-builder-backend/ent/project"
+	"resume-builder-backend/ent/resume"
+	"resume-builder-backend/ent/schema"
+	"resume-builder-backend/ent/skill"
+	"resume-builder-backend/ent/template"
+	"resume-builder-backend/ent/user"
+	"time"
+
+	"github.com/google/uuid"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	achievementFields := schema.Achievement{}.Fields()
+	_ = achievementFields
+	// achievementDescDiscription is the schema descriptor for discription field.
+	achievementDescDiscription := achievementFields[1].Descriptor()
+	// achievement.DiscriptionValidator is a validator for the "discription" field. It is called by the builders before save.
+	achievement.DiscriptionValidator = achievementDescDiscription.Validators[0].(func(string) error)
+	// achievementDescOrderIndex is the schema descriptor for orderIndex field.
+	achievementDescOrderIndex := achievementFields[7].Descriptor()
+	// achievement.DefaultOrderIndex holds the default value on creation for the orderIndex field.
+	achievement.DefaultOrderIndex = achievementDescOrderIndex.Default.(int)
+	// achievementDescID is the schema descriptor for id field.
+	achievementDescID := achievementFields[0].Descriptor()
+	// achievement.DefaultID holds the default value on creation for the id field.
+	achievement.DefaultID = achievementDescID.Default.(func() uuid.UUID)
+	certificationFields := schema.Certification{}.Fields()
+	_ = certificationFields
+	// certificationDescOrderIndex is the schema descriptor for orderIndex field.
+	certificationDescOrderIndex := certificationFields[8].Descriptor()
+	// certification.DefaultOrderIndex holds the default value on creation for the orderIndex field.
+	certification.DefaultOrderIndex = certificationDescOrderIndex.Default.(int)
+	// certificationDescID is the schema descriptor for id field.
+	certificationDescID := certificationFields[0].Descriptor()
+	// certification.DefaultID holds the default value on creation for the id field.
+	certification.DefaultID = certificationDescID.Default.(func() uuid.UUID)
+	educationFields := schema.Education{}.Fields()
+	_ = educationFields
+	// educationDescInstitutionName is the schema descriptor for institutionName field.
+	educationDescInstitutionName := educationFields[1].Descriptor()
+	// education.InstitutionNameValidator is a validator for the "institutionName" field. It is called by the builders before save.
+	education.InstitutionNameValidator = educationDescInstitutionName.Validators[0].(func(string) error)
+	// educationDescDegree is the schema descriptor for degree field.
+	educationDescDegree := educationFields[2].Descriptor()
+	// education.DegreeValidator is a validator for the "degree" field. It is called by the builders before save.
+	education.DegreeValidator = educationDescDegree.Validators[0].(func(string) error)
+	// educationDescFieldOfStudy is the schema descriptor for fieldOfStudy field.
+	educationDescFieldOfStudy := educationFields[3].Descriptor()
+	// education.FieldOfStudyValidator is a validator for the "fieldOfStudy" field. It is called by the builders before save.
+	education.FieldOfStudyValidator = educationDescFieldOfStudy.Validators[0].(func(string) error)
+	// educationDescOrderIndex is the schema descriptor for orderIndex field.
+	educationDescOrderIndex := educationFields[10].Descriptor()
+	// education.DefaultOrderIndex holds the default value on creation for the orderIndex field.
+	education.DefaultOrderIndex = educationDescOrderIndex.Default.(int)
+	// educationDescID is the schema descriptor for id field.
+	educationDescID := educationFields[0].Descriptor()
+	// education.DefaultID holds the default value on creation for the id field.
+	education.DefaultID = educationDescID.Default.(func() uuid.UUID)
+	experienceFields := schema.Experience{}.Fields()
+	_ = experienceFields
+	// experienceDescCompanyName is the schema descriptor for companyName field.
+	experienceDescCompanyName := experienceFields[1].Descriptor()
+	// experience.CompanyNameValidator is a validator for the "companyName" field. It is called by the builders before save.
+	experience.CompanyNameValidator = experienceDescCompanyName.Validators[0].(func(string) error)
+	// experienceDescPosition is the schema descriptor for position field.
+	experienceDescPosition := experienceFields[2].Descriptor()
+	// experience.PositionValidator is a validator for the "position" field. It is called by the builders before save.
+	experience.PositionValidator = experienceDescPosition.Validators[0].(func(string) error)
+	// experienceDescIsCurrent is the schema descriptor for isCurrent field.
+	experienceDescIsCurrent := experienceFields[5].Descriptor()
+	// experience.DefaultIsCurrent holds the default value on creation for the isCurrent field.
+	experience.DefaultIsCurrent = experienceDescIsCurrent.Default.(bool)
+	// experienceDescDescription is the schema descriptor for description field.
+	experienceDescDescription := experienceFields[6].Descriptor()
+	// experience.DescriptionValidator is a validator for the "description" field. It is called by the builders before save.
+	experience.DescriptionValidator = experienceDescDescription.Validators[0].(func(string) error)
+	// experienceDescOrderIndex is the schema descriptor for orderIndex field.
+	experienceDescOrderIndex := experienceFields[10].Descriptor()
+	// experience.DefaultOrderIndex holds the default value on creation for the orderIndex field.
+	experience.DefaultOrderIndex = experienceDescOrderIndex.Default.(int)
+	// experienceDescID is the schema descriptor for id field.
+	experienceDescID := experienceFields[0].Descriptor()
+	// experience.DefaultID holds the default value on creation for the id field.
+	experience.DefaultID = experienceDescID.Default.(func() uuid.UUID)
+	headercontactinfoFields := schema.HeaderContactInfo{}.Fields()
+	_ = headercontactinfoFields
+	// headercontactinfoDescFullname is the schema descriptor for fullname field.
+	headercontactinfoDescFullname := headercontactinfoFields[1].Descriptor()
+	// headercontactinfo.FullnameValidator is a validator for the "fullname" field. It is called by the builders before save.
+	headercontactinfo.FullnameValidator = headercontactinfoDescFullname.Validators[0].(func(string) error)
+	// headercontactinfoDescEmail is the schema descriptor for email field.
+	headercontactinfoDescEmail := headercontactinfoFields[5].Descriptor()
+	// headercontactinfo.EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	headercontactinfo.EmailValidator = headercontactinfoDescEmail.Validators[0].(func(string) error)
+	// headercontactinfoDescID is the schema descriptor for id field.
+	headercontactinfoDescID := headercontactinfoFields[0].Descriptor()
+	// headercontactinfo.DefaultID holds the default value on creation for the id field.
+	headercontactinfo.DefaultID = headercontactinfoDescID.Default.(func() uuid.UUID)
+	hobbyFields := schema.Hobby{}.Fields()
+	_ = hobbyFields
+	// hobbyDescOrderIndex is the schema descriptor for orderIndex field.
+	hobbyDescOrderIndex := hobbyFields[6].Descriptor()
+	// hobby.DefaultOrderIndex holds the default value on creation for the orderIndex field.
+	hobby.DefaultOrderIndex = hobbyDescOrderIndex.Default.(int)
+	// hobbyDescID is the schema descriptor for id field.
+	hobbyDescID := hobbyFields[0].Descriptor()
+	// hobby.DefaultID holds the default value on creation for the id field.
+	hobby.DefaultID = hobbyDescID.Default.(func() uuid.UUID)
+	professionalsummaryFields := schema.ProfessionalSummary{}.Fields()
+	_ = professionalsummaryFields
+	// professionalsummaryDescSummary is the schema descriptor for summary field.
+	professionalsummaryDescSummary := professionalsummaryFields[2].Descriptor()
+	// professionalsummary.SummaryValidator is a validator for the "summary" field. It is called by the builders before save.
+	professionalsummary.SummaryValidator = professionalsummaryDescSummary.Validators[0].(func(string) error)
+	// professionalsummaryDescID is the schema descriptor for id field.
+	professionalsummaryDescID := professionalsummaryFields[0].Descriptor()
+	// professionalsummary.DefaultID holds the default value on creation for the id field.
+	professionalsummary.DefaultID = professionalsummaryDescID.Default.(func() uuid.UUID)
+	projectFields := schema.Project{}.Fields()
+	_ = projectFields
+	// projectDescOrderIndex is the schema descriptor for orderIndex field.
+	projectDescOrderIndex := projectFields[12].Descriptor()
+	// project.DefaultOrderIndex holds the default value on creation for the orderIndex field.
+	project.DefaultOrderIndex = projectDescOrderIndex.Default.(int)
+	// projectDescID is the schema descriptor for id field.
+	projectDescID := projectFields[0].Descriptor()
+	// project.DefaultID holds the default value on creation for the id field.
+	project.DefaultID = projectDescID.Default.(func() uuid.UUID)
+	resumeFields := schema.Resume{}.Fields()
+	_ = resumeFields
+	// resumeDescTitle is the schema descriptor for title field.
+	resumeDescTitle := resumeFields[2].Descriptor()
+	// resume.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	resume.TitleValidator = resumeDescTitle.Validators[0].(func(string) error)
+	// resumeDescIsAiGenerated is the schema descriptor for isAiGenerated field.
+	resumeDescIsAiGenerated := resumeFields[4].Descriptor()
+	// resume.DefaultIsAiGenerated holds the default value on creation for the isAiGenerated field.
+	resume.DefaultIsAiGenerated = resumeDescIsAiGenerated.Default.(bool)
+	// resumeDescIsPublic is the schema descriptor for isPublic field.
+	resumeDescIsPublic := resumeFields[5].Descriptor()
+	// resume.DefaultIsPublic holds the default value on creation for the isPublic field.
+	resume.DefaultIsPublic = resumeDescIsPublic.Default.(bool)
+	// resumeDescCreatedAt is the schema descriptor for createdAt field.
+	resumeDescCreatedAt := resumeFields[7].Descriptor()
+	// resume.DefaultCreatedAt holds the default value on creation for the createdAt field.
+	resume.DefaultCreatedAt = resumeDescCreatedAt.Default.(func() time.Time)
+	// resumeDescUpdatedAt is the schema descriptor for updatedAt field.
+	resumeDescUpdatedAt := resumeFields[8].Descriptor()
+	// resume.DefaultUpdatedAt holds the default value on creation for the updatedAt field.
+	resume.DefaultUpdatedAt = resumeDescUpdatedAt.Default.(func() time.Time)
+	// resume.UpdateDefaultUpdatedAt holds the default value on update for the updatedAt field.
+	resume.UpdateDefaultUpdatedAt = resumeDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// resumeDescID is the schema descriptor for id field.
+	resumeDescID := resumeFields[0].Descriptor()
+	// resume.DefaultID holds the default value on creation for the id field.
+	resume.DefaultID = resumeDescID.Default.(func() uuid.UUID)
+	skillFields := schema.Skill{}.Fields()
+	_ = skillFields
+	// skillDescName is the schema descriptor for name field.
+	skillDescName := skillFields[1].Descriptor()
+	// skill.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	skill.NameValidator = skillDescName.Validators[0].(func(string) error)
+	// skillDescCategory is the schema descriptor for category field.
+	skillDescCategory := skillFields[2].Descriptor()
+	// skill.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
+	skill.CategoryValidator = skillDescCategory.Validators[0].(func(string) error)
+	// skillDescOrderIndex is the schema descriptor for orderIndex field.
+	skillDescOrderIndex := skillFields[6].Descriptor()
+	// skill.DefaultOrderIndex holds the default value on creation for the orderIndex field.
+	skill.DefaultOrderIndex = skillDescOrderIndex.Default.(int)
+	// skillDescID is the schema descriptor for id field.
+	skillDescID := skillFields[0].Descriptor()
+	// skill.DefaultID holds the default value on creation for the id field.
+	skill.DefaultID = skillDescID.Default.(func() uuid.UUID)
+	templateFields := schema.Template{}.Fields()
+	_ = templateFields
+	// templateDescName is the schema descriptor for name field.
+	templateDescName := templateFields[1].Descriptor()
+	// template.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	template.NameValidator = templateDescName.Validators[0].(func(string) error)
+	// templateDescHtmlTemplate is the schema descriptor for htmlTemplate field.
+	templateDescHtmlTemplate := templateFields[3].Descriptor()
+	// template.HtmlTemplateValidator is a validator for the "htmlTemplate" field. It is called by the builders before save.
+	template.HtmlTemplateValidator = templateDescHtmlTemplate.Validators[0].(func(string) error)
+	// templateDescCssStyles is the schema descriptor for cssStyles field.
+	templateDescCssStyles := templateFields[4].Descriptor()
+	// template.CssStylesValidator is a validator for the "cssStyles" field. It is called by the builders before save.
+	template.CssStylesValidator = templateDescCssStyles.Validators[0].(func(string) error)
+	// templateDescIsActive is the schema descriptor for isActive field.
+	templateDescIsActive := templateFields[5].Descriptor()
+	// template.DefaultIsActive holds the default value on creation for the isActive field.
+	template.DefaultIsActive = templateDescIsActive.Default.(bool)
+	// templateDescID is the schema descriptor for id field.
+	templateDescID := templateFields[0].Descriptor()
+	// template.DefaultID holds the default value on creation for the id field.
+	template.DefaultID = templateDescID.Default.(func() uuid.UUID)
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescEmail is the schema descriptor for email field.
+	userDescEmail := userFields[1].Descriptor()
+	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	user.EmailValidator = userDescEmail.Validators[0].(func(string) error)
+	// userDescPasswordHash is the schema descriptor for passwordHash field.
+	userDescPasswordHash := userFields[2].Descriptor()
+	// user.PasswordHashValidator is a validator for the "passwordHash" field. It is called by the builders before save.
+	user.PasswordHashValidator = userDescPasswordHash.Validators[0].(func(string) error)
+	// userDescFirstName is the schema descriptor for firstName field.
+	userDescFirstName := userFields[3].Descriptor()
+	// user.FirstNameValidator is a validator for the "firstName" field. It is called by the builders before save.
+	user.FirstNameValidator = userDescFirstName.Validators[0].(func(string) error)
+	// userDescLastName is the schema descriptor for lastName field.
+	userDescLastName := userFields[4].Descriptor()
+	// user.LastNameValidator is a validator for the "lastName" field. It is called by the builders before save.
+	user.LastNameValidator = userDescLastName.Validators[0].(func(string) error)
+	// userDescIsActive is the schema descriptor for isActive field.
+	userDescIsActive := userFields[5].Descriptor()
+	// user.DefaultIsActive holds the default value on creation for the isActive field.
+	user.DefaultIsActive = userDescIsActive.Default.(bool)
+	// userDescCreatedAt is the schema descriptor for createdAt field.
+	userDescCreatedAt := userFields[6].Descriptor()
+	// user.DefaultCreatedAt holds the default value on creation for the createdAt field.
+	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
+	// userDescUpdatedAt is the schema descriptor for updatedAt field.
+	userDescUpdatedAt := userFields[7].Descriptor()
+	// user.DefaultUpdatedAt holds the default value on creation for the updatedAt field.
+	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
+	// user.UpdateDefaultUpdatedAt holds the default value on update for the updatedAt field.
+	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.DefaultID holds the default value on creation for the id field.
+	user.DefaultID = userDescID.Default.(func() uuid.UUID)
 }

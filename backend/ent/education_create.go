@@ -4,11 +4,15 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"resume-builder-backend/ent/education"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // EducationCreate is the builder for creating a Education entity.
@@ -18,6 +22,131 @@ type EducationCreate struct {
 	hooks    []Hook
 }
 
+// SetInstitutionName sets the "institutionName" field.
+func (_c *EducationCreate) SetInstitutionName(v string) *EducationCreate {
+	_c.mutation.SetInstitutionName(v)
+	return _c
+}
+
+// SetDegree sets the "degree" field.
+func (_c *EducationCreate) SetDegree(v string) *EducationCreate {
+	_c.mutation.SetDegree(v)
+	return _c
+}
+
+// SetFieldOfStudy sets the "fieldOfStudy" field.
+func (_c *EducationCreate) SetFieldOfStudy(v string) *EducationCreate {
+	_c.mutation.SetFieldOfStudy(v)
+	return _c
+}
+
+// SetStartDate sets the "startDate" field.
+func (_c *EducationCreate) SetStartDate(v time.Time) *EducationCreate {
+	_c.mutation.SetStartDate(v)
+	return _c
+}
+
+// SetEndDate sets the "endDate" field.
+func (_c *EducationCreate) SetEndDate(v time.Time) *EducationCreate {
+	_c.mutation.SetEndDate(v)
+	return _c
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_c *EducationCreate) SetNillableEndDate(v *time.Time) *EducationCreate {
+	if v != nil {
+		_c.SetEndDate(*v)
+	}
+	return _c
+}
+
+// SetGpa sets the "gpa" field.
+func (_c *EducationCreate) SetGpa(v string) *EducationCreate {
+	_c.mutation.SetGpa(v)
+	return _c
+}
+
+// SetNillableGpa sets the "gpa" field if the given value is not nil.
+func (_c *EducationCreate) SetNillableGpa(v *string) *EducationCreate {
+	if v != nil {
+		_c.SetGpa(*v)
+	}
+	return _c
+}
+
+// SetLocation sets the "location" field.
+func (_c *EducationCreate) SetLocation(v string) *EducationCreate {
+	_c.mutation.SetLocation(v)
+	return _c
+}
+
+// SetNillableLocation sets the "location" field if the given value is not nil.
+func (_c *EducationCreate) SetNillableLocation(v *string) *EducationCreate {
+	if v != nil {
+		_c.SetLocation(*v)
+	}
+	return _c
+}
+
+// SetRelevantCoursework sets the "relevantCoursework" field.
+func (_c *EducationCreate) SetRelevantCoursework(v map[string]interface{}) *EducationCreate {
+	_c.mutation.SetRelevantCoursework(v)
+	return _c
+}
+
+// SetDescription sets the "description" field.
+func (_c *EducationCreate) SetDescription(v string) *EducationCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *EducationCreate) SetNillableDescription(v *string) *EducationCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
+	return _c
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_c *EducationCreate) SetOrderIndex(v int) *EducationCreate {
+	_c.mutation.SetOrderIndex(v)
+	return _c
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_c *EducationCreate) SetNillableOrderIndex(v *int) *EducationCreate {
+	if v != nil {
+		_c.SetOrderIndex(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *EducationCreate) SetID(v uuid.UUID) *EducationCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *EducationCreate) SetNillableID(v *uuid.UUID) *EducationCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *EducationCreate) SetResumeID(id uuid.UUID) *EducationCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *EducationCreate) SetResume(v *Resume) *EducationCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the EducationMutation object of the builder.
 func (_c *EducationCreate) Mutation() *EducationMutation {
 	return _c.mutation
@@ -25,6 +154,7 @@ func (_c *EducationCreate) Mutation() *EducationMutation {
 
 // Save creates the Education in the database.
 func (_c *EducationCreate) Save(ctx context.Context) (*Education, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +180,53 @@ func (_c *EducationCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *EducationCreate) defaults() {
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		v := education.DefaultOrderIndex
+		_c.mutation.SetOrderIndex(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := education.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *EducationCreate) check() error {
+	if _, ok := _c.mutation.InstitutionName(); !ok {
+		return &ValidationError{Name: "institutionName", err: errors.New(`ent: missing required field "Education.institutionName"`)}
+	}
+	if v, ok := _c.mutation.InstitutionName(); ok {
+		if err := education.InstitutionNameValidator(v); err != nil {
+			return &ValidationError{Name: "institutionName", err: fmt.Errorf(`ent: validator failed for field "Education.institutionName": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Degree(); !ok {
+		return &ValidationError{Name: "degree", err: errors.New(`ent: missing required field "Education.degree"`)}
+	}
+	if v, ok := _c.mutation.Degree(); ok {
+		if err := education.DegreeValidator(v); err != nil {
+			return &ValidationError{Name: "degree", err: fmt.Errorf(`ent: validator failed for field "Education.degree": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.FieldOfStudy(); !ok {
+		return &ValidationError{Name: "fieldOfStudy", err: errors.New(`ent: missing required field "Education.fieldOfStudy"`)}
+	}
+	if v, ok := _c.mutation.FieldOfStudy(); ok {
+		if err := education.FieldOfStudyValidator(v); err != nil {
+			return &ValidationError{Name: "fieldOfStudy", err: fmt.Errorf(`ent: validator failed for field "Education.fieldOfStudy": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.StartDate(); !ok {
+		return &ValidationError{Name: "startDate", err: errors.New(`ent: missing required field "Education.startDate"`)}
+	}
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		return &ValidationError{Name: "orderIndex", err: errors.New(`ent: missing required field "Education.orderIndex"`)}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "Education.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +241,13 @@ func (_c *EducationCreate) sqlSave(ctx context.Context) (*Education, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +256,69 @@ func (_c *EducationCreate) sqlSave(ctx context.Context) (*Education, error) {
 func (_c *EducationCreate) createSpec() (*Education, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Education{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(education.Table, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(education.Table, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.InstitutionName(); ok {
+		_spec.SetField(education.FieldInstitutionName, field.TypeString, value)
+		_node.InstitutionName = value
+	}
+	if value, ok := _c.mutation.Degree(); ok {
+		_spec.SetField(education.FieldDegree, field.TypeString, value)
+		_node.Degree = value
+	}
+	if value, ok := _c.mutation.FieldOfStudy(); ok {
+		_spec.SetField(education.FieldFieldOfStudy, field.TypeString, value)
+		_node.FieldOfStudy = value
+	}
+	if value, ok := _c.mutation.StartDate(); ok {
+		_spec.SetField(education.FieldStartDate, field.TypeTime, value)
+		_node.StartDate = value
+	}
+	if value, ok := _c.mutation.EndDate(); ok {
+		_spec.SetField(education.FieldEndDate, field.TypeTime, value)
+		_node.EndDate = &value
+	}
+	if value, ok := _c.mutation.Gpa(); ok {
+		_spec.SetField(education.FieldGpa, field.TypeString, value)
+		_node.Gpa = value
+	}
+	if value, ok := _c.mutation.Location(); ok {
+		_spec.SetField(education.FieldLocation, field.TypeString, value)
+		_node.Location = value
+	}
+	if value, ok := _c.mutation.RelevantCoursework(); ok {
+		_spec.SetField(education.FieldRelevantCoursework, field.TypeJSON, value)
+		_node.RelevantCoursework = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(education.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := _c.mutation.OrderIndex(); ok {
+		_spec.SetField(education.FieldOrderIndex, field.TypeInt, value)
+		_node.OrderIndex = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   education.ResumeTable,
+			Columns: []string{education.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.resume_educations = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +340,7 @@ func (_c *EducationCreateBulk) Save(ctx context.Context) ([]*Education, error) {
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*EducationMutation)
 				if !ok {
@@ -125,10 +367,6 @@ func (_c *EducationCreateBulk) Save(ctx context.Context) ([]*Education, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

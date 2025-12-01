@@ -3,20 +3,72 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"resume-builder-backend/ent/project"
+	"resume-builder-backend/ent/resume"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Project is the model entity for the Project schema.
 type Project struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID uuid.UUID `json:"id,omitempty"`
+	// Title holds the value of the "title" field.
+	Title string `json:"title,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// StartDate holds the value of the "startDate" field.
+	StartDate *time.Time `json:"startDate,omitempty"`
+	// EndDate holds the value of the "endDate" field.
+	EndDate *time.Time `json:"endDate,omitempty"`
+	// ProjectUrl holds the value of the "projectUrl" field.
+	ProjectUrl string `json:"projectUrl,omitempty"`
+	// GithubUrl holds the value of the "githubUrl" field.
+	GithubUrl string `json:"githubUrl,omitempty"`
+	// DemoUrl holds the value of the "demoUrl" field.
+	DemoUrl string `json:"demoUrl,omitempty"`
+	// TechnologiesUsed holds the value of the "technologiesUsed" field.
+	TechnologiesUsed map[string]interface{} `json:"technologiesUsed,omitempty"`
+	// KeyFeatures holds the value of the "keyFeatures" field.
+	KeyFeatures map[string]interface{} `json:"keyFeatures,omitempty"`
+	// Role holds the value of the "role" field.
+	Role string `json:"role,omitempty"`
+	// TeamSize holds the value of the "teamSize" field.
+	TeamSize *int `json:"teamSize,omitempty"`
+	// OrderIndex holds the value of the "orderIndex" field.
+	OrderIndex int `json:"orderIndex,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ProjectQuery when eager-loading is set.
+	Edges           ProjectEdges `json:"edges"`
+	resume_projects *uuid.UUID
+	selectValues    sql.SelectValues
+}
+
+// ProjectEdges holds the relations/edges for other nodes in the graph.
+type ProjectEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProjectEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +76,18 @@ func (*Project) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case project.FieldID:
+		case project.FieldTechnologiesUsed, project.FieldKeyFeatures:
+			values[i] = new([]byte)
+		case project.FieldTeamSize, project.FieldOrderIndex:
 			values[i] = new(sql.NullInt64)
+		case project.FieldTitle, project.FieldDescription, project.FieldProjectUrl, project.FieldGithubUrl, project.FieldDemoUrl, project.FieldRole:
+			values[i] = new(sql.NullString)
+		case project.FieldStartDate, project.FieldEndDate:
+			values[i] = new(sql.NullTime)
+		case project.FieldID:
+			values[i] = new(uuid.UUID)
+		case project.ForeignKeys[0]: // resume_projects
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +104,97 @@ func (_m *Project) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case project.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case project.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = value.String
+			}
+		case project.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
+			}
+		case project.FieldStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field startDate", values[i])
+			} else if value.Valid {
+				_m.StartDate = new(time.Time)
+				*_m.StartDate = value.Time
+			}
+		case project.FieldEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field endDate", values[i])
+			} else if value.Valid {
+				_m.EndDate = new(time.Time)
+				*_m.EndDate = value.Time
+			}
+		case project.FieldProjectUrl:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field projectUrl", values[i])
+			} else if value.Valid {
+				_m.ProjectUrl = value.String
+			}
+		case project.FieldGithubUrl:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field githubUrl", values[i])
+			} else if value.Valid {
+				_m.GithubUrl = value.String
+			}
+		case project.FieldDemoUrl:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field demoUrl", values[i])
+			} else if value.Valid {
+				_m.DemoUrl = value.String
+			}
+		case project.FieldTechnologiesUsed:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field technologiesUsed", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.TechnologiesUsed); err != nil {
+					return fmt.Errorf("unmarshal field technologiesUsed: %w", err)
+				}
+			}
+		case project.FieldKeyFeatures:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field keyFeatures", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.KeyFeatures); err != nil {
+					return fmt.Errorf("unmarshal field keyFeatures: %w", err)
+				}
+			}
+		case project.FieldRole:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field role", values[i])
+			} else if value.Valid {
+				_m.Role = value.String
+			}
+		case project.FieldTeamSize:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field teamSize", values[i])
+			} else if value.Valid {
+				_m.TeamSize = new(int)
+				*_m.TeamSize = int(value.Int64)
+			}
+		case project.FieldOrderIndex:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field orderIndex", values[i])
+			} else if value.Valid {
+				_m.OrderIndex = int(value.Int64)
+			}
+		case project.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field resume_projects", values[i])
+			} else if value.Valid {
+				_m.resume_projects = new(uuid.UUID)
+				*_m.resume_projects = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +206,11 @@ func (_m *Project) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Project) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the Project entity.
+func (_m *Project) QueryResume() *ResumeQuery {
+	return NewProjectClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this Project.
@@ -82,7 +235,48 @@ func (_m *Project) Unwrap() *Project {
 func (_m *Project) String() string {
 	var builder strings.Builder
 	builder.WriteString("Project(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("title=")
+	builder.WriteString(_m.Title)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	if v := _m.StartDate; v != nil {
+		builder.WriteString("startDate=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.EndDate; v != nil {
+		builder.WriteString("endDate=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("projectUrl=")
+	builder.WriteString(_m.ProjectUrl)
+	builder.WriteString(", ")
+	builder.WriteString("githubUrl=")
+	builder.WriteString(_m.GithubUrl)
+	builder.WriteString(", ")
+	builder.WriteString("demoUrl=")
+	builder.WriteString(_m.DemoUrl)
+	builder.WriteString(", ")
+	builder.WriteString("technologiesUsed=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TechnologiesUsed))
+	builder.WriteString(", ")
+	builder.WriteString("keyFeatures=")
+	builder.WriteString(fmt.Sprintf("%v", _m.KeyFeatures))
+	builder.WriteString(", ")
+	builder.WriteString("role=")
+	builder.WriteString(_m.Role)
+	builder.WriteString(", ")
+	if v := _m.TeamSize; v != nil {
+		builder.WriteString("teamSize=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("orderIndex=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OrderIndex))
 	builder.WriteByte(')')
 	return builder.String()
 }

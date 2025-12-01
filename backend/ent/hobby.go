@@ -5,18 +5,56 @@ package ent
 import (
 	"fmt"
 	"resume-builder-backend/ent/hobby"
+	"resume-builder-backend/ent/resume"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Hobby is the model entity for the Hobby schema.
 type Hobby struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID uuid.UUID `json:"id,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// SkillLevel holds the value of the "skillLevel" field.
+	SkillLevel string `json:"skillLevel,omitempty"`
+	// YearsInvolved holds the value of the "yearsInvolved" field.
+	YearsInvolved *int `json:"yearsInvolved,omitempty"`
+	// Achievements holds the value of the "achievements" field.
+	Achievements string `json:"achievements,omitempty"`
+	// OrderIndex holds the value of the "orderIndex" field.
+	OrderIndex int `json:"orderIndex,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the HobbyQuery when eager-loading is set.
+	Edges          HobbyEdges `json:"edges"`
+	resume_hobbies *uuid.UUID
+	selectValues   sql.SelectValues
+}
+
+// HobbyEdges holds the relations/edges for other nodes in the graph.
+type HobbyEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e HobbyEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +62,14 @@ func (*Hobby) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case hobby.FieldID:
+		case hobby.FieldYearsInvolved, hobby.FieldOrderIndex:
 			values[i] = new(sql.NullInt64)
+		case hobby.FieldName, hobby.FieldDescription, hobby.FieldSkillLevel, hobby.FieldAchievements:
+			values[i] = new(sql.NullString)
+		case hobby.FieldID:
+			values[i] = new(uuid.UUID)
+		case hobby.ForeignKeys[0]: // resume_hobbies
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +86,55 @@ func (_m *Hobby) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case hobby.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case hobby.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				_m.Name = value.String
+			}
+		case hobby.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
+			}
+		case hobby.FieldSkillLevel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field skillLevel", values[i])
+			} else if value.Valid {
+				_m.SkillLevel = value.String
+			}
+		case hobby.FieldYearsInvolved:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field yearsInvolved", values[i])
+			} else if value.Valid {
+				_m.YearsInvolved = new(int)
+				*_m.YearsInvolved = int(value.Int64)
+			}
+		case hobby.FieldAchievements:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field achievements", values[i])
+			} else if value.Valid {
+				_m.Achievements = value.String
+			}
+		case hobby.FieldOrderIndex:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field orderIndex", values[i])
+			} else if value.Valid {
+				_m.OrderIndex = int(value.Int64)
+			}
+		case hobby.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field resume_hobbies", values[i])
+			} else if value.Valid {
+				_m.resume_hobbies = new(uuid.UUID)
+				*_m.resume_hobbies = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +146,11 @@ func (_m *Hobby) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Hobby) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the Hobby entity.
+func (_m *Hobby) QueryResume() *ResumeQuery {
+	return NewHobbyClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this Hobby.
@@ -82,7 +175,26 @@ func (_m *Hobby) Unwrap() *Hobby {
 func (_m *Hobby) String() string {
 	var builder strings.Builder
 	builder.WriteString("Hobby(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("name=")
+	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("skillLevel=")
+	builder.WriteString(_m.SkillLevel)
+	builder.WriteString(", ")
+	if v := _m.YearsInvolved; v != nil {
+		builder.WriteString("yearsInvolved=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("achievements=")
+	builder.WriteString(_m.Achievements)
+	builder.WriteString(", ")
+	builder.WriteString("orderIndex=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OrderIndex))
 	builder.WriteByte(')')
 	return builder.String()
 }

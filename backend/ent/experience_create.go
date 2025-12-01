@@ -4,11 +4,15 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"resume-builder-backend/ent/experience"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ExperienceCreate is the builder for creating a Experience entity.
@@ -18,6 +22,123 @@ type ExperienceCreate struct {
 	hooks    []Hook
 }
 
+// SetCompanyName sets the "companyName" field.
+func (_c *ExperienceCreate) SetCompanyName(v string) *ExperienceCreate {
+	_c.mutation.SetCompanyName(v)
+	return _c
+}
+
+// SetPosition sets the "position" field.
+func (_c *ExperienceCreate) SetPosition(v string) *ExperienceCreate {
+	_c.mutation.SetPosition(v)
+	return _c
+}
+
+// SetStartDate sets the "startDate" field.
+func (_c *ExperienceCreate) SetStartDate(v time.Time) *ExperienceCreate {
+	_c.mutation.SetStartDate(v)
+	return _c
+}
+
+// SetEndDate sets the "endDate" field.
+func (_c *ExperienceCreate) SetEndDate(v time.Time) *ExperienceCreate {
+	_c.mutation.SetEndDate(v)
+	return _c
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_c *ExperienceCreate) SetNillableEndDate(v *time.Time) *ExperienceCreate {
+	if v != nil {
+		_c.SetEndDate(*v)
+	}
+	return _c
+}
+
+// SetIsCurrent sets the "isCurrent" field.
+func (_c *ExperienceCreate) SetIsCurrent(v bool) *ExperienceCreate {
+	_c.mutation.SetIsCurrent(v)
+	return _c
+}
+
+// SetNillableIsCurrent sets the "isCurrent" field if the given value is not nil.
+func (_c *ExperienceCreate) SetNillableIsCurrent(v *bool) *ExperienceCreate {
+	if v != nil {
+		_c.SetIsCurrent(*v)
+	}
+	return _c
+}
+
+// SetDescription sets the "description" field.
+func (_c *ExperienceCreate) SetDescription(v string) *ExperienceCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetLocation sets the "location" field.
+func (_c *ExperienceCreate) SetLocation(v string) *ExperienceCreate {
+	_c.mutation.SetLocation(v)
+	return _c
+}
+
+// SetNillableLocation sets the "location" field if the given value is not nil.
+func (_c *ExperienceCreate) SetNillableLocation(v *string) *ExperienceCreate {
+	if v != nil {
+		_c.SetLocation(*v)
+	}
+	return _c
+}
+
+// SetAcheivements sets the "acheivements" field.
+func (_c *ExperienceCreate) SetAcheivements(v map[string]interface{}) *ExperienceCreate {
+	_c.mutation.SetAcheivements(v)
+	return _c
+}
+
+// SetTechnologiesUsed sets the "technologiesUsed" field.
+func (_c *ExperienceCreate) SetTechnologiesUsed(v map[string]interface{}) *ExperienceCreate {
+	_c.mutation.SetTechnologiesUsed(v)
+	return _c
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_c *ExperienceCreate) SetOrderIndex(v int) *ExperienceCreate {
+	_c.mutation.SetOrderIndex(v)
+	return _c
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_c *ExperienceCreate) SetNillableOrderIndex(v *int) *ExperienceCreate {
+	if v != nil {
+		_c.SetOrderIndex(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *ExperienceCreate) SetID(v uuid.UUID) *ExperienceCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *ExperienceCreate) SetNillableID(v *uuid.UUID) *ExperienceCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *ExperienceCreate) SetResumeID(id uuid.UUID) *ExperienceCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *ExperienceCreate) SetResume(v *Resume) *ExperienceCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the ExperienceMutation object of the builder.
 func (_c *ExperienceCreate) Mutation() *ExperienceMutation {
 	return _c.mutation
@@ -25,6 +146,7 @@ func (_c *ExperienceCreate) Mutation() *ExperienceMutation {
 
 // Save creates the Experience in the database.
 func (_c *ExperienceCreate) Save(ctx context.Context) (*Experience, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +172,60 @@ func (_c *ExperienceCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *ExperienceCreate) defaults() {
+	if _, ok := _c.mutation.IsCurrent(); !ok {
+		v := experience.DefaultIsCurrent
+		_c.mutation.SetIsCurrent(v)
+	}
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		v := experience.DefaultOrderIndex
+		_c.mutation.SetOrderIndex(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := experience.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *ExperienceCreate) check() error {
+	if _, ok := _c.mutation.CompanyName(); !ok {
+		return &ValidationError{Name: "companyName", err: errors.New(`ent: missing required field "Experience.companyName"`)}
+	}
+	if v, ok := _c.mutation.CompanyName(); ok {
+		if err := experience.CompanyNameValidator(v); err != nil {
+			return &ValidationError{Name: "companyName", err: fmt.Errorf(`ent: validator failed for field "Experience.companyName": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Position(); !ok {
+		return &ValidationError{Name: "position", err: errors.New(`ent: missing required field "Experience.position"`)}
+	}
+	if v, ok := _c.mutation.Position(); ok {
+		if err := experience.PositionValidator(v); err != nil {
+			return &ValidationError{Name: "position", err: fmt.Errorf(`ent: validator failed for field "Experience.position": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.StartDate(); !ok {
+		return &ValidationError{Name: "startDate", err: errors.New(`ent: missing required field "Experience.startDate"`)}
+	}
+	if _, ok := _c.mutation.IsCurrent(); !ok {
+		return &ValidationError{Name: "isCurrent", err: errors.New(`ent: missing required field "Experience.isCurrent"`)}
+	}
+	if _, ok := _c.mutation.Description(); !ok {
+		return &ValidationError{Name: "description", err: errors.New(`ent: missing required field "Experience.description"`)}
+	}
+	if v, ok := _c.mutation.Description(); ok {
+		if err := experience.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Experience.description": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		return &ValidationError{Name: "orderIndex", err: errors.New(`ent: missing required field "Experience.orderIndex"`)}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "Experience.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +240,13 @@ func (_c *ExperienceCreate) sqlSave(ctx context.Context) (*Experience, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +255,69 @@ func (_c *ExperienceCreate) sqlSave(ctx context.Context) (*Experience, error) {
 func (_c *ExperienceCreate) createSpec() (*Experience, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Experience{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(experience.Table, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(experience.Table, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.CompanyName(); ok {
+		_spec.SetField(experience.FieldCompanyName, field.TypeString, value)
+		_node.CompanyName = value
+	}
+	if value, ok := _c.mutation.Position(); ok {
+		_spec.SetField(experience.FieldPosition, field.TypeString, value)
+		_node.Position = value
+	}
+	if value, ok := _c.mutation.StartDate(); ok {
+		_spec.SetField(experience.FieldStartDate, field.TypeTime, value)
+		_node.StartDate = value
+	}
+	if value, ok := _c.mutation.EndDate(); ok {
+		_spec.SetField(experience.FieldEndDate, field.TypeTime, value)
+		_node.EndDate = &value
+	}
+	if value, ok := _c.mutation.IsCurrent(); ok {
+		_spec.SetField(experience.FieldIsCurrent, field.TypeBool, value)
+		_node.IsCurrent = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(experience.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := _c.mutation.Location(); ok {
+		_spec.SetField(experience.FieldLocation, field.TypeString, value)
+		_node.Location = value
+	}
+	if value, ok := _c.mutation.Acheivements(); ok {
+		_spec.SetField(experience.FieldAcheivements, field.TypeJSON, value)
+		_node.Acheivements = value
+	}
+	if value, ok := _c.mutation.TechnologiesUsed(); ok {
+		_spec.SetField(experience.FieldTechnologiesUsed, field.TypeJSON, value)
+		_node.TechnologiesUsed = value
+	}
+	if value, ok := _c.mutation.OrderIndex(); ok {
+		_spec.SetField(experience.FieldOrderIndex, field.TypeInt, value)
+		_node.OrderIndex = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   experience.ResumeTable,
+			Columns: []string{experience.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.resume_experiences = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +339,7 @@ func (_c *ExperienceCreateBulk) Save(ctx context.Context) ([]*Experience, error)
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ExperienceMutation)
 				if !ok {
@@ -125,10 +366,6 @@ func (_c *ExperienceCreateBulk) Save(ctx context.Context) ([]*Experience, error)
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

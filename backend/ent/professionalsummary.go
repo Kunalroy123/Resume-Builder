@@ -3,20 +3,56 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"resume-builder-backend/ent/professionalsummary"
+	"resume-builder-backend/ent/resume"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // ProfessionalSummary is the model entity for the ProfessionalSummary schema.
 type ProfessionalSummary struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
+	// ResumeId holds the value of the "resumeId" field.
+	ResumeId uuid.UUID `json:"resumeId,omitempty"`
+	// Summary holds the value of the "summary" field.
+	Summary string `json:"summary,omitempty"`
+	// YearsOfExperience holds the value of the "yearsOfExperience" field.
+	YearsOfExperience *int `json:"yearsOfExperience,omitempty"`
+	// KeyStrengths holds the value of the "keyStrengths" field.
+	KeyStrengths []string `json:"keyStrengths,omitempty"`
+	// CareerObjective holds the value of the "careerObjective" field.
+	CareerObjective string `json:"careerObjective,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ProfessionalSummaryQuery when eager-loading is set.
+	Edges        ProfessionalSummaryEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// ProfessionalSummaryEdges holds the relations/edges for other nodes in the graph.
+type ProfessionalSummaryEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ProfessionalSummaryEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +60,14 @@ func (*ProfessionalSummary) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case professionalsummary.FieldID:
+		case professionalsummary.FieldKeyStrengths:
+			values[i] = new([]byte)
+		case professionalsummary.FieldYearsOfExperience:
 			values[i] = new(sql.NullInt64)
+		case professionalsummary.FieldSummary, professionalsummary.FieldCareerObjective:
+			values[i] = new(sql.NullString)
+		case professionalsummary.FieldID, professionalsummary.FieldResumeId:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +84,44 @@ func (_m *ProfessionalSummary) assignValues(columns []string, values []any) erro
 	for i := range columns {
 		switch columns[i] {
 		case professionalsummary.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case professionalsummary.FieldResumeId:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field resumeId", values[i])
+			} else if value != nil {
+				_m.ResumeId = *value
+			}
+		case professionalsummary.FieldSummary:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field summary", values[i])
+			} else if value.Valid {
+				_m.Summary = value.String
+			}
+		case professionalsummary.FieldYearsOfExperience:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field yearsOfExperience", values[i])
+			} else if value.Valid {
+				_m.YearsOfExperience = new(int)
+				*_m.YearsOfExperience = int(value.Int64)
+			}
+		case professionalsummary.FieldKeyStrengths:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field keyStrengths", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.KeyStrengths); err != nil {
+					return fmt.Errorf("unmarshal field keyStrengths: %w", err)
+				}
+			}
+		case professionalsummary.FieldCareerObjective:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field careerObjective", values[i])
+			} else if value.Valid {
+				_m.CareerObjective = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +133,11 @@ func (_m *ProfessionalSummary) assignValues(columns []string, values []any) erro
 // This includes values selected through modifiers, order, etc.
 func (_m *ProfessionalSummary) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the ProfessionalSummary entity.
+func (_m *ProfessionalSummary) QueryResume() *ResumeQuery {
+	return NewProfessionalSummaryClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this ProfessionalSummary.
@@ -82,7 +162,23 @@ func (_m *ProfessionalSummary) Unwrap() *ProfessionalSummary {
 func (_m *ProfessionalSummary) String() string {
 	var builder strings.Builder
 	builder.WriteString("ProfessionalSummary(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("resumeId=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ResumeId))
+	builder.WriteString(", ")
+	builder.WriteString("summary=")
+	builder.WriteString(_m.Summary)
+	builder.WriteString(", ")
+	if v := _m.YearsOfExperience; v != nil {
+		builder.WriteString("yearsOfExperience=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("keyStrengths=")
+	builder.WriteString(fmt.Sprintf("%v", _m.KeyStrengths))
+	builder.WriteString(", ")
+	builder.WriteString("careerObjective=")
+	builder.WriteString(_m.CareerObjective)
 	builder.WriteByte(')')
 	return builder.String()
 }

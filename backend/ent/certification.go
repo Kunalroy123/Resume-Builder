@@ -5,18 +5,61 @@ package ent
 import (
 	"fmt"
 	"resume-builder-backend/ent/certification"
+	"resume-builder-backend/ent/resume"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Certification is the model entity for the Certification schema.
 type Certification struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID uuid.UUID `json:"id,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
+	// IssuingOrganization holds the value of the "issuingOrganization" field.
+	IssuingOrganization string `json:"issuingOrganization,omitempty"`
+	// IssueDate holds the value of the "issueDate" field.
+	IssueDate *time.Time `json:"issueDate,omitempty"`
+	// ExpiryDate holds the value of the "expiryDate" field.
+	ExpiryDate *time.Time `json:"expiryDate,omitempty"`
+	// CredentialId holds the value of the "credentialId" field.
+	CredentialId string `json:"credentialId,omitempty"`
+	// CredentialUrl holds the value of the "credentialUrl" field.
+	CredentialUrl string `json:"credentialUrl,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// OrderIndex holds the value of the "orderIndex" field.
+	OrderIndex int `json:"orderIndex,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the CertificationQuery when eager-loading is set.
+	Edges                 CertificationEdges `json:"edges"`
+	resume_certifications *uuid.UUID
+	selectValues          sql.SelectValues
+}
+
+// CertificationEdges holds the relations/edges for other nodes in the graph.
+type CertificationEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CertificationEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +67,16 @@ func (*Certification) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case certification.FieldID:
+		case certification.FieldOrderIndex:
 			values[i] = new(sql.NullInt64)
+		case certification.FieldName, certification.FieldIssuingOrganization, certification.FieldCredentialId, certification.FieldCredentialUrl, certification.FieldDescription:
+			values[i] = new(sql.NullString)
+		case certification.FieldIssueDate, certification.FieldExpiryDate:
+			values[i] = new(sql.NullTime)
+		case certification.FieldID:
+			values[i] = new(uuid.UUID)
+		case certification.ForeignKeys[0]: // resume_certifications
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +93,68 @@ func (_m *Certification) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case certification.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case certification.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				_m.Name = value.String
+			}
+		case certification.FieldIssuingOrganization:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field issuingOrganization", values[i])
+			} else if value.Valid {
+				_m.IssuingOrganization = value.String
+			}
+		case certification.FieldIssueDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field issueDate", values[i])
+			} else if value.Valid {
+				_m.IssueDate = new(time.Time)
+				*_m.IssueDate = value.Time
+			}
+		case certification.FieldExpiryDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expiryDate", values[i])
+			} else if value.Valid {
+				_m.ExpiryDate = new(time.Time)
+				*_m.ExpiryDate = value.Time
+			}
+		case certification.FieldCredentialId:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field credentialId", values[i])
+			} else if value.Valid {
+				_m.CredentialId = value.String
+			}
+		case certification.FieldCredentialUrl:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field credentialUrl", values[i])
+			} else if value.Valid {
+				_m.CredentialUrl = value.String
+			}
+		case certification.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
+			}
+		case certification.FieldOrderIndex:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field orderIndex", values[i])
+			} else if value.Valid {
+				_m.OrderIndex = int(value.Int64)
+			}
+		case certification.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field resume_certifications", values[i])
+			} else if value.Valid {
+				_m.resume_certifications = new(uuid.UUID)
+				*_m.resume_certifications = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +166,11 @@ func (_m *Certification) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Certification) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the Certification entity.
+func (_m *Certification) QueryResume() *ResumeQuery {
+	return NewCertificationClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this Certification.
@@ -82,7 +195,34 @@ func (_m *Certification) Unwrap() *Certification {
 func (_m *Certification) String() string {
 	var builder strings.Builder
 	builder.WriteString("Certification(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("name=")
+	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("issuingOrganization=")
+	builder.WriteString(_m.IssuingOrganization)
+	builder.WriteString(", ")
+	if v := _m.IssueDate; v != nil {
+		builder.WriteString("issueDate=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.ExpiryDate; v != nil {
+		builder.WriteString("expiryDate=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("credentialId=")
+	builder.WriteString(_m.CredentialId)
+	builder.WriteString(", ")
+	builder.WriteString("credentialUrl=")
+	builder.WriteString(_m.CredentialUrl)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("orderIndex=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OrderIndex))
 	builder.WriteByte(')')
 	return builder.String()
 }

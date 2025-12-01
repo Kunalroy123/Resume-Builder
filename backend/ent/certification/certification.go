@@ -4,6 +4,8 @@ package certification
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +13,52 @@ const (
 	Label = "certification"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldIssuingOrganization holds the string denoting the issuingorganization field in the database.
+	FieldIssuingOrganization = "issuing_organization"
+	// FieldIssueDate holds the string denoting the issuedate field in the database.
+	FieldIssueDate = "issue_date"
+	// FieldExpiryDate holds the string denoting the expirydate field in the database.
+	FieldExpiryDate = "expiry_date"
+	// FieldCredentialId holds the string denoting the credentialid field in the database.
+	FieldCredentialId = "credential_id"
+	// FieldCredentialUrl holds the string denoting the credentialurl field in the database.
+	FieldCredentialUrl = "credential_url"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldOrderIndex holds the string denoting the orderindex field in the database.
+	FieldOrderIndex = "order_index"
+	// EdgeResume holds the string denoting the resume edge name in mutations.
+	EdgeResume = "resume"
 	// Table holds the table name of the certification in the database.
 	Table = "certifications"
+	// ResumeTable is the table that holds the resume relation/edge.
+	ResumeTable = "certifications"
+	// ResumeInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumeInverseTable = "resumes"
+	// ResumeColumn is the table column denoting the resume relation/edge.
+	ResumeColumn = "resume_certifications"
 )
 
 // Columns holds all SQL columns for certification fields.
 var Columns = []string{
 	FieldID,
+	FieldName,
+	FieldIssuingOrganization,
+	FieldIssueDate,
+	FieldExpiryDate,
+	FieldCredentialId,
+	FieldCredentialUrl,
+	FieldDescription,
+	FieldOrderIndex,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "certifications"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"resume_certifications",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -27,8 +68,20 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
+
+var (
+	// DefaultOrderIndex holds the default value on creation for the "orderIndex" field.
+	DefaultOrderIndex int
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
 
 // OrderOption defines the ordering options for the Certification queries.
 type OrderOption func(*sql.Selector)
@@ -36,4 +89,58 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByIssuingOrganization orders the results by the issuingOrganization field.
+func ByIssuingOrganization(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIssuingOrganization, opts...).ToFunc()
+}
+
+// ByIssueDate orders the results by the issueDate field.
+func ByIssueDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIssueDate, opts...).ToFunc()
+}
+
+// ByExpiryDate orders the results by the expiryDate field.
+func ByExpiryDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpiryDate, opts...).ToFunc()
+}
+
+// ByCredentialId orders the results by the credentialId field.
+func ByCredentialId(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCredentialId, opts...).ToFunc()
+}
+
+// ByCredentialUrl orders the results by the credentialUrl field.
+func ByCredentialUrl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCredentialUrl, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByOrderIndex orders the results by the orderIndex field.
+func ByOrderIndex(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderIndex, opts...).ToFunc()
+}
+
+// ByResumeField orders the results by resume field.
+func ByResumeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumeStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newResumeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+	)
 }

@@ -4,11 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"resume-builder-backend/ent/resume"
 	"resume-builder-backend/ent/template"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // TemplateCreate is the builder for creating a Template entity.
@@ -18,6 +21,95 @@ type TemplateCreate struct {
 	hooks    []Hook
 }
 
+// SetName sets the "name" field.
+func (_c *TemplateCreate) SetName(v string) *TemplateCreate {
+	_c.mutation.SetName(v)
+	return _c
+}
+
+// SetDescription sets the "description" field.
+func (_c *TemplateCreate) SetDescription(v string) *TemplateCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableDescription(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
+	return _c
+}
+
+// SetHtmlTemplate sets the "htmlTemplate" field.
+func (_c *TemplateCreate) SetHtmlTemplate(v string) *TemplateCreate {
+	_c.mutation.SetHtmlTemplate(v)
+	return _c
+}
+
+// SetCssStyles sets the "cssStyles" field.
+func (_c *TemplateCreate) SetCssStyles(v string) *TemplateCreate {
+	_c.mutation.SetCssStyles(v)
+	return _c
+}
+
+// SetIsActive sets the "isActive" field.
+func (_c *TemplateCreate) SetIsActive(v bool) *TemplateCreate {
+	_c.mutation.SetIsActive(v)
+	return _c
+}
+
+// SetNillableIsActive sets the "isActive" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableIsActive(v *bool) *TemplateCreate {
+	if v != nil {
+		_c.SetIsActive(*v)
+	}
+	return _c
+}
+
+// SetPreviewImage sets the "previewImage" field.
+func (_c *TemplateCreate) SetPreviewImage(v string) *TemplateCreate {
+	_c.mutation.SetPreviewImage(v)
+	return _c
+}
+
+// SetNillablePreviewImage sets the "previewImage" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillablePreviewImage(v *string) *TemplateCreate {
+	if v != nil {
+		_c.SetPreviewImage(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *TemplateCreate) SetID(v uuid.UUID) *TemplateCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *TemplateCreate) SetNillableID(v *uuid.UUID) *TemplateCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// AddResumeIDs adds the "resumes" edge to the Resume entity by IDs.
+func (_c *TemplateCreate) AddResumeIDs(ids ...uuid.UUID) *TemplateCreate {
+	_c.mutation.AddResumeIDs(ids...)
+	return _c
+}
+
+// AddResumes adds the "resumes" edges to the Resume entity.
+func (_c *TemplateCreate) AddResumes(v ...*Resume) *TemplateCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddResumeIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_c *TemplateCreate) Mutation() *TemplateMutation {
 	return _c.mutation
@@ -25,6 +117,7 @@ func (_c *TemplateCreate) Mutation() *TemplateMutation {
 
 // Save creates the Template in the database.
 func (_c *TemplateCreate) Save(ctx context.Context) (*Template, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +143,47 @@ func (_c *TemplateCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *TemplateCreate) defaults() {
+	if _, ok := _c.mutation.IsActive(); !ok {
+		v := template.DefaultIsActive
+		_c.mutation.SetIsActive(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := template.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *TemplateCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Template.name"`)}
+	}
+	if v, ok := _c.mutation.Name(); ok {
+		if err := template.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Template.name": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.HtmlTemplate(); !ok {
+		return &ValidationError{Name: "htmlTemplate", err: errors.New(`ent: missing required field "Template.htmlTemplate"`)}
+	}
+	if v, ok := _c.mutation.HtmlTemplate(); ok {
+		if err := template.HtmlTemplateValidator(v); err != nil {
+			return &ValidationError{Name: "htmlTemplate", err: fmt.Errorf(`ent: validator failed for field "Template.htmlTemplate": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.CssStyles(); !ok {
+		return &ValidationError{Name: "cssStyles", err: errors.New(`ent: missing required field "Template.cssStyles"`)}
+	}
+	if v, ok := _c.mutation.CssStyles(); ok {
+		if err := template.CssStylesValidator(v); err != nil {
+			return &ValidationError{Name: "cssStyles", err: fmt.Errorf(`ent: validator failed for field "Template.cssStyles": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.IsActive(); !ok {
+		return &ValidationError{Name: "isActive", err: errors.New(`ent: missing required field "Template.isActive"`)}
+	}
 	return nil
 }
 
@@ -66,8 +198,13 @@ func (_c *TemplateCreate) sqlSave(ctx context.Context) (*Template, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +213,52 @@ func (_c *TemplateCreate) sqlSave(ctx context.Context) (*Template, error) {
 func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Template{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(template.Table, sqlgraph.NewFieldSpec(template.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(template.Table, sqlgraph.NewFieldSpec(template.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Name(); ok {
+		_spec.SetField(template.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(template.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := _c.mutation.HtmlTemplate(); ok {
+		_spec.SetField(template.FieldHtmlTemplate, field.TypeString, value)
+		_node.HtmlTemplate = value
+	}
+	if value, ok := _c.mutation.CssStyles(); ok {
+		_spec.SetField(template.FieldCssStyles, field.TypeString, value)
+		_node.CssStyles = value
+	}
+	if value, ok := _c.mutation.IsActive(); ok {
+		_spec.SetField(template.FieldIsActive, field.TypeBool, value)
+		_node.IsActive = value
+	}
+	if value, ok := _c.mutation.PreviewImage(); ok {
+		_spec.SetField(template.FieldPreviewImage, field.TypeString, value)
+		_node.PreviewImage = value
+	}
+	if nodes := _c.mutation.ResumesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.ResumesTable,
+			Columns: []string{template.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +280,7 @@ func (_c *TemplateCreateBulk) Save(ctx context.Context) ([]*Template, error) {
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*TemplateMutation)
 				if !ok {
@@ -125,10 +307,6 @@ func (_c *TemplateCreateBulk) Save(ctx context.Context) ([]*Template, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

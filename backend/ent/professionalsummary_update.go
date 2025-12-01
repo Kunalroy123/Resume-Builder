@@ -8,10 +8,13 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/predicate"
 	"resume-builder-backend/ent/professionalsummary"
+	"resume-builder-backend/ent/resume"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ProfessionalSummaryUpdate is the builder for updating ProfessionalSummary entities.
@@ -27,9 +30,119 @@ func (_u *ProfessionalSummaryUpdate) Where(ps ...predicate.ProfessionalSummary) 
 	return _u
 }
 
+// SetResumeId sets the "resumeId" field.
+func (_u *ProfessionalSummaryUpdate) SetResumeId(v uuid.UUID) *ProfessionalSummaryUpdate {
+	_u.mutation.SetResumeId(v)
+	return _u
+}
+
+// SetNillableResumeId sets the "resumeId" field if the given value is not nil.
+func (_u *ProfessionalSummaryUpdate) SetNillableResumeId(v *uuid.UUID) *ProfessionalSummaryUpdate {
+	if v != nil {
+		_u.SetResumeId(*v)
+	}
+	return _u
+}
+
+// SetSummary sets the "summary" field.
+func (_u *ProfessionalSummaryUpdate) SetSummary(v string) *ProfessionalSummaryUpdate {
+	_u.mutation.SetSummary(v)
+	return _u
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (_u *ProfessionalSummaryUpdate) SetNillableSummary(v *string) *ProfessionalSummaryUpdate {
+	if v != nil {
+		_u.SetSummary(*v)
+	}
+	return _u
+}
+
+// SetYearsOfExperience sets the "yearsOfExperience" field.
+func (_u *ProfessionalSummaryUpdate) SetYearsOfExperience(v int) *ProfessionalSummaryUpdate {
+	_u.mutation.ResetYearsOfExperience()
+	_u.mutation.SetYearsOfExperience(v)
+	return _u
+}
+
+// SetNillableYearsOfExperience sets the "yearsOfExperience" field if the given value is not nil.
+func (_u *ProfessionalSummaryUpdate) SetNillableYearsOfExperience(v *int) *ProfessionalSummaryUpdate {
+	if v != nil {
+		_u.SetYearsOfExperience(*v)
+	}
+	return _u
+}
+
+// AddYearsOfExperience adds value to the "yearsOfExperience" field.
+func (_u *ProfessionalSummaryUpdate) AddYearsOfExperience(v int) *ProfessionalSummaryUpdate {
+	_u.mutation.AddYearsOfExperience(v)
+	return _u
+}
+
+// ClearYearsOfExperience clears the value of the "yearsOfExperience" field.
+func (_u *ProfessionalSummaryUpdate) ClearYearsOfExperience() *ProfessionalSummaryUpdate {
+	_u.mutation.ClearYearsOfExperience()
+	return _u
+}
+
+// SetKeyStrengths sets the "keyStrengths" field.
+func (_u *ProfessionalSummaryUpdate) SetKeyStrengths(v []string) *ProfessionalSummaryUpdate {
+	_u.mutation.SetKeyStrengths(v)
+	return _u
+}
+
+// AppendKeyStrengths appends value to the "keyStrengths" field.
+func (_u *ProfessionalSummaryUpdate) AppendKeyStrengths(v []string) *ProfessionalSummaryUpdate {
+	_u.mutation.AppendKeyStrengths(v)
+	return _u
+}
+
+// ClearKeyStrengths clears the value of the "keyStrengths" field.
+func (_u *ProfessionalSummaryUpdate) ClearKeyStrengths() *ProfessionalSummaryUpdate {
+	_u.mutation.ClearKeyStrengths()
+	return _u
+}
+
+// SetCareerObjective sets the "careerObjective" field.
+func (_u *ProfessionalSummaryUpdate) SetCareerObjective(v string) *ProfessionalSummaryUpdate {
+	_u.mutation.SetCareerObjective(v)
+	return _u
+}
+
+// SetNillableCareerObjective sets the "careerObjective" field if the given value is not nil.
+func (_u *ProfessionalSummaryUpdate) SetNillableCareerObjective(v *string) *ProfessionalSummaryUpdate {
+	if v != nil {
+		_u.SetCareerObjective(*v)
+	}
+	return _u
+}
+
+// ClearCareerObjective clears the value of the "careerObjective" field.
+func (_u *ProfessionalSummaryUpdate) ClearCareerObjective() *ProfessionalSummaryUpdate {
+	_u.mutation.ClearCareerObjective()
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *ProfessionalSummaryUpdate) SetResumeID(id uuid.UUID) *ProfessionalSummaryUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *ProfessionalSummaryUpdate) SetResume(v *Resume) *ProfessionalSummaryUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the ProfessionalSummaryMutation object of the builder.
 func (_u *ProfessionalSummaryUpdate) Mutation() *ProfessionalSummaryMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *ProfessionalSummaryUpdate) ClearResume() *ProfessionalSummaryUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +172,88 @@ func (_u *ProfessionalSummaryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *ProfessionalSummaryUpdate) check() error {
+	if v, ok := _u.mutation.Summary(); ok {
+		if err := professionalsummary.SummaryValidator(v); err != nil {
+			return &ValidationError{Name: "summary", err: fmt.Errorf(`ent: validator failed for field "ProfessionalSummary.summary": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "ProfessionalSummary.resume"`)
+	}
+	return nil
+}
+
 func (_u *ProfessionalSummaryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(professionalsummary.Table, professionalsummary.Columns, sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(professionalsummary.Table, professionalsummary.Columns, sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Summary(); ok {
+		_spec.SetField(professionalsummary.FieldSummary, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.YearsOfExperience(); ok {
+		_spec.SetField(professionalsummary.FieldYearsOfExperience, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedYearsOfExperience(); ok {
+		_spec.AddField(professionalsummary.FieldYearsOfExperience, field.TypeInt, value)
+	}
+	if _u.mutation.YearsOfExperienceCleared() {
+		_spec.ClearField(professionalsummary.FieldYearsOfExperience, field.TypeInt)
+	}
+	if value, ok := _u.mutation.KeyStrengths(); ok {
+		_spec.SetField(professionalsummary.FieldKeyStrengths, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedKeyStrengths(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, professionalsummary.FieldKeyStrengths, value)
+		})
+	}
+	if _u.mutation.KeyStrengthsCleared() {
+		_spec.ClearField(professionalsummary.FieldKeyStrengths, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.CareerObjective(); ok {
+		_spec.SetField(professionalsummary.FieldCareerObjective, field.TypeString, value)
+	}
+	if _u.mutation.CareerObjectiveCleared() {
+		_spec.ClearField(professionalsummary.FieldCareerObjective, field.TypeString)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   professionalsummary.ResumeTable,
+			Columns: []string{professionalsummary.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   professionalsummary.ResumeTable,
+			Columns: []string{professionalsummary.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +275,119 @@ type ProfessionalSummaryUpdateOne struct {
 	mutation *ProfessionalSummaryMutation
 }
 
+// SetResumeId sets the "resumeId" field.
+func (_u *ProfessionalSummaryUpdateOne) SetResumeId(v uuid.UUID) *ProfessionalSummaryUpdateOne {
+	_u.mutation.SetResumeId(v)
+	return _u
+}
+
+// SetNillableResumeId sets the "resumeId" field if the given value is not nil.
+func (_u *ProfessionalSummaryUpdateOne) SetNillableResumeId(v *uuid.UUID) *ProfessionalSummaryUpdateOne {
+	if v != nil {
+		_u.SetResumeId(*v)
+	}
+	return _u
+}
+
+// SetSummary sets the "summary" field.
+func (_u *ProfessionalSummaryUpdateOne) SetSummary(v string) *ProfessionalSummaryUpdateOne {
+	_u.mutation.SetSummary(v)
+	return _u
+}
+
+// SetNillableSummary sets the "summary" field if the given value is not nil.
+func (_u *ProfessionalSummaryUpdateOne) SetNillableSummary(v *string) *ProfessionalSummaryUpdateOne {
+	if v != nil {
+		_u.SetSummary(*v)
+	}
+	return _u
+}
+
+// SetYearsOfExperience sets the "yearsOfExperience" field.
+func (_u *ProfessionalSummaryUpdateOne) SetYearsOfExperience(v int) *ProfessionalSummaryUpdateOne {
+	_u.mutation.ResetYearsOfExperience()
+	_u.mutation.SetYearsOfExperience(v)
+	return _u
+}
+
+// SetNillableYearsOfExperience sets the "yearsOfExperience" field if the given value is not nil.
+func (_u *ProfessionalSummaryUpdateOne) SetNillableYearsOfExperience(v *int) *ProfessionalSummaryUpdateOne {
+	if v != nil {
+		_u.SetYearsOfExperience(*v)
+	}
+	return _u
+}
+
+// AddYearsOfExperience adds value to the "yearsOfExperience" field.
+func (_u *ProfessionalSummaryUpdateOne) AddYearsOfExperience(v int) *ProfessionalSummaryUpdateOne {
+	_u.mutation.AddYearsOfExperience(v)
+	return _u
+}
+
+// ClearYearsOfExperience clears the value of the "yearsOfExperience" field.
+func (_u *ProfessionalSummaryUpdateOne) ClearYearsOfExperience() *ProfessionalSummaryUpdateOne {
+	_u.mutation.ClearYearsOfExperience()
+	return _u
+}
+
+// SetKeyStrengths sets the "keyStrengths" field.
+func (_u *ProfessionalSummaryUpdateOne) SetKeyStrengths(v []string) *ProfessionalSummaryUpdateOne {
+	_u.mutation.SetKeyStrengths(v)
+	return _u
+}
+
+// AppendKeyStrengths appends value to the "keyStrengths" field.
+func (_u *ProfessionalSummaryUpdateOne) AppendKeyStrengths(v []string) *ProfessionalSummaryUpdateOne {
+	_u.mutation.AppendKeyStrengths(v)
+	return _u
+}
+
+// ClearKeyStrengths clears the value of the "keyStrengths" field.
+func (_u *ProfessionalSummaryUpdateOne) ClearKeyStrengths() *ProfessionalSummaryUpdateOne {
+	_u.mutation.ClearKeyStrengths()
+	return _u
+}
+
+// SetCareerObjective sets the "careerObjective" field.
+func (_u *ProfessionalSummaryUpdateOne) SetCareerObjective(v string) *ProfessionalSummaryUpdateOne {
+	_u.mutation.SetCareerObjective(v)
+	return _u
+}
+
+// SetNillableCareerObjective sets the "careerObjective" field if the given value is not nil.
+func (_u *ProfessionalSummaryUpdateOne) SetNillableCareerObjective(v *string) *ProfessionalSummaryUpdateOne {
+	if v != nil {
+		_u.SetCareerObjective(*v)
+	}
+	return _u
+}
+
+// ClearCareerObjective clears the value of the "careerObjective" field.
+func (_u *ProfessionalSummaryUpdateOne) ClearCareerObjective() *ProfessionalSummaryUpdateOne {
+	_u.mutation.ClearCareerObjective()
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *ProfessionalSummaryUpdateOne) SetResumeID(id uuid.UUID) *ProfessionalSummaryUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *ProfessionalSummaryUpdateOne) SetResume(v *Resume) *ProfessionalSummaryUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the ProfessionalSummaryMutation object of the builder.
 func (_u *ProfessionalSummaryUpdateOne) Mutation() *ProfessionalSummaryMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *ProfessionalSummaryUpdateOne) ClearResume() *ProfessionalSummaryUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the ProfessionalSummaryUpdate builder.
@@ -133,8 +430,24 @@ func (_u *ProfessionalSummaryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *ProfessionalSummaryUpdateOne) check() error {
+	if v, ok := _u.mutation.Summary(); ok {
+		if err := professionalsummary.SummaryValidator(v); err != nil {
+			return &ValidationError{Name: "summary", err: fmt.Errorf(`ent: validator failed for field "ProfessionalSummary.summary": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "ProfessionalSummary.resume"`)
+	}
+	return nil
+}
+
 func (_u *ProfessionalSummaryUpdateOne) sqlSave(ctx context.Context) (_node *ProfessionalSummary, err error) {
-	_spec := sqlgraph.NewUpdateSpec(professionalsummary.Table, professionalsummary.Columns, sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(professionalsummary.Table, professionalsummary.Columns, sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "ProfessionalSummary.id" for update`)}
@@ -158,6 +471,64 @@ func (_u *ProfessionalSummaryUpdateOne) sqlSave(ctx context.Context) (_node *Pro
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Summary(); ok {
+		_spec.SetField(professionalsummary.FieldSummary, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.YearsOfExperience(); ok {
+		_spec.SetField(professionalsummary.FieldYearsOfExperience, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedYearsOfExperience(); ok {
+		_spec.AddField(professionalsummary.FieldYearsOfExperience, field.TypeInt, value)
+	}
+	if _u.mutation.YearsOfExperienceCleared() {
+		_spec.ClearField(professionalsummary.FieldYearsOfExperience, field.TypeInt)
+	}
+	if value, ok := _u.mutation.KeyStrengths(); ok {
+		_spec.SetField(professionalsummary.FieldKeyStrengths, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedKeyStrengths(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, professionalsummary.FieldKeyStrengths, value)
+		})
+	}
+	if _u.mutation.KeyStrengthsCleared() {
+		_spec.ClearField(professionalsummary.FieldKeyStrengths, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.CareerObjective(); ok {
+		_spec.SetField(professionalsummary.FieldCareerObjective, field.TypeString, value)
+	}
+	if _u.mutation.CareerObjectiveCleared() {
+		_spec.ClearField(professionalsummary.FieldCareerObjective, field.TypeString)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   professionalsummary.ResumeTable,
+			Columns: []string{professionalsummary.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   professionalsummary.ResumeTable,
+			Columns: []string{professionalsummary.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &ProfessionalSummary{config: _u.config}
 	_spec.Assign = _node.assignValues

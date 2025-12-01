@@ -6,51 +6,316 @@ import (
 	"resume-builder-backend/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.ProfessionalSummary {
+func ID(id uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.ProfessionalSummary {
+func IDEQ(id uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.ProfessionalSummary {
+func IDNEQ(id uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.ProfessionalSummary {
+func IDIn(ids ...uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.ProfessionalSummary {
+func IDNotIn(ids ...uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.ProfessionalSummary {
+func IDGT(id uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.ProfessionalSummary {
+func IDGTE(id uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.ProfessionalSummary {
+func IDLT(id uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.ProfessionalSummary {
+func IDLTE(id uuid.UUID) predicate.ProfessionalSummary {
 	return predicate.ProfessionalSummary(sql.FieldLTE(FieldID, id))
+}
+
+// ResumeId applies equality check predicate on the "resumeId" field. It's identical to ResumeIdEQ.
+func ResumeId(v uuid.UUID) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEQ(FieldResumeId, v))
+}
+
+// Summary applies equality check predicate on the "summary" field. It's identical to SummaryEQ.
+func Summary(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEQ(FieldSummary, v))
+}
+
+// YearsOfExperience applies equality check predicate on the "yearsOfExperience" field. It's identical to YearsOfExperienceEQ.
+func YearsOfExperience(v int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEQ(FieldYearsOfExperience, v))
+}
+
+// CareerObjective applies equality check predicate on the "careerObjective" field. It's identical to CareerObjectiveEQ.
+func CareerObjective(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEQ(FieldCareerObjective, v))
+}
+
+// ResumeIdEQ applies the EQ predicate on the "resumeId" field.
+func ResumeIdEQ(v uuid.UUID) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEQ(FieldResumeId, v))
+}
+
+// ResumeIdNEQ applies the NEQ predicate on the "resumeId" field.
+func ResumeIdNEQ(v uuid.UUID) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNEQ(FieldResumeId, v))
+}
+
+// ResumeIdIn applies the In predicate on the "resumeId" field.
+func ResumeIdIn(vs ...uuid.UUID) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldIn(FieldResumeId, vs...))
+}
+
+// ResumeIdNotIn applies the NotIn predicate on the "resumeId" field.
+func ResumeIdNotIn(vs ...uuid.UUID) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNotIn(FieldResumeId, vs...))
+}
+
+// SummaryEQ applies the EQ predicate on the "summary" field.
+func SummaryEQ(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEQ(FieldSummary, v))
+}
+
+// SummaryNEQ applies the NEQ predicate on the "summary" field.
+func SummaryNEQ(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNEQ(FieldSummary, v))
+}
+
+// SummaryIn applies the In predicate on the "summary" field.
+func SummaryIn(vs ...string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldIn(FieldSummary, vs...))
+}
+
+// SummaryNotIn applies the NotIn predicate on the "summary" field.
+func SummaryNotIn(vs ...string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNotIn(FieldSummary, vs...))
+}
+
+// SummaryGT applies the GT predicate on the "summary" field.
+func SummaryGT(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldGT(FieldSummary, v))
+}
+
+// SummaryGTE applies the GTE predicate on the "summary" field.
+func SummaryGTE(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldGTE(FieldSummary, v))
+}
+
+// SummaryLT applies the LT predicate on the "summary" field.
+func SummaryLT(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldLT(FieldSummary, v))
+}
+
+// SummaryLTE applies the LTE predicate on the "summary" field.
+func SummaryLTE(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldLTE(FieldSummary, v))
+}
+
+// SummaryContains applies the Contains predicate on the "summary" field.
+func SummaryContains(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldContains(FieldSummary, v))
+}
+
+// SummaryHasPrefix applies the HasPrefix predicate on the "summary" field.
+func SummaryHasPrefix(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldHasPrefix(FieldSummary, v))
+}
+
+// SummaryHasSuffix applies the HasSuffix predicate on the "summary" field.
+func SummaryHasSuffix(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldHasSuffix(FieldSummary, v))
+}
+
+// SummaryEqualFold applies the EqualFold predicate on the "summary" field.
+func SummaryEqualFold(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEqualFold(FieldSummary, v))
+}
+
+// SummaryContainsFold applies the ContainsFold predicate on the "summary" field.
+func SummaryContainsFold(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldContainsFold(FieldSummary, v))
+}
+
+// YearsOfExperienceEQ applies the EQ predicate on the "yearsOfExperience" field.
+func YearsOfExperienceEQ(v int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEQ(FieldYearsOfExperience, v))
+}
+
+// YearsOfExperienceNEQ applies the NEQ predicate on the "yearsOfExperience" field.
+func YearsOfExperienceNEQ(v int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNEQ(FieldYearsOfExperience, v))
+}
+
+// YearsOfExperienceIn applies the In predicate on the "yearsOfExperience" field.
+func YearsOfExperienceIn(vs ...int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldIn(FieldYearsOfExperience, vs...))
+}
+
+// YearsOfExperienceNotIn applies the NotIn predicate on the "yearsOfExperience" field.
+func YearsOfExperienceNotIn(vs ...int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNotIn(FieldYearsOfExperience, vs...))
+}
+
+// YearsOfExperienceGT applies the GT predicate on the "yearsOfExperience" field.
+func YearsOfExperienceGT(v int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldGT(FieldYearsOfExperience, v))
+}
+
+// YearsOfExperienceGTE applies the GTE predicate on the "yearsOfExperience" field.
+func YearsOfExperienceGTE(v int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldGTE(FieldYearsOfExperience, v))
+}
+
+// YearsOfExperienceLT applies the LT predicate on the "yearsOfExperience" field.
+func YearsOfExperienceLT(v int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldLT(FieldYearsOfExperience, v))
+}
+
+// YearsOfExperienceLTE applies the LTE predicate on the "yearsOfExperience" field.
+func YearsOfExperienceLTE(v int) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldLTE(FieldYearsOfExperience, v))
+}
+
+// YearsOfExperienceIsNil applies the IsNil predicate on the "yearsOfExperience" field.
+func YearsOfExperienceIsNil() predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldIsNull(FieldYearsOfExperience))
+}
+
+// YearsOfExperienceNotNil applies the NotNil predicate on the "yearsOfExperience" field.
+func YearsOfExperienceNotNil() predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNotNull(FieldYearsOfExperience))
+}
+
+// KeyStrengthsIsNil applies the IsNil predicate on the "keyStrengths" field.
+func KeyStrengthsIsNil() predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldIsNull(FieldKeyStrengths))
+}
+
+// KeyStrengthsNotNil applies the NotNil predicate on the "keyStrengths" field.
+func KeyStrengthsNotNil() predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNotNull(FieldKeyStrengths))
+}
+
+// CareerObjectiveEQ applies the EQ predicate on the "careerObjective" field.
+func CareerObjectiveEQ(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEQ(FieldCareerObjective, v))
+}
+
+// CareerObjectiveNEQ applies the NEQ predicate on the "careerObjective" field.
+func CareerObjectiveNEQ(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNEQ(FieldCareerObjective, v))
+}
+
+// CareerObjectiveIn applies the In predicate on the "careerObjective" field.
+func CareerObjectiveIn(vs ...string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldIn(FieldCareerObjective, vs...))
+}
+
+// CareerObjectiveNotIn applies the NotIn predicate on the "careerObjective" field.
+func CareerObjectiveNotIn(vs ...string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNotIn(FieldCareerObjective, vs...))
+}
+
+// CareerObjectiveGT applies the GT predicate on the "careerObjective" field.
+func CareerObjectiveGT(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldGT(FieldCareerObjective, v))
+}
+
+// CareerObjectiveGTE applies the GTE predicate on the "careerObjective" field.
+func CareerObjectiveGTE(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldGTE(FieldCareerObjective, v))
+}
+
+// CareerObjectiveLT applies the LT predicate on the "careerObjective" field.
+func CareerObjectiveLT(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldLT(FieldCareerObjective, v))
+}
+
+// CareerObjectiveLTE applies the LTE predicate on the "careerObjective" field.
+func CareerObjectiveLTE(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldLTE(FieldCareerObjective, v))
+}
+
+// CareerObjectiveContains applies the Contains predicate on the "careerObjective" field.
+func CareerObjectiveContains(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldContains(FieldCareerObjective, v))
+}
+
+// CareerObjectiveHasPrefix applies the HasPrefix predicate on the "careerObjective" field.
+func CareerObjectiveHasPrefix(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldHasPrefix(FieldCareerObjective, v))
+}
+
+// CareerObjectiveHasSuffix applies the HasSuffix predicate on the "careerObjective" field.
+func CareerObjectiveHasSuffix(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldHasSuffix(FieldCareerObjective, v))
+}
+
+// CareerObjectiveIsNil applies the IsNil predicate on the "careerObjective" field.
+func CareerObjectiveIsNil() predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldIsNull(FieldCareerObjective))
+}
+
+// CareerObjectiveNotNil applies the NotNil predicate on the "careerObjective" field.
+func CareerObjectiveNotNil() predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldNotNull(FieldCareerObjective))
+}
+
+// CareerObjectiveEqualFold applies the EqualFold predicate on the "careerObjective" field.
+func CareerObjectiveEqualFold(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldEqualFold(FieldCareerObjective, v))
+}
+
+// CareerObjectiveContainsFold applies the ContainsFold predicate on the "careerObjective" field.
+func CareerObjectiveContainsFold(v string) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(sql.FieldContainsFold(FieldCareerObjective, v))
+}
+
+// HasResume applies the HasEdge predicate on the "resume" edge.
+func HasResume() predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, ResumeTable, ResumeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResumeWith applies the HasEdge predicate on the "resume" edge with a given conditions (other predicates).
+func HasResumeWith(preds ...predicate.Resume) predicate.ProfessionalSummary {
+	return predicate.ProfessionalSummary(func(s *sql.Selector) {
+		step := newResumeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

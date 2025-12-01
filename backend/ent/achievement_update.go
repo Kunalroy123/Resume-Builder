@@ -8,10 +8,13 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/achievement"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // AchievementUpdate is the builder for updating Achievement entities.
@@ -27,9 +30,155 @@ func (_u *AchievementUpdate) Where(ps ...predicate.Achievement) *AchievementUpda
 	return _u
 }
 
+// SetDiscription sets the "discription" field.
+func (_u *AchievementUpdate) SetDiscription(v string) *AchievementUpdate {
+	_u.mutation.SetDiscription(v)
+	return _u
+}
+
+// SetNillableDiscription sets the "discription" field if the given value is not nil.
+func (_u *AchievementUpdate) SetNillableDiscription(v *string) *AchievementUpdate {
+	if v != nil {
+		_u.SetDiscription(*v)
+	}
+	return _u
+}
+
+// SetDateAchieved sets the "dateAchieved" field.
+func (_u *AchievementUpdate) SetDateAchieved(v time.Time) *AchievementUpdate {
+	_u.mutation.SetDateAchieved(v)
+	return _u
+}
+
+// SetNillableDateAchieved sets the "dateAchieved" field if the given value is not nil.
+func (_u *AchievementUpdate) SetNillableDateAchieved(v *time.Time) *AchievementUpdate {
+	if v != nil {
+		_u.SetDateAchieved(*v)
+	}
+	return _u
+}
+
+// ClearDateAchieved clears the value of the "dateAchieved" field.
+func (_u *AchievementUpdate) ClearDateAchieved() *AchievementUpdate {
+	_u.mutation.ClearDateAchieved()
+	return _u
+}
+
+// SetIssuingOrganization sets the "issuingOrganization" field.
+func (_u *AchievementUpdate) SetIssuingOrganization(v string) *AchievementUpdate {
+	_u.mutation.SetIssuingOrganization(v)
+	return _u
+}
+
+// SetNillableIssuingOrganization sets the "issuingOrganization" field if the given value is not nil.
+func (_u *AchievementUpdate) SetNillableIssuingOrganization(v *string) *AchievementUpdate {
+	if v != nil {
+		_u.SetIssuingOrganization(*v)
+	}
+	return _u
+}
+
+// ClearIssuingOrganization clears the value of the "issuingOrganization" field.
+func (_u *AchievementUpdate) ClearIssuingOrganization() *AchievementUpdate {
+	_u.mutation.ClearIssuingOrganization()
+	return _u
+}
+
+// SetAchievementType sets the "achievementType" field.
+func (_u *AchievementUpdate) SetAchievementType(v achievement.AchievementType) *AchievementUpdate {
+	_u.mutation.SetAchievementType(v)
+	return _u
+}
+
+// SetNillableAchievementType sets the "achievementType" field if the given value is not nil.
+func (_u *AchievementUpdate) SetNillableAchievementType(v *achievement.AchievementType) *AchievementUpdate {
+	if v != nil {
+		_u.SetAchievementType(*v)
+	}
+	return _u
+}
+
+// SetAchievementUrl sets the "achievementUrl" field.
+func (_u *AchievementUpdate) SetAchievementUrl(v string) *AchievementUpdate {
+	_u.mutation.SetAchievementUrl(v)
+	return _u
+}
+
+// SetNillableAchievementUrl sets the "achievementUrl" field if the given value is not nil.
+func (_u *AchievementUpdate) SetNillableAchievementUrl(v *string) *AchievementUpdate {
+	if v != nil {
+		_u.SetAchievementUrl(*v)
+	}
+	return _u
+}
+
+// ClearAchievementUrl clears the value of the "achievementUrl" field.
+func (_u *AchievementUpdate) ClearAchievementUrl() *AchievementUpdate {
+	_u.mutation.ClearAchievementUrl()
+	return _u
+}
+
+// SetImpactMetrics sets the "impactMetrics" field.
+func (_u *AchievementUpdate) SetImpactMetrics(v string) *AchievementUpdate {
+	_u.mutation.SetImpactMetrics(v)
+	return _u
+}
+
+// SetNillableImpactMetrics sets the "impactMetrics" field if the given value is not nil.
+func (_u *AchievementUpdate) SetNillableImpactMetrics(v *string) *AchievementUpdate {
+	if v != nil {
+		_u.SetImpactMetrics(*v)
+	}
+	return _u
+}
+
+// ClearImpactMetrics clears the value of the "impactMetrics" field.
+func (_u *AchievementUpdate) ClearImpactMetrics() *AchievementUpdate {
+	_u.mutation.ClearImpactMetrics()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *AchievementUpdate) SetOrderIndex(v int) *AchievementUpdate {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *AchievementUpdate) SetNillableOrderIndex(v *int) *AchievementUpdate {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *AchievementUpdate) AddOrderIndex(v int) *AchievementUpdate {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *AchievementUpdate) SetResumeID(id uuid.UUID) *AchievementUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *AchievementUpdate) SetResume(v *Resume) *AchievementUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the AchievementMutation object of the builder.
 func (_u *AchievementUpdate) Mutation() *AchievementMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *AchievementUpdate) ClearResume() *AchievementUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +208,100 @@ func (_u *AchievementUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *AchievementUpdate) check() error {
+	if v, ok := _u.mutation.Discription(); ok {
+		if err := achievement.DiscriptionValidator(v); err != nil {
+			return &ValidationError{Name: "discription", err: fmt.Errorf(`ent: validator failed for field "Achievement.discription": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.AchievementType(); ok {
+		if err := achievement.AchievementTypeValidator(v); err != nil {
+			return &ValidationError{Name: "achievementType", err: fmt.Errorf(`ent: validator failed for field "Achievement.achievementType": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Achievement.resume"`)
+	}
+	return nil
+}
+
 func (_u *AchievementUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(achievement.Table, achievement.Columns, sqlgraph.NewFieldSpec(achievement.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(achievement.Table, achievement.Columns, sqlgraph.NewFieldSpec(achievement.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Discription(); ok {
+		_spec.SetField(achievement.FieldDiscription, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.DateAchieved(); ok {
+		_spec.SetField(achievement.FieldDateAchieved, field.TypeTime, value)
+	}
+	if _u.mutation.DateAchievedCleared() {
+		_spec.ClearField(achievement.FieldDateAchieved, field.TypeTime)
+	}
+	if value, ok := _u.mutation.IssuingOrganization(); ok {
+		_spec.SetField(achievement.FieldIssuingOrganization, field.TypeString, value)
+	}
+	if _u.mutation.IssuingOrganizationCleared() {
+		_spec.ClearField(achievement.FieldIssuingOrganization, field.TypeString)
+	}
+	if value, ok := _u.mutation.AchievementType(); ok {
+		_spec.SetField(achievement.FieldAchievementType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.AchievementUrl(); ok {
+		_spec.SetField(achievement.FieldAchievementUrl, field.TypeString, value)
+	}
+	if _u.mutation.AchievementUrlCleared() {
+		_spec.ClearField(achievement.FieldAchievementUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.ImpactMetrics(); ok {
+		_spec.SetField(achievement.FieldImpactMetrics, field.TypeString, value)
+	}
+	if _u.mutation.ImpactMetricsCleared() {
+		_spec.ClearField(achievement.FieldImpactMetrics, field.TypeString)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(achievement.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(achievement.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   achievement.ResumeTable,
+			Columns: []string{achievement.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   achievement.ResumeTable,
+			Columns: []string{achievement.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +323,155 @@ type AchievementUpdateOne struct {
 	mutation *AchievementMutation
 }
 
+// SetDiscription sets the "discription" field.
+func (_u *AchievementUpdateOne) SetDiscription(v string) *AchievementUpdateOne {
+	_u.mutation.SetDiscription(v)
+	return _u
+}
+
+// SetNillableDiscription sets the "discription" field if the given value is not nil.
+func (_u *AchievementUpdateOne) SetNillableDiscription(v *string) *AchievementUpdateOne {
+	if v != nil {
+		_u.SetDiscription(*v)
+	}
+	return _u
+}
+
+// SetDateAchieved sets the "dateAchieved" field.
+func (_u *AchievementUpdateOne) SetDateAchieved(v time.Time) *AchievementUpdateOne {
+	_u.mutation.SetDateAchieved(v)
+	return _u
+}
+
+// SetNillableDateAchieved sets the "dateAchieved" field if the given value is not nil.
+func (_u *AchievementUpdateOne) SetNillableDateAchieved(v *time.Time) *AchievementUpdateOne {
+	if v != nil {
+		_u.SetDateAchieved(*v)
+	}
+	return _u
+}
+
+// ClearDateAchieved clears the value of the "dateAchieved" field.
+func (_u *AchievementUpdateOne) ClearDateAchieved() *AchievementUpdateOne {
+	_u.mutation.ClearDateAchieved()
+	return _u
+}
+
+// SetIssuingOrganization sets the "issuingOrganization" field.
+func (_u *AchievementUpdateOne) SetIssuingOrganization(v string) *AchievementUpdateOne {
+	_u.mutation.SetIssuingOrganization(v)
+	return _u
+}
+
+// SetNillableIssuingOrganization sets the "issuingOrganization" field if the given value is not nil.
+func (_u *AchievementUpdateOne) SetNillableIssuingOrganization(v *string) *AchievementUpdateOne {
+	if v != nil {
+		_u.SetIssuingOrganization(*v)
+	}
+	return _u
+}
+
+// ClearIssuingOrganization clears the value of the "issuingOrganization" field.
+func (_u *AchievementUpdateOne) ClearIssuingOrganization() *AchievementUpdateOne {
+	_u.mutation.ClearIssuingOrganization()
+	return _u
+}
+
+// SetAchievementType sets the "achievementType" field.
+func (_u *AchievementUpdateOne) SetAchievementType(v achievement.AchievementType) *AchievementUpdateOne {
+	_u.mutation.SetAchievementType(v)
+	return _u
+}
+
+// SetNillableAchievementType sets the "achievementType" field if the given value is not nil.
+func (_u *AchievementUpdateOne) SetNillableAchievementType(v *achievement.AchievementType) *AchievementUpdateOne {
+	if v != nil {
+		_u.SetAchievementType(*v)
+	}
+	return _u
+}
+
+// SetAchievementUrl sets the "achievementUrl" field.
+func (_u *AchievementUpdateOne) SetAchievementUrl(v string) *AchievementUpdateOne {
+	_u.mutation.SetAchievementUrl(v)
+	return _u
+}
+
+// SetNillableAchievementUrl sets the "achievementUrl" field if the given value is not nil.
+func (_u *AchievementUpdateOne) SetNillableAchievementUrl(v *string) *AchievementUpdateOne {
+	if v != nil {
+		_u.SetAchievementUrl(*v)
+	}
+	return _u
+}
+
+// ClearAchievementUrl clears the value of the "achievementUrl" field.
+func (_u *AchievementUpdateOne) ClearAchievementUrl() *AchievementUpdateOne {
+	_u.mutation.ClearAchievementUrl()
+	return _u
+}
+
+// SetImpactMetrics sets the "impactMetrics" field.
+func (_u *AchievementUpdateOne) SetImpactMetrics(v string) *AchievementUpdateOne {
+	_u.mutation.SetImpactMetrics(v)
+	return _u
+}
+
+// SetNillableImpactMetrics sets the "impactMetrics" field if the given value is not nil.
+func (_u *AchievementUpdateOne) SetNillableImpactMetrics(v *string) *AchievementUpdateOne {
+	if v != nil {
+		_u.SetImpactMetrics(*v)
+	}
+	return _u
+}
+
+// ClearImpactMetrics clears the value of the "impactMetrics" field.
+func (_u *AchievementUpdateOne) ClearImpactMetrics() *AchievementUpdateOne {
+	_u.mutation.ClearImpactMetrics()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *AchievementUpdateOne) SetOrderIndex(v int) *AchievementUpdateOne {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *AchievementUpdateOne) SetNillableOrderIndex(v *int) *AchievementUpdateOne {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *AchievementUpdateOne) AddOrderIndex(v int) *AchievementUpdateOne {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *AchievementUpdateOne) SetResumeID(id uuid.UUID) *AchievementUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *AchievementUpdateOne) SetResume(v *Resume) *AchievementUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the AchievementMutation object of the builder.
 func (_u *AchievementUpdateOne) Mutation() *AchievementMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *AchievementUpdateOne) ClearResume() *AchievementUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the AchievementUpdate builder.
@@ -133,8 +514,29 @@ func (_u *AchievementUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *AchievementUpdateOne) check() error {
+	if v, ok := _u.mutation.Discription(); ok {
+		if err := achievement.DiscriptionValidator(v); err != nil {
+			return &ValidationError{Name: "discription", err: fmt.Errorf(`ent: validator failed for field "Achievement.discription": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.AchievementType(); ok {
+		if err := achievement.AchievementTypeValidator(v); err != nil {
+			return &ValidationError{Name: "achievementType", err: fmt.Errorf(`ent: validator failed for field "Achievement.achievementType": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Achievement.resume"`)
+	}
+	return nil
+}
+
 func (_u *AchievementUpdateOne) sqlSave(ctx context.Context) (_node *Achievement, err error) {
-	_spec := sqlgraph.NewUpdateSpec(achievement.Table, achievement.Columns, sqlgraph.NewFieldSpec(achievement.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(achievement.Table, achievement.Columns, sqlgraph.NewFieldSpec(achievement.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Achievement.id" for update`)}
@@ -158,6 +560,71 @@ func (_u *AchievementUpdateOne) sqlSave(ctx context.Context) (_node *Achievement
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Discription(); ok {
+		_spec.SetField(achievement.FieldDiscription, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.DateAchieved(); ok {
+		_spec.SetField(achievement.FieldDateAchieved, field.TypeTime, value)
+	}
+	if _u.mutation.DateAchievedCleared() {
+		_spec.ClearField(achievement.FieldDateAchieved, field.TypeTime)
+	}
+	if value, ok := _u.mutation.IssuingOrganization(); ok {
+		_spec.SetField(achievement.FieldIssuingOrganization, field.TypeString, value)
+	}
+	if _u.mutation.IssuingOrganizationCleared() {
+		_spec.ClearField(achievement.FieldIssuingOrganization, field.TypeString)
+	}
+	if value, ok := _u.mutation.AchievementType(); ok {
+		_spec.SetField(achievement.FieldAchievementType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.AchievementUrl(); ok {
+		_spec.SetField(achievement.FieldAchievementUrl, field.TypeString, value)
+	}
+	if _u.mutation.AchievementUrlCleared() {
+		_spec.ClearField(achievement.FieldAchievementUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.ImpactMetrics(); ok {
+		_spec.SetField(achievement.FieldImpactMetrics, field.TypeString, value)
+	}
+	if _u.mutation.ImpactMetricsCleared() {
+		_spec.ClearField(achievement.FieldImpactMetrics, field.TypeString)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(achievement.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(achievement.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   achievement.ResumeTable,
+			Columns: []string{achievement.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   achievement.ResumeTable,
+			Columns: []string{achievement.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Achievement{config: _u.config}
 	_spec.Assign = _node.assignValues

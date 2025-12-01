@@ -8,10 +8,13 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/predicate"
 	"resume-builder-backend/ent/project"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ProjectUpdate is the builder for updating Project entities.
@@ -27,9 +30,258 @@ func (_u *ProjectUpdate) Where(ps ...predicate.Project) *ProjectUpdate {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *ProjectUpdate) SetTitle(v string) *ProjectUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableTitle(v *string) *ProjectUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *ProjectUpdate) ClearTitle() *ProjectUpdate {
+	_u.mutation.ClearTitle()
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *ProjectUpdate) SetDescription(v string) *ProjectUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableDescription(v *string) *ProjectUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *ProjectUpdate) ClearDescription() *ProjectUpdate {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetStartDate sets the "startDate" field.
+func (_u *ProjectUpdate) SetStartDate(v time.Time) *ProjectUpdate {
+	_u.mutation.SetStartDate(v)
+	return _u
+}
+
+// SetNillableStartDate sets the "startDate" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableStartDate(v *time.Time) *ProjectUpdate {
+	if v != nil {
+		_u.SetStartDate(*v)
+	}
+	return _u
+}
+
+// ClearStartDate clears the value of the "startDate" field.
+func (_u *ProjectUpdate) ClearStartDate() *ProjectUpdate {
+	_u.mutation.ClearStartDate()
+	return _u
+}
+
+// SetEndDate sets the "endDate" field.
+func (_u *ProjectUpdate) SetEndDate(v time.Time) *ProjectUpdate {
+	_u.mutation.SetEndDate(v)
+	return _u
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableEndDate(v *time.Time) *ProjectUpdate {
+	if v != nil {
+		_u.SetEndDate(*v)
+	}
+	return _u
+}
+
+// ClearEndDate clears the value of the "endDate" field.
+func (_u *ProjectUpdate) ClearEndDate() *ProjectUpdate {
+	_u.mutation.ClearEndDate()
+	return _u
+}
+
+// SetProjectUrl sets the "projectUrl" field.
+func (_u *ProjectUpdate) SetProjectUrl(v string) *ProjectUpdate {
+	_u.mutation.SetProjectUrl(v)
+	return _u
+}
+
+// SetNillableProjectUrl sets the "projectUrl" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableProjectUrl(v *string) *ProjectUpdate {
+	if v != nil {
+		_u.SetProjectUrl(*v)
+	}
+	return _u
+}
+
+// ClearProjectUrl clears the value of the "projectUrl" field.
+func (_u *ProjectUpdate) ClearProjectUrl() *ProjectUpdate {
+	_u.mutation.ClearProjectUrl()
+	return _u
+}
+
+// SetGithubUrl sets the "githubUrl" field.
+func (_u *ProjectUpdate) SetGithubUrl(v string) *ProjectUpdate {
+	_u.mutation.SetGithubUrl(v)
+	return _u
+}
+
+// SetNillableGithubUrl sets the "githubUrl" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableGithubUrl(v *string) *ProjectUpdate {
+	if v != nil {
+		_u.SetGithubUrl(*v)
+	}
+	return _u
+}
+
+// ClearGithubUrl clears the value of the "githubUrl" field.
+func (_u *ProjectUpdate) ClearGithubUrl() *ProjectUpdate {
+	_u.mutation.ClearGithubUrl()
+	return _u
+}
+
+// SetDemoUrl sets the "demoUrl" field.
+func (_u *ProjectUpdate) SetDemoUrl(v string) *ProjectUpdate {
+	_u.mutation.SetDemoUrl(v)
+	return _u
+}
+
+// SetNillableDemoUrl sets the "demoUrl" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableDemoUrl(v *string) *ProjectUpdate {
+	if v != nil {
+		_u.SetDemoUrl(*v)
+	}
+	return _u
+}
+
+// ClearDemoUrl clears the value of the "demoUrl" field.
+func (_u *ProjectUpdate) ClearDemoUrl() *ProjectUpdate {
+	_u.mutation.ClearDemoUrl()
+	return _u
+}
+
+// SetTechnologiesUsed sets the "technologiesUsed" field.
+func (_u *ProjectUpdate) SetTechnologiesUsed(v map[string]interface{}) *ProjectUpdate {
+	_u.mutation.SetTechnologiesUsed(v)
+	return _u
+}
+
+// ClearTechnologiesUsed clears the value of the "technologiesUsed" field.
+func (_u *ProjectUpdate) ClearTechnologiesUsed() *ProjectUpdate {
+	_u.mutation.ClearTechnologiesUsed()
+	return _u
+}
+
+// SetKeyFeatures sets the "keyFeatures" field.
+func (_u *ProjectUpdate) SetKeyFeatures(v map[string]interface{}) *ProjectUpdate {
+	_u.mutation.SetKeyFeatures(v)
+	return _u
+}
+
+// ClearKeyFeatures clears the value of the "keyFeatures" field.
+func (_u *ProjectUpdate) ClearKeyFeatures() *ProjectUpdate {
+	_u.mutation.ClearKeyFeatures()
+	return _u
+}
+
+// SetRole sets the "role" field.
+func (_u *ProjectUpdate) SetRole(v string) *ProjectUpdate {
+	_u.mutation.SetRole(v)
+	return _u
+}
+
+// SetNillableRole sets the "role" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableRole(v *string) *ProjectUpdate {
+	if v != nil {
+		_u.SetRole(*v)
+	}
+	return _u
+}
+
+// ClearRole clears the value of the "role" field.
+func (_u *ProjectUpdate) ClearRole() *ProjectUpdate {
+	_u.mutation.ClearRole()
+	return _u
+}
+
+// SetTeamSize sets the "teamSize" field.
+func (_u *ProjectUpdate) SetTeamSize(v int) *ProjectUpdate {
+	_u.mutation.ResetTeamSize()
+	_u.mutation.SetTeamSize(v)
+	return _u
+}
+
+// SetNillableTeamSize sets the "teamSize" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableTeamSize(v *int) *ProjectUpdate {
+	if v != nil {
+		_u.SetTeamSize(*v)
+	}
+	return _u
+}
+
+// AddTeamSize adds value to the "teamSize" field.
+func (_u *ProjectUpdate) AddTeamSize(v int) *ProjectUpdate {
+	_u.mutation.AddTeamSize(v)
+	return _u
+}
+
+// ClearTeamSize clears the value of the "teamSize" field.
+func (_u *ProjectUpdate) ClearTeamSize() *ProjectUpdate {
+	_u.mutation.ClearTeamSize()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *ProjectUpdate) SetOrderIndex(v int) *ProjectUpdate {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *ProjectUpdate) SetNillableOrderIndex(v *int) *ProjectUpdate {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *ProjectUpdate) AddOrderIndex(v int) *ProjectUpdate {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *ProjectUpdate) SetResumeID(id uuid.UUID) *ProjectUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *ProjectUpdate) SetResume(v *Resume) *ProjectUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the ProjectMutation object of the builder.
 func (_u *ProjectUpdate) Mutation() *ProjectMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *ProjectUpdate) ClearResume() *ProjectUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +311,129 @@ func (_u *ProjectUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *ProjectUpdate) check() error {
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Project.resume"`)
+	}
+	return nil
+}
+
 func (_u *ProjectUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(project.Table, project.Columns, sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(project.Table, project.Columns, sqlgraph.NewFieldSpec(project.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(project.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(project.FieldTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(project.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(project.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.StartDate(); ok {
+		_spec.SetField(project.FieldStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.StartDateCleared() {
+		_spec.ClearField(project.FieldStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EndDate(); ok {
+		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.EndDateCleared() {
+		_spec.ClearField(project.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ProjectUrl(); ok {
+		_spec.SetField(project.FieldProjectUrl, field.TypeString, value)
+	}
+	if _u.mutation.ProjectUrlCleared() {
+		_spec.ClearField(project.FieldProjectUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.GithubUrl(); ok {
+		_spec.SetField(project.FieldGithubUrl, field.TypeString, value)
+	}
+	if _u.mutation.GithubUrlCleared() {
+		_spec.ClearField(project.FieldGithubUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.DemoUrl(); ok {
+		_spec.SetField(project.FieldDemoUrl, field.TypeString, value)
+	}
+	if _u.mutation.DemoUrlCleared() {
+		_spec.ClearField(project.FieldDemoUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.TechnologiesUsed(); ok {
+		_spec.SetField(project.FieldTechnologiesUsed, field.TypeJSON, value)
+	}
+	if _u.mutation.TechnologiesUsedCleared() {
+		_spec.ClearField(project.FieldTechnologiesUsed, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.KeyFeatures(); ok {
+		_spec.SetField(project.FieldKeyFeatures, field.TypeJSON, value)
+	}
+	if _u.mutation.KeyFeaturesCleared() {
+		_spec.ClearField(project.FieldKeyFeatures, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Role(); ok {
+		_spec.SetField(project.FieldRole, field.TypeString, value)
+	}
+	if _u.mutation.RoleCleared() {
+		_spec.ClearField(project.FieldRole, field.TypeString)
+	}
+	if value, ok := _u.mutation.TeamSize(); ok {
+		_spec.SetField(project.FieldTeamSize, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedTeamSize(); ok {
+		_spec.AddField(project.FieldTeamSize, field.TypeInt, value)
+	}
+	if _u.mutation.TeamSizeCleared() {
+		_spec.ClearField(project.FieldTeamSize, field.TypeInt)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(project.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(project.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ResumeTable,
+			Columns: []string{project.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ResumeTable,
+			Columns: []string{project.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +455,258 @@ type ProjectUpdateOne struct {
 	mutation *ProjectMutation
 }
 
+// SetTitle sets the "title" field.
+func (_u *ProjectUpdateOne) SetTitle(v string) *ProjectUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableTitle(v *string) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *ProjectUpdateOne) ClearTitle() *ProjectUpdateOne {
+	_u.mutation.ClearTitle()
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *ProjectUpdateOne) SetDescription(v string) *ProjectUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableDescription(v *string) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *ProjectUpdateOne) ClearDescription() *ProjectUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetStartDate sets the "startDate" field.
+func (_u *ProjectUpdateOne) SetStartDate(v time.Time) *ProjectUpdateOne {
+	_u.mutation.SetStartDate(v)
+	return _u
+}
+
+// SetNillableStartDate sets the "startDate" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableStartDate(v *time.Time) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetStartDate(*v)
+	}
+	return _u
+}
+
+// ClearStartDate clears the value of the "startDate" field.
+func (_u *ProjectUpdateOne) ClearStartDate() *ProjectUpdateOne {
+	_u.mutation.ClearStartDate()
+	return _u
+}
+
+// SetEndDate sets the "endDate" field.
+func (_u *ProjectUpdateOne) SetEndDate(v time.Time) *ProjectUpdateOne {
+	_u.mutation.SetEndDate(v)
+	return _u
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableEndDate(v *time.Time) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetEndDate(*v)
+	}
+	return _u
+}
+
+// ClearEndDate clears the value of the "endDate" field.
+func (_u *ProjectUpdateOne) ClearEndDate() *ProjectUpdateOne {
+	_u.mutation.ClearEndDate()
+	return _u
+}
+
+// SetProjectUrl sets the "projectUrl" field.
+func (_u *ProjectUpdateOne) SetProjectUrl(v string) *ProjectUpdateOne {
+	_u.mutation.SetProjectUrl(v)
+	return _u
+}
+
+// SetNillableProjectUrl sets the "projectUrl" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableProjectUrl(v *string) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetProjectUrl(*v)
+	}
+	return _u
+}
+
+// ClearProjectUrl clears the value of the "projectUrl" field.
+func (_u *ProjectUpdateOne) ClearProjectUrl() *ProjectUpdateOne {
+	_u.mutation.ClearProjectUrl()
+	return _u
+}
+
+// SetGithubUrl sets the "githubUrl" field.
+func (_u *ProjectUpdateOne) SetGithubUrl(v string) *ProjectUpdateOne {
+	_u.mutation.SetGithubUrl(v)
+	return _u
+}
+
+// SetNillableGithubUrl sets the "githubUrl" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableGithubUrl(v *string) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetGithubUrl(*v)
+	}
+	return _u
+}
+
+// ClearGithubUrl clears the value of the "githubUrl" field.
+func (_u *ProjectUpdateOne) ClearGithubUrl() *ProjectUpdateOne {
+	_u.mutation.ClearGithubUrl()
+	return _u
+}
+
+// SetDemoUrl sets the "demoUrl" field.
+func (_u *ProjectUpdateOne) SetDemoUrl(v string) *ProjectUpdateOne {
+	_u.mutation.SetDemoUrl(v)
+	return _u
+}
+
+// SetNillableDemoUrl sets the "demoUrl" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableDemoUrl(v *string) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetDemoUrl(*v)
+	}
+	return _u
+}
+
+// ClearDemoUrl clears the value of the "demoUrl" field.
+func (_u *ProjectUpdateOne) ClearDemoUrl() *ProjectUpdateOne {
+	_u.mutation.ClearDemoUrl()
+	return _u
+}
+
+// SetTechnologiesUsed sets the "technologiesUsed" field.
+func (_u *ProjectUpdateOne) SetTechnologiesUsed(v map[string]interface{}) *ProjectUpdateOne {
+	_u.mutation.SetTechnologiesUsed(v)
+	return _u
+}
+
+// ClearTechnologiesUsed clears the value of the "technologiesUsed" field.
+func (_u *ProjectUpdateOne) ClearTechnologiesUsed() *ProjectUpdateOne {
+	_u.mutation.ClearTechnologiesUsed()
+	return _u
+}
+
+// SetKeyFeatures sets the "keyFeatures" field.
+func (_u *ProjectUpdateOne) SetKeyFeatures(v map[string]interface{}) *ProjectUpdateOne {
+	_u.mutation.SetKeyFeatures(v)
+	return _u
+}
+
+// ClearKeyFeatures clears the value of the "keyFeatures" field.
+func (_u *ProjectUpdateOne) ClearKeyFeatures() *ProjectUpdateOne {
+	_u.mutation.ClearKeyFeatures()
+	return _u
+}
+
+// SetRole sets the "role" field.
+func (_u *ProjectUpdateOne) SetRole(v string) *ProjectUpdateOne {
+	_u.mutation.SetRole(v)
+	return _u
+}
+
+// SetNillableRole sets the "role" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableRole(v *string) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetRole(*v)
+	}
+	return _u
+}
+
+// ClearRole clears the value of the "role" field.
+func (_u *ProjectUpdateOne) ClearRole() *ProjectUpdateOne {
+	_u.mutation.ClearRole()
+	return _u
+}
+
+// SetTeamSize sets the "teamSize" field.
+func (_u *ProjectUpdateOne) SetTeamSize(v int) *ProjectUpdateOne {
+	_u.mutation.ResetTeamSize()
+	_u.mutation.SetTeamSize(v)
+	return _u
+}
+
+// SetNillableTeamSize sets the "teamSize" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableTeamSize(v *int) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetTeamSize(*v)
+	}
+	return _u
+}
+
+// AddTeamSize adds value to the "teamSize" field.
+func (_u *ProjectUpdateOne) AddTeamSize(v int) *ProjectUpdateOne {
+	_u.mutation.AddTeamSize(v)
+	return _u
+}
+
+// ClearTeamSize clears the value of the "teamSize" field.
+func (_u *ProjectUpdateOne) ClearTeamSize() *ProjectUpdateOne {
+	_u.mutation.ClearTeamSize()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *ProjectUpdateOne) SetOrderIndex(v int) *ProjectUpdateOne {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *ProjectUpdateOne) SetNillableOrderIndex(v *int) *ProjectUpdateOne {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *ProjectUpdateOne) AddOrderIndex(v int) *ProjectUpdateOne {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *ProjectUpdateOne) SetResumeID(id uuid.UUID) *ProjectUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *ProjectUpdateOne) SetResume(v *Resume) *ProjectUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the ProjectMutation object of the builder.
 func (_u *ProjectUpdateOne) Mutation() *ProjectMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *ProjectUpdateOne) ClearResume() *ProjectUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the ProjectUpdate builder.
@@ -133,8 +749,19 @@ func (_u *ProjectUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *ProjectUpdateOne) check() error {
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Project.resume"`)
+	}
+	return nil
+}
+
 func (_u *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err error) {
-	_spec := sqlgraph.NewUpdateSpec(project.Table, project.Columns, sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(project.Table, project.Columns, sqlgraph.NewFieldSpec(project.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Project.id" for update`)}
@@ -158,6 +785,110 @@ func (_u *ProjectUpdateOne) sqlSave(ctx context.Context) (_node *Project, err er
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(project.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(project.FieldTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(project.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(project.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.StartDate(); ok {
+		_spec.SetField(project.FieldStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.StartDateCleared() {
+		_spec.ClearField(project.FieldStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.EndDate(); ok {
+		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.EndDateCleared() {
+		_spec.ClearField(project.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ProjectUrl(); ok {
+		_spec.SetField(project.FieldProjectUrl, field.TypeString, value)
+	}
+	if _u.mutation.ProjectUrlCleared() {
+		_spec.ClearField(project.FieldProjectUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.GithubUrl(); ok {
+		_spec.SetField(project.FieldGithubUrl, field.TypeString, value)
+	}
+	if _u.mutation.GithubUrlCleared() {
+		_spec.ClearField(project.FieldGithubUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.DemoUrl(); ok {
+		_spec.SetField(project.FieldDemoUrl, field.TypeString, value)
+	}
+	if _u.mutation.DemoUrlCleared() {
+		_spec.ClearField(project.FieldDemoUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.TechnologiesUsed(); ok {
+		_spec.SetField(project.FieldTechnologiesUsed, field.TypeJSON, value)
+	}
+	if _u.mutation.TechnologiesUsedCleared() {
+		_spec.ClearField(project.FieldTechnologiesUsed, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.KeyFeatures(); ok {
+		_spec.SetField(project.FieldKeyFeatures, field.TypeJSON, value)
+	}
+	if _u.mutation.KeyFeaturesCleared() {
+		_spec.ClearField(project.FieldKeyFeatures, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Role(); ok {
+		_spec.SetField(project.FieldRole, field.TypeString, value)
+	}
+	if _u.mutation.RoleCleared() {
+		_spec.ClearField(project.FieldRole, field.TypeString)
+	}
+	if value, ok := _u.mutation.TeamSize(); ok {
+		_spec.SetField(project.FieldTeamSize, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedTeamSize(); ok {
+		_spec.AddField(project.FieldTeamSize, field.TypeInt, value)
+	}
+	if _u.mutation.TeamSizeCleared() {
+		_spec.ClearField(project.FieldTeamSize, field.TypeInt)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(project.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(project.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ResumeTable,
+			Columns: []string{project.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ResumeTable,
+			Columns: []string{project.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Project{config: _u.config}
 	_spec.Assign = _node.assignValues

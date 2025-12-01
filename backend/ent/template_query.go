@@ -4,24 +4,28 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
 	"resume-builder-backend/ent/template"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // TemplateQuery is the builder for querying Template entities.
 type TemplateQuery struct {
 	config
-	ctx        *QueryContext
-	order      []template.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Template
+	ctx         *QueryContext
+	order       []template.OrderOption
+	inters      []Interceptor
+	predicates  []predicate.Template
+	withResumes *ResumeQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (_q *TemplateQuery) Order(o ...template.OrderOption) *TemplateQuery {
 	return _q
 }
 
+// QueryResumes chains the current query on the "resumes" edge.
+func (_q *TemplateQuery) QueryResumes() *ResumeQuery {
+	query := (&ResumeClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, template.ResumesTable, template.ResumesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Template entity from the query.
 // Returns a *NotFoundError when no Template was found.
 func (_q *TemplateQuery) First(ctx context.Context) (*Template, error) {
@@ -82,8 +108,8 @@ func (_q *TemplateQuery) FirstX(ctx context.Context) *Template {
 
 // FirstID returns the first Template ID from the query.
 // Returns a *NotFoundError when no Template ID was found.
-func (_q *TemplateQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *TemplateQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -95,7 +121,7 @@ func (_q *TemplateQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *TemplateQuery) FirstIDX(ctx context.Context) int {
+func (_q *TemplateQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -133,8 +159,8 @@ func (_q *TemplateQuery) OnlyX(ctx context.Context) *Template {
 // OnlyID is like Only, but returns the only Template ID in the query.
 // Returns a *NotSingularError when more than one Template ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *TemplateQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *TemplateQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -150,7 +176,7 @@ func (_q *TemplateQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *TemplateQuery) OnlyIDX(ctx context.Context) int {
+func (_q *TemplateQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,7 +204,7 @@ func (_q *TemplateQuery) AllX(ctx context.Context) []*Template {
 }
 
 // IDs executes the query and returns a list of Template IDs.
-func (_q *TemplateQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *TemplateQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -190,7 +216,7 @@ func (_q *TemplateQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *TemplateQuery) IDsX(ctx context.Context) []int {
+func (_q *TemplateQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -245,19 +271,43 @@ func (_q *TemplateQuery) Clone() *TemplateQuery {
 		return nil
 	}
 	return &TemplateQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]template.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.Template{}, _q.predicates...),
+		config:      _q.config,
+		ctx:         _q.ctx.Clone(),
+		order:       append([]template.OrderOption{}, _q.order...),
+		inters:      append([]Interceptor{}, _q.inters...),
+		predicates:  append([]predicate.Template{}, _q.predicates...),
+		withResumes: _q.withResumes.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
 	}
 }
 
+// WithResumes tells the query-builder to eager-load the nodes that are connected to
+// the "resumes" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithResumes(opts ...func(*ResumeQuery)) *TemplateQuery {
+	query := (&ResumeClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withResumes = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Template.Query().
+//		GroupBy(template.FieldName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (_q *TemplateQuery) GroupBy(field string, fields ...string) *TemplateGroupBy {
 	_q.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &TemplateGroupBy{build: _q}
@@ -269,6 +319,16 @@ func (_q *TemplateQuery) GroupBy(field string, fields ...string) *TemplateGroupB
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Template.Query().
+//		Select(template.FieldName).
+//		Scan(ctx, &v)
 func (_q *TemplateQuery) Select(fields ...string) *TemplateSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
 	sbuild := &TemplateSelect{TemplateQuery: _q}
@@ -310,8 +370,11 @@ func (_q *TemplateQuery) prepareQuery(ctx context.Context) error {
 
 func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Template, error) {
 	var (
-		nodes = []*Template{}
-		_spec = _q.querySpec()
+		nodes       = []*Template{}
+		_spec       = _q.querySpec()
+		loadedTypes = [1]bool{
+			_q.withResumes != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Template).scanValues(nil, columns)
@@ -319,6 +382,7 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Template{config: _q.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -330,7 +394,48 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withResumes; query != nil {
+		if err := _q.loadResumes(ctx, query, nodes,
+			func(n *Template) { n.Edges.Resumes = []*Resume{} },
+			func(n *Template, e *Resume) { n.Edges.Resumes = append(n.Edges.Resumes, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (_q *TemplateQuery) loadResumes(ctx context.Context, query *ResumeQuery, nodes []*Template, init func(*Template), assign func(*Template, *Resume)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Template)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(resume.FieldTemplateId)
+	}
+	query.Where(predicate.Resume(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(template.ResumesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TemplateId
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "templateId" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "templateId" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (_q *TemplateQuery) sqlCount(ctx context.Context) (int, error) {
@@ -343,7 +448,7 @@ func (_q *TemplateQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *TemplateQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(template.Table, template.Columns, sqlgraph.NewFieldSpec(template.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(template.Table, template.Columns, sqlgraph.NewFieldSpec(template.FieldID, field.TypeUUID))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

@@ -4,53 +4,549 @@ package experience
 
 import (
 	"resume-builder-backend/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Experience {
+func ID(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Experience {
+func IDEQ(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Experience {
+func IDNEQ(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Experience {
+func IDIn(ids ...uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Experience {
+func IDNotIn(ids ...uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Experience {
+func IDGT(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Experience {
+func IDGTE(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Experience {
+func IDLT(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Experience {
+func IDLTE(id uuid.UUID) predicate.Experience {
 	return predicate.Experience(sql.FieldLTE(FieldID, id))
+}
+
+// CompanyName applies equality check predicate on the "companyName" field. It's identical to CompanyNameEQ.
+func CompanyName(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldCompanyName, v))
+}
+
+// Position applies equality check predicate on the "position" field. It's identical to PositionEQ.
+func Position(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldPosition, v))
+}
+
+// StartDate applies equality check predicate on the "startDate" field. It's identical to StartDateEQ.
+func StartDate(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldStartDate, v))
+}
+
+// EndDate applies equality check predicate on the "endDate" field. It's identical to EndDateEQ.
+func EndDate(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldEndDate, v))
+}
+
+// IsCurrent applies equality check predicate on the "isCurrent" field. It's identical to IsCurrentEQ.
+func IsCurrent(v bool) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldIsCurrent, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldDescription, v))
+}
+
+// Location applies equality check predicate on the "location" field. It's identical to LocationEQ.
+func Location(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldLocation, v))
+}
+
+// OrderIndex applies equality check predicate on the "orderIndex" field. It's identical to OrderIndexEQ.
+func OrderIndex(v int) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// CompanyNameEQ applies the EQ predicate on the "companyName" field.
+func CompanyNameEQ(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldCompanyName, v))
+}
+
+// CompanyNameNEQ applies the NEQ predicate on the "companyName" field.
+func CompanyNameNEQ(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldCompanyName, v))
+}
+
+// CompanyNameIn applies the In predicate on the "companyName" field.
+func CompanyNameIn(vs ...string) predicate.Experience {
+	return predicate.Experience(sql.FieldIn(FieldCompanyName, vs...))
+}
+
+// CompanyNameNotIn applies the NotIn predicate on the "companyName" field.
+func CompanyNameNotIn(vs ...string) predicate.Experience {
+	return predicate.Experience(sql.FieldNotIn(FieldCompanyName, vs...))
+}
+
+// CompanyNameGT applies the GT predicate on the "companyName" field.
+func CompanyNameGT(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldGT(FieldCompanyName, v))
+}
+
+// CompanyNameGTE applies the GTE predicate on the "companyName" field.
+func CompanyNameGTE(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldGTE(FieldCompanyName, v))
+}
+
+// CompanyNameLT applies the LT predicate on the "companyName" field.
+func CompanyNameLT(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldLT(FieldCompanyName, v))
+}
+
+// CompanyNameLTE applies the LTE predicate on the "companyName" field.
+func CompanyNameLTE(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldLTE(FieldCompanyName, v))
+}
+
+// CompanyNameContains applies the Contains predicate on the "companyName" field.
+func CompanyNameContains(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldContains(FieldCompanyName, v))
+}
+
+// CompanyNameHasPrefix applies the HasPrefix predicate on the "companyName" field.
+func CompanyNameHasPrefix(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldHasPrefix(FieldCompanyName, v))
+}
+
+// CompanyNameHasSuffix applies the HasSuffix predicate on the "companyName" field.
+func CompanyNameHasSuffix(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldHasSuffix(FieldCompanyName, v))
+}
+
+// CompanyNameEqualFold applies the EqualFold predicate on the "companyName" field.
+func CompanyNameEqualFold(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEqualFold(FieldCompanyName, v))
+}
+
+// CompanyNameContainsFold applies the ContainsFold predicate on the "companyName" field.
+func CompanyNameContainsFold(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldContainsFold(FieldCompanyName, v))
+}
+
+// PositionEQ applies the EQ predicate on the "position" field.
+func PositionEQ(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldPosition, v))
+}
+
+// PositionNEQ applies the NEQ predicate on the "position" field.
+func PositionNEQ(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldPosition, v))
+}
+
+// PositionIn applies the In predicate on the "position" field.
+func PositionIn(vs ...string) predicate.Experience {
+	return predicate.Experience(sql.FieldIn(FieldPosition, vs...))
+}
+
+// PositionNotIn applies the NotIn predicate on the "position" field.
+func PositionNotIn(vs ...string) predicate.Experience {
+	return predicate.Experience(sql.FieldNotIn(FieldPosition, vs...))
+}
+
+// PositionGT applies the GT predicate on the "position" field.
+func PositionGT(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldGT(FieldPosition, v))
+}
+
+// PositionGTE applies the GTE predicate on the "position" field.
+func PositionGTE(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldGTE(FieldPosition, v))
+}
+
+// PositionLT applies the LT predicate on the "position" field.
+func PositionLT(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldLT(FieldPosition, v))
+}
+
+// PositionLTE applies the LTE predicate on the "position" field.
+func PositionLTE(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldLTE(FieldPosition, v))
+}
+
+// PositionContains applies the Contains predicate on the "position" field.
+func PositionContains(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldContains(FieldPosition, v))
+}
+
+// PositionHasPrefix applies the HasPrefix predicate on the "position" field.
+func PositionHasPrefix(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldHasPrefix(FieldPosition, v))
+}
+
+// PositionHasSuffix applies the HasSuffix predicate on the "position" field.
+func PositionHasSuffix(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldHasSuffix(FieldPosition, v))
+}
+
+// PositionEqualFold applies the EqualFold predicate on the "position" field.
+func PositionEqualFold(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEqualFold(FieldPosition, v))
+}
+
+// PositionContainsFold applies the ContainsFold predicate on the "position" field.
+func PositionContainsFold(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldContainsFold(FieldPosition, v))
+}
+
+// StartDateEQ applies the EQ predicate on the "startDate" field.
+func StartDateEQ(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldStartDate, v))
+}
+
+// StartDateNEQ applies the NEQ predicate on the "startDate" field.
+func StartDateNEQ(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldStartDate, v))
+}
+
+// StartDateIn applies the In predicate on the "startDate" field.
+func StartDateIn(vs ...time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldIn(FieldStartDate, vs...))
+}
+
+// StartDateNotIn applies the NotIn predicate on the "startDate" field.
+func StartDateNotIn(vs ...time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldNotIn(FieldStartDate, vs...))
+}
+
+// StartDateGT applies the GT predicate on the "startDate" field.
+func StartDateGT(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldGT(FieldStartDate, v))
+}
+
+// StartDateGTE applies the GTE predicate on the "startDate" field.
+func StartDateGTE(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldGTE(FieldStartDate, v))
+}
+
+// StartDateLT applies the LT predicate on the "startDate" field.
+func StartDateLT(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldLT(FieldStartDate, v))
+}
+
+// StartDateLTE applies the LTE predicate on the "startDate" field.
+func StartDateLTE(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldLTE(FieldStartDate, v))
+}
+
+// EndDateEQ applies the EQ predicate on the "endDate" field.
+func EndDateEQ(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldEndDate, v))
+}
+
+// EndDateNEQ applies the NEQ predicate on the "endDate" field.
+func EndDateNEQ(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldEndDate, v))
+}
+
+// EndDateIn applies the In predicate on the "endDate" field.
+func EndDateIn(vs ...time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldIn(FieldEndDate, vs...))
+}
+
+// EndDateNotIn applies the NotIn predicate on the "endDate" field.
+func EndDateNotIn(vs ...time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldNotIn(FieldEndDate, vs...))
+}
+
+// EndDateGT applies the GT predicate on the "endDate" field.
+func EndDateGT(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldGT(FieldEndDate, v))
+}
+
+// EndDateGTE applies the GTE predicate on the "endDate" field.
+func EndDateGTE(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldGTE(FieldEndDate, v))
+}
+
+// EndDateLT applies the LT predicate on the "endDate" field.
+func EndDateLT(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldLT(FieldEndDate, v))
+}
+
+// EndDateLTE applies the LTE predicate on the "endDate" field.
+func EndDateLTE(v time.Time) predicate.Experience {
+	return predicate.Experience(sql.FieldLTE(FieldEndDate, v))
+}
+
+// EndDateIsNil applies the IsNil predicate on the "endDate" field.
+func EndDateIsNil() predicate.Experience {
+	return predicate.Experience(sql.FieldIsNull(FieldEndDate))
+}
+
+// EndDateNotNil applies the NotNil predicate on the "endDate" field.
+func EndDateNotNil() predicate.Experience {
+	return predicate.Experience(sql.FieldNotNull(FieldEndDate))
+}
+
+// IsCurrentEQ applies the EQ predicate on the "isCurrent" field.
+func IsCurrentEQ(v bool) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldIsCurrent, v))
+}
+
+// IsCurrentNEQ applies the NEQ predicate on the "isCurrent" field.
+func IsCurrentNEQ(v bool) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldIsCurrent, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Experience {
+	return predicate.Experience(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Experience {
+	return predicate.Experience(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// LocationEQ applies the EQ predicate on the "location" field.
+func LocationEQ(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldLocation, v))
+}
+
+// LocationNEQ applies the NEQ predicate on the "location" field.
+func LocationNEQ(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldLocation, v))
+}
+
+// LocationIn applies the In predicate on the "location" field.
+func LocationIn(vs ...string) predicate.Experience {
+	return predicate.Experience(sql.FieldIn(FieldLocation, vs...))
+}
+
+// LocationNotIn applies the NotIn predicate on the "location" field.
+func LocationNotIn(vs ...string) predicate.Experience {
+	return predicate.Experience(sql.FieldNotIn(FieldLocation, vs...))
+}
+
+// LocationGT applies the GT predicate on the "location" field.
+func LocationGT(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldGT(FieldLocation, v))
+}
+
+// LocationGTE applies the GTE predicate on the "location" field.
+func LocationGTE(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldGTE(FieldLocation, v))
+}
+
+// LocationLT applies the LT predicate on the "location" field.
+func LocationLT(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldLT(FieldLocation, v))
+}
+
+// LocationLTE applies the LTE predicate on the "location" field.
+func LocationLTE(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldLTE(FieldLocation, v))
+}
+
+// LocationContains applies the Contains predicate on the "location" field.
+func LocationContains(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldContains(FieldLocation, v))
+}
+
+// LocationHasPrefix applies the HasPrefix predicate on the "location" field.
+func LocationHasPrefix(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldHasPrefix(FieldLocation, v))
+}
+
+// LocationHasSuffix applies the HasSuffix predicate on the "location" field.
+func LocationHasSuffix(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldHasSuffix(FieldLocation, v))
+}
+
+// LocationIsNil applies the IsNil predicate on the "location" field.
+func LocationIsNil() predicate.Experience {
+	return predicate.Experience(sql.FieldIsNull(FieldLocation))
+}
+
+// LocationNotNil applies the NotNil predicate on the "location" field.
+func LocationNotNil() predicate.Experience {
+	return predicate.Experience(sql.FieldNotNull(FieldLocation))
+}
+
+// LocationEqualFold applies the EqualFold predicate on the "location" field.
+func LocationEqualFold(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldEqualFold(FieldLocation, v))
+}
+
+// LocationContainsFold applies the ContainsFold predicate on the "location" field.
+func LocationContainsFold(v string) predicate.Experience {
+	return predicate.Experience(sql.FieldContainsFold(FieldLocation, v))
+}
+
+// AcheivementsIsNil applies the IsNil predicate on the "acheivements" field.
+func AcheivementsIsNil() predicate.Experience {
+	return predicate.Experience(sql.FieldIsNull(FieldAcheivements))
+}
+
+// AcheivementsNotNil applies the NotNil predicate on the "acheivements" field.
+func AcheivementsNotNil() predicate.Experience {
+	return predicate.Experience(sql.FieldNotNull(FieldAcheivements))
+}
+
+// TechnologiesUsedIsNil applies the IsNil predicate on the "technologiesUsed" field.
+func TechnologiesUsedIsNil() predicate.Experience {
+	return predicate.Experience(sql.FieldIsNull(FieldTechnologiesUsed))
+}
+
+// TechnologiesUsedNotNil applies the NotNil predicate on the "technologiesUsed" field.
+func TechnologiesUsedNotNil() predicate.Experience {
+	return predicate.Experience(sql.FieldNotNull(FieldTechnologiesUsed))
+}
+
+// OrderIndexEQ applies the EQ predicate on the "orderIndex" field.
+func OrderIndexEQ(v int) predicate.Experience {
+	return predicate.Experience(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexNEQ applies the NEQ predicate on the "orderIndex" field.
+func OrderIndexNEQ(v int) predicate.Experience {
+	return predicate.Experience(sql.FieldNEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexIn applies the In predicate on the "orderIndex" field.
+func OrderIndexIn(vs ...int) predicate.Experience {
+	return predicate.Experience(sql.FieldIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexNotIn applies the NotIn predicate on the "orderIndex" field.
+func OrderIndexNotIn(vs ...int) predicate.Experience {
+	return predicate.Experience(sql.FieldNotIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexGT applies the GT predicate on the "orderIndex" field.
+func OrderIndexGT(v int) predicate.Experience {
+	return predicate.Experience(sql.FieldGT(FieldOrderIndex, v))
+}
+
+// OrderIndexGTE applies the GTE predicate on the "orderIndex" field.
+func OrderIndexGTE(v int) predicate.Experience {
+	return predicate.Experience(sql.FieldGTE(FieldOrderIndex, v))
+}
+
+// OrderIndexLT applies the LT predicate on the "orderIndex" field.
+func OrderIndexLT(v int) predicate.Experience {
+	return predicate.Experience(sql.FieldLT(FieldOrderIndex, v))
+}
+
+// OrderIndexLTE applies the LTE predicate on the "orderIndex" field.
+func OrderIndexLTE(v int) predicate.Experience {
+	return predicate.Experience(sql.FieldLTE(FieldOrderIndex, v))
+}
+
+// HasResume applies the HasEdge predicate on the "resume" edge.
+func HasResume() predicate.Experience {
+	return predicate.Experience(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResumeWith applies the HasEdge predicate on the "resume" edge with a given conditions (other predicates).
+func HasResumeWith(preds ...predicate.Resume) predicate.Experience {
+	return predicate.Experience(func(s *sql.Selector) {
+		step := newResumeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

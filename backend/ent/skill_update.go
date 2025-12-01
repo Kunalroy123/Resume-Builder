@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
 	"resume-builder-backend/ent/skill"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // SkillUpdate is the builder for updating Skill entities.
@@ -27,9 +29,130 @@ func (_u *SkillUpdate) Where(ps ...predicate.Skill) *SkillUpdate {
 	return _u
 }
 
+// SetName sets the "name" field.
+func (_u *SkillUpdate) SetName(v string) *SkillUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *SkillUpdate) SetNillableName(v *string) *SkillUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// SetCategory sets the "category" field.
+func (_u *SkillUpdate) SetCategory(v string) *SkillUpdate {
+	_u.mutation.SetCategory(v)
+	return _u
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (_u *SkillUpdate) SetNillableCategory(v *string) *SkillUpdate {
+	if v != nil {
+		_u.SetCategory(*v)
+	}
+	return _u
+}
+
+// SetSkillType sets the "skillType" field.
+func (_u *SkillUpdate) SetSkillType(v skill.SkillType) *SkillUpdate {
+	_u.mutation.SetSkillType(v)
+	return _u
+}
+
+// SetNillableSkillType sets the "skillType" field if the given value is not nil.
+func (_u *SkillUpdate) SetNillableSkillType(v *skill.SkillType) *SkillUpdate {
+	if v != nil {
+		_u.SetSkillType(*v)
+	}
+	return _u
+}
+
+// SetProficiencyLevel sets the "proficiencyLevel" field.
+func (_u *SkillUpdate) SetProficiencyLevel(v skill.ProficiencyLevel) *SkillUpdate {
+	_u.mutation.SetProficiencyLevel(v)
+	return _u
+}
+
+// SetNillableProficiencyLevel sets the "proficiencyLevel" field if the given value is not nil.
+func (_u *SkillUpdate) SetNillableProficiencyLevel(v *skill.ProficiencyLevel) *SkillUpdate {
+	if v != nil {
+		_u.SetProficiencyLevel(*v)
+	}
+	return _u
+}
+
+// SetYearsOfExperience sets the "yearsOfExperience" field.
+func (_u *SkillUpdate) SetYearsOfExperience(v int) *SkillUpdate {
+	_u.mutation.ResetYearsOfExperience()
+	_u.mutation.SetYearsOfExperience(v)
+	return _u
+}
+
+// SetNillableYearsOfExperience sets the "yearsOfExperience" field if the given value is not nil.
+func (_u *SkillUpdate) SetNillableYearsOfExperience(v *int) *SkillUpdate {
+	if v != nil {
+		_u.SetYearsOfExperience(*v)
+	}
+	return _u
+}
+
+// AddYearsOfExperience adds value to the "yearsOfExperience" field.
+func (_u *SkillUpdate) AddYearsOfExperience(v int) *SkillUpdate {
+	_u.mutation.AddYearsOfExperience(v)
+	return _u
+}
+
+// ClearYearsOfExperience clears the value of the "yearsOfExperience" field.
+func (_u *SkillUpdate) ClearYearsOfExperience() *SkillUpdate {
+	_u.mutation.ClearYearsOfExperience()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *SkillUpdate) SetOrderIndex(v int) *SkillUpdate {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *SkillUpdate) SetNillableOrderIndex(v *int) *SkillUpdate {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *SkillUpdate) AddOrderIndex(v int) *SkillUpdate {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *SkillUpdate) SetResumeID(id uuid.UUID) *SkillUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *SkillUpdate) SetResume(v *Resume) *SkillUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the SkillMutation object of the builder.
 func (_u *SkillUpdate) Mutation() *SkillMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *SkillUpdate) ClearResume() *SkillUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +182,101 @@ func (_u *SkillUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *SkillUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
+		if err := skill.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Skill.name": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Category(); ok {
+		if err := skill.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`ent: validator failed for field "Skill.category": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SkillType(); ok {
+		if err := skill.SkillTypeValidator(v); err != nil {
+			return &ValidationError{Name: "skillType", err: fmt.Errorf(`ent: validator failed for field "Skill.skillType": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ProficiencyLevel(); ok {
+		if err := skill.ProficiencyLevelValidator(v); err != nil {
+			return &ValidationError{Name: "proficiencyLevel", err: fmt.Errorf(`ent: validator failed for field "Skill.proficiencyLevel": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Skill.resume"`)
+	}
+	return nil
+}
+
 func (_u *SkillUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(skill.Table, skill.Columns, sqlgraph.NewFieldSpec(skill.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(skill.Table, skill.Columns, sqlgraph.NewFieldSpec(skill.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(skill.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Category(); ok {
+		_spec.SetField(skill.FieldCategory, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.SkillType(); ok {
+		_spec.SetField(skill.FieldSkillType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ProficiencyLevel(); ok {
+		_spec.SetField(skill.FieldProficiencyLevel, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.YearsOfExperience(); ok {
+		_spec.SetField(skill.FieldYearsOfExperience, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedYearsOfExperience(); ok {
+		_spec.AddField(skill.FieldYearsOfExperience, field.TypeInt, value)
+	}
+	if _u.mutation.YearsOfExperienceCleared() {
+		_spec.ClearField(skill.FieldYearsOfExperience, field.TypeInt)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(skill.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(skill.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   skill.ResumeTable,
+			Columns: []string{skill.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   skill.ResumeTable,
+			Columns: []string{skill.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +298,130 @@ type SkillUpdateOne struct {
 	mutation *SkillMutation
 }
 
+// SetName sets the "name" field.
+func (_u *SkillUpdateOne) SetName(v string) *SkillUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *SkillUpdateOne) SetNillableName(v *string) *SkillUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// SetCategory sets the "category" field.
+func (_u *SkillUpdateOne) SetCategory(v string) *SkillUpdateOne {
+	_u.mutation.SetCategory(v)
+	return _u
+}
+
+// SetNillableCategory sets the "category" field if the given value is not nil.
+func (_u *SkillUpdateOne) SetNillableCategory(v *string) *SkillUpdateOne {
+	if v != nil {
+		_u.SetCategory(*v)
+	}
+	return _u
+}
+
+// SetSkillType sets the "skillType" field.
+func (_u *SkillUpdateOne) SetSkillType(v skill.SkillType) *SkillUpdateOne {
+	_u.mutation.SetSkillType(v)
+	return _u
+}
+
+// SetNillableSkillType sets the "skillType" field if the given value is not nil.
+func (_u *SkillUpdateOne) SetNillableSkillType(v *skill.SkillType) *SkillUpdateOne {
+	if v != nil {
+		_u.SetSkillType(*v)
+	}
+	return _u
+}
+
+// SetProficiencyLevel sets the "proficiencyLevel" field.
+func (_u *SkillUpdateOne) SetProficiencyLevel(v skill.ProficiencyLevel) *SkillUpdateOne {
+	_u.mutation.SetProficiencyLevel(v)
+	return _u
+}
+
+// SetNillableProficiencyLevel sets the "proficiencyLevel" field if the given value is not nil.
+func (_u *SkillUpdateOne) SetNillableProficiencyLevel(v *skill.ProficiencyLevel) *SkillUpdateOne {
+	if v != nil {
+		_u.SetProficiencyLevel(*v)
+	}
+	return _u
+}
+
+// SetYearsOfExperience sets the "yearsOfExperience" field.
+func (_u *SkillUpdateOne) SetYearsOfExperience(v int) *SkillUpdateOne {
+	_u.mutation.ResetYearsOfExperience()
+	_u.mutation.SetYearsOfExperience(v)
+	return _u
+}
+
+// SetNillableYearsOfExperience sets the "yearsOfExperience" field if the given value is not nil.
+func (_u *SkillUpdateOne) SetNillableYearsOfExperience(v *int) *SkillUpdateOne {
+	if v != nil {
+		_u.SetYearsOfExperience(*v)
+	}
+	return _u
+}
+
+// AddYearsOfExperience adds value to the "yearsOfExperience" field.
+func (_u *SkillUpdateOne) AddYearsOfExperience(v int) *SkillUpdateOne {
+	_u.mutation.AddYearsOfExperience(v)
+	return _u
+}
+
+// ClearYearsOfExperience clears the value of the "yearsOfExperience" field.
+func (_u *SkillUpdateOne) ClearYearsOfExperience() *SkillUpdateOne {
+	_u.mutation.ClearYearsOfExperience()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *SkillUpdateOne) SetOrderIndex(v int) *SkillUpdateOne {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *SkillUpdateOne) SetNillableOrderIndex(v *int) *SkillUpdateOne {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *SkillUpdateOne) AddOrderIndex(v int) *SkillUpdateOne {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *SkillUpdateOne) SetResumeID(id uuid.UUID) *SkillUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *SkillUpdateOne) SetResume(v *Resume) *SkillUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the SkillMutation object of the builder.
 func (_u *SkillUpdateOne) Mutation() *SkillMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *SkillUpdateOne) ClearResume() *SkillUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the SkillUpdate builder.
@@ -133,8 +464,39 @@ func (_u *SkillUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *SkillUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
+		if err := skill.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Skill.name": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Category(); ok {
+		if err := skill.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`ent: validator failed for field "Skill.category": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SkillType(); ok {
+		if err := skill.SkillTypeValidator(v); err != nil {
+			return &ValidationError{Name: "skillType", err: fmt.Errorf(`ent: validator failed for field "Skill.skillType": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ProficiencyLevel(); ok {
+		if err := skill.ProficiencyLevelValidator(v); err != nil {
+			return &ValidationError{Name: "proficiencyLevel", err: fmt.Errorf(`ent: validator failed for field "Skill.proficiencyLevel": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Skill.resume"`)
+	}
+	return nil
+}
+
 func (_u *SkillUpdateOne) sqlSave(ctx context.Context) (_node *Skill, err error) {
-	_spec := sqlgraph.NewUpdateSpec(skill.Table, skill.Columns, sqlgraph.NewFieldSpec(skill.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(skill.Table, skill.Columns, sqlgraph.NewFieldSpec(skill.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Skill.id" for update`)}
@@ -158,6 +520,62 @@ func (_u *SkillUpdateOne) sqlSave(ctx context.Context) (_node *Skill, err error)
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(skill.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Category(); ok {
+		_spec.SetField(skill.FieldCategory, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.SkillType(); ok {
+		_spec.SetField(skill.FieldSkillType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ProficiencyLevel(); ok {
+		_spec.SetField(skill.FieldProficiencyLevel, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.YearsOfExperience(); ok {
+		_spec.SetField(skill.FieldYearsOfExperience, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedYearsOfExperience(); ok {
+		_spec.AddField(skill.FieldYearsOfExperience, field.TypeInt, value)
+	}
+	if _u.mutation.YearsOfExperienceCleared() {
+		_spec.ClearField(skill.FieldYearsOfExperience, field.TypeInt)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(skill.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(skill.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   skill.ResumeTable,
+			Columns: []string{skill.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   skill.ResumeTable,
+			Columns: []string{skill.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Skill{config: _u.config}
 	_spec.Assign = _node.assignValues

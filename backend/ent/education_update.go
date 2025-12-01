@@ -8,10 +8,13 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/education"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // EducationUpdate is the builder for updating Education entities.
@@ -27,9 +30,195 @@ func (_u *EducationUpdate) Where(ps ...predicate.Education) *EducationUpdate {
 	return _u
 }
 
+// SetInstitutionName sets the "institutionName" field.
+func (_u *EducationUpdate) SetInstitutionName(v string) *EducationUpdate {
+	_u.mutation.SetInstitutionName(v)
+	return _u
+}
+
+// SetNillableInstitutionName sets the "institutionName" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableInstitutionName(v *string) *EducationUpdate {
+	if v != nil {
+		_u.SetInstitutionName(*v)
+	}
+	return _u
+}
+
+// SetDegree sets the "degree" field.
+func (_u *EducationUpdate) SetDegree(v string) *EducationUpdate {
+	_u.mutation.SetDegree(v)
+	return _u
+}
+
+// SetNillableDegree sets the "degree" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableDegree(v *string) *EducationUpdate {
+	if v != nil {
+		_u.SetDegree(*v)
+	}
+	return _u
+}
+
+// SetFieldOfStudy sets the "fieldOfStudy" field.
+func (_u *EducationUpdate) SetFieldOfStudy(v string) *EducationUpdate {
+	_u.mutation.SetFieldOfStudy(v)
+	return _u
+}
+
+// SetNillableFieldOfStudy sets the "fieldOfStudy" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableFieldOfStudy(v *string) *EducationUpdate {
+	if v != nil {
+		_u.SetFieldOfStudy(*v)
+	}
+	return _u
+}
+
+// SetStartDate sets the "startDate" field.
+func (_u *EducationUpdate) SetStartDate(v time.Time) *EducationUpdate {
+	_u.mutation.SetStartDate(v)
+	return _u
+}
+
+// SetNillableStartDate sets the "startDate" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableStartDate(v *time.Time) *EducationUpdate {
+	if v != nil {
+		_u.SetStartDate(*v)
+	}
+	return _u
+}
+
+// SetEndDate sets the "endDate" field.
+func (_u *EducationUpdate) SetEndDate(v time.Time) *EducationUpdate {
+	_u.mutation.SetEndDate(v)
+	return _u
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableEndDate(v *time.Time) *EducationUpdate {
+	if v != nil {
+		_u.SetEndDate(*v)
+	}
+	return _u
+}
+
+// ClearEndDate clears the value of the "endDate" field.
+func (_u *EducationUpdate) ClearEndDate() *EducationUpdate {
+	_u.mutation.ClearEndDate()
+	return _u
+}
+
+// SetGpa sets the "gpa" field.
+func (_u *EducationUpdate) SetGpa(v string) *EducationUpdate {
+	_u.mutation.SetGpa(v)
+	return _u
+}
+
+// SetNillableGpa sets the "gpa" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableGpa(v *string) *EducationUpdate {
+	if v != nil {
+		_u.SetGpa(*v)
+	}
+	return _u
+}
+
+// ClearGpa clears the value of the "gpa" field.
+func (_u *EducationUpdate) ClearGpa() *EducationUpdate {
+	_u.mutation.ClearGpa()
+	return _u
+}
+
+// SetLocation sets the "location" field.
+func (_u *EducationUpdate) SetLocation(v string) *EducationUpdate {
+	_u.mutation.SetLocation(v)
+	return _u
+}
+
+// SetNillableLocation sets the "location" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableLocation(v *string) *EducationUpdate {
+	if v != nil {
+		_u.SetLocation(*v)
+	}
+	return _u
+}
+
+// ClearLocation clears the value of the "location" field.
+func (_u *EducationUpdate) ClearLocation() *EducationUpdate {
+	_u.mutation.ClearLocation()
+	return _u
+}
+
+// SetRelevantCoursework sets the "relevantCoursework" field.
+func (_u *EducationUpdate) SetRelevantCoursework(v map[string]interface{}) *EducationUpdate {
+	_u.mutation.SetRelevantCoursework(v)
+	return _u
+}
+
+// ClearRelevantCoursework clears the value of the "relevantCoursework" field.
+func (_u *EducationUpdate) ClearRelevantCoursework() *EducationUpdate {
+	_u.mutation.ClearRelevantCoursework()
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *EducationUpdate) SetDescription(v string) *EducationUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableDescription(v *string) *EducationUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *EducationUpdate) ClearDescription() *EducationUpdate {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *EducationUpdate) SetOrderIndex(v int) *EducationUpdate {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *EducationUpdate) SetNillableOrderIndex(v *int) *EducationUpdate {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *EducationUpdate) AddOrderIndex(v int) *EducationUpdate {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *EducationUpdate) SetResumeID(id uuid.UUID) *EducationUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *EducationUpdate) SetResume(v *Resume) *EducationUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the EducationMutation object of the builder.
 func (_u *EducationUpdate) Mutation() *EducationMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *EducationUpdate) ClearResume() *EducationUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +248,117 @@ func (_u *EducationUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *EducationUpdate) check() error {
+	if v, ok := _u.mutation.InstitutionName(); ok {
+		if err := education.InstitutionNameValidator(v); err != nil {
+			return &ValidationError{Name: "institutionName", err: fmt.Errorf(`ent: validator failed for field "Education.institutionName": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Degree(); ok {
+		if err := education.DegreeValidator(v); err != nil {
+			return &ValidationError{Name: "degree", err: fmt.Errorf(`ent: validator failed for field "Education.degree": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.FieldOfStudy(); ok {
+		if err := education.FieldOfStudyValidator(v); err != nil {
+			return &ValidationError{Name: "fieldOfStudy", err: fmt.Errorf(`ent: validator failed for field "Education.fieldOfStudy": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Education.resume"`)
+	}
+	return nil
+}
+
 func (_u *EducationUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.InstitutionName(); ok {
+		_spec.SetField(education.FieldInstitutionName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Degree(); ok {
+		_spec.SetField(education.FieldDegree, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.FieldOfStudy(); ok {
+		_spec.SetField(education.FieldFieldOfStudy, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.StartDate(); ok {
+		_spec.SetField(education.FieldStartDate, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.EndDate(); ok {
+		_spec.SetField(education.FieldEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.EndDateCleared() {
+		_spec.ClearField(education.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Gpa(); ok {
+		_spec.SetField(education.FieldGpa, field.TypeString, value)
+	}
+	if _u.mutation.GpaCleared() {
+		_spec.ClearField(education.FieldGpa, field.TypeString)
+	}
+	if value, ok := _u.mutation.Location(); ok {
+		_spec.SetField(education.FieldLocation, field.TypeString, value)
+	}
+	if _u.mutation.LocationCleared() {
+		_spec.ClearField(education.FieldLocation, field.TypeString)
+	}
+	if value, ok := _u.mutation.RelevantCoursework(); ok {
+		_spec.SetField(education.FieldRelevantCoursework, field.TypeJSON, value)
+	}
+	if _u.mutation.RelevantCourseworkCleared() {
+		_spec.ClearField(education.FieldRelevantCoursework, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(education.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(education.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(education.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(education.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   education.ResumeTable,
+			Columns: []string{education.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   education.ResumeTable,
+			Columns: []string{education.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +380,195 @@ type EducationUpdateOne struct {
 	mutation *EducationMutation
 }
 
+// SetInstitutionName sets the "institutionName" field.
+func (_u *EducationUpdateOne) SetInstitutionName(v string) *EducationUpdateOne {
+	_u.mutation.SetInstitutionName(v)
+	return _u
+}
+
+// SetNillableInstitutionName sets the "institutionName" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableInstitutionName(v *string) *EducationUpdateOne {
+	if v != nil {
+		_u.SetInstitutionName(*v)
+	}
+	return _u
+}
+
+// SetDegree sets the "degree" field.
+func (_u *EducationUpdateOne) SetDegree(v string) *EducationUpdateOne {
+	_u.mutation.SetDegree(v)
+	return _u
+}
+
+// SetNillableDegree sets the "degree" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableDegree(v *string) *EducationUpdateOne {
+	if v != nil {
+		_u.SetDegree(*v)
+	}
+	return _u
+}
+
+// SetFieldOfStudy sets the "fieldOfStudy" field.
+func (_u *EducationUpdateOne) SetFieldOfStudy(v string) *EducationUpdateOne {
+	_u.mutation.SetFieldOfStudy(v)
+	return _u
+}
+
+// SetNillableFieldOfStudy sets the "fieldOfStudy" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableFieldOfStudy(v *string) *EducationUpdateOne {
+	if v != nil {
+		_u.SetFieldOfStudy(*v)
+	}
+	return _u
+}
+
+// SetStartDate sets the "startDate" field.
+func (_u *EducationUpdateOne) SetStartDate(v time.Time) *EducationUpdateOne {
+	_u.mutation.SetStartDate(v)
+	return _u
+}
+
+// SetNillableStartDate sets the "startDate" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableStartDate(v *time.Time) *EducationUpdateOne {
+	if v != nil {
+		_u.SetStartDate(*v)
+	}
+	return _u
+}
+
+// SetEndDate sets the "endDate" field.
+func (_u *EducationUpdateOne) SetEndDate(v time.Time) *EducationUpdateOne {
+	_u.mutation.SetEndDate(v)
+	return _u
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableEndDate(v *time.Time) *EducationUpdateOne {
+	if v != nil {
+		_u.SetEndDate(*v)
+	}
+	return _u
+}
+
+// ClearEndDate clears the value of the "endDate" field.
+func (_u *EducationUpdateOne) ClearEndDate() *EducationUpdateOne {
+	_u.mutation.ClearEndDate()
+	return _u
+}
+
+// SetGpa sets the "gpa" field.
+func (_u *EducationUpdateOne) SetGpa(v string) *EducationUpdateOne {
+	_u.mutation.SetGpa(v)
+	return _u
+}
+
+// SetNillableGpa sets the "gpa" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableGpa(v *string) *EducationUpdateOne {
+	if v != nil {
+		_u.SetGpa(*v)
+	}
+	return _u
+}
+
+// ClearGpa clears the value of the "gpa" field.
+func (_u *EducationUpdateOne) ClearGpa() *EducationUpdateOne {
+	_u.mutation.ClearGpa()
+	return _u
+}
+
+// SetLocation sets the "location" field.
+func (_u *EducationUpdateOne) SetLocation(v string) *EducationUpdateOne {
+	_u.mutation.SetLocation(v)
+	return _u
+}
+
+// SetNillableLocation sets the "location" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableLocation(v *string) *EducationUpdateOne {
+	if v != nil {
+		_u.SetLocation(*v)
+	}
+	return _u
+}
+
+// ClearLocation clears the value of the "location" field.
+func (_u *EducationUpdateOne) ClearLocation() *EducationUpdateOne {
+	_u.mutation.ClearLocation()
+	return _u
+}
+
+// SetRelevantCoursework sets the "relevantCoursework" field.
+func (_u *EducationUpdateOne) SetRelevantCoursework(v map[string]interface{}) *EducationUpdateOne {
+	_u.mutation.SetRelevantCoursework(v)
+	return _u
+}
+
+// ClearRelevantCoursework clears the value of the "relevantCoursework" field.
+func (_u *EducationUpdateOne) ClearRelevantCoursework() *EducationUpdateOne {
+	_u.mutation.ClearRelevantCoursework()
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *EducationUpdateOne) SetDescription(v string) *EducationUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableDescription(v *string) *EducationUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *EducationUpdateOne) ClearDescription() *EducationUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *EducationUpdateOne) SetOrderIndex(v int) *EducationUpdateOne {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *EducationUpdateOne) SetNillableOrderIndex(v *int) *EducationUpdateOne {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *EducationUpdateOne) AddOrderIndex(v int) *EducationUpdateOne {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *EducationUpdateOne) SetResumeID(id uuid.UUID) *EducationUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *EducationUpdateOne) SetResume(v *Resume) *EducationUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the EducationMutation object of the builder.
 func (_u *EducationUpdateOne) Mutation() *EducationMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *EducationUpdateOne) ClearResume() *EducationUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the EducationUpdate builder.
@@ -133,8 +611,34 @@ func (_u *EducationUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *EducationUpdateOne) check() error {
+	if v, ok := _u.mutation.InstitutionName(); ok {
+		if err := education.InstitutionNameValidator(v); err != nil {
+			return &ValidationError{Name: "institutionName", err: fmt.Errorf(`ent: validator failed for field "Education.institutionName": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Degree(); ok {
+		if err := education.DegreeValidator(v); err != nil {
+			return &ValidationError{Name: "degree", err: fmt.Errorf(`ent: validator failed for field "Education.degree": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.FieldOfStudy(); ok {
+		if err := education.FieldOfStudyValidator(v); err != nil {
+			return &ValidationError{Name: "fieldOfStudy", err: fmt.Errorf(`ent: validator failed for field "Education.fieldOfStudy": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Education.resume"`)
+	}
+	return nil
+}
+
 func (_u *EducationUpdateOne) sqlSave(ctx context.Context) (_node *Education, err error) {
-	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(education.Table, education.Columns, sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Education.id" for update`)}
@@ -158,6 +662,83 @@ func (_u *EducationUpdateOne) sqlSave(ctx context.Context) (_node *Education, er
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.InstitutionName(); ok {
+		_spec.SetField(education.FieldInstitutionName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Degree(); ok {
+		_spec.SetField(education.FieldDegree, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.FieldOfStudy(); ok {
+		_spec.SetField(education.FieldFieldOfStudy, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.StartDate(); ok {
+		_spec.SetField(education.FieldStartDate, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.EndDate(); ok {
+		_spec.SetField(education.FieldEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.EndDateCleared() {
+		_spec.ClearField(education.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Gpa(); ok {
+		_spec.SetField(education.FieldGpa, field.TypeString, value)
+	}
+	if _u.mutation.GpaCleared() {
+		_spec.ClearField(education.FieldGpa, field.TypeString)
+	}
+	if value, ok := _u.mutation.Location(); ok {
+		_spec.SetField(education.FieldLocation, field.TypeString, value)
+	}
+	if _u.mutation.LocationCleared() {
+		_spec.ClearField(education.FieldLocation, field.TypeString)
+	}
+	if value, ok := _u.mutation.RelevantCoursework(); ok {
+		_spec.SetField(education.FieldRelevantCoursework, field.TypeJSON, value)
+	}
+	if _u.mutation.RelevantCourseworkCleared() {
+		_spec.ClearField(education.FieldRelevantCoursework, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(education.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(education.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(education.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(education.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   education.ResumeTable,
+			Columns: []string{education.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   education.ResumeTable,
+			Columns: []string{education.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Education{config: _u.config}
 	_spec.Assign = _node.assignValues

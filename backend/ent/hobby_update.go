@@ -8,10 +8,12 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/hobby"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // HobbyUpdate is the builder for updating Hobby entities.
@@ -27,9 +29,154 @@ func (_u *HobbyUpdate) Where(ps ...predicate.Hobby) *HobbyUpdate {
 	return _u
 }
 
+// SetName sets the "name" field.
+func (_u *HobbyUpdate) SetName(v string) *HobbyUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *HobbyUpdate) SetNillableName(v *string) *HobbyUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *HobbyUpdate) ClearName() *HobbyUpdate {
+	_u.mutation.ClearName()
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *HobbyUpdate) SetDescription(v string) *HobbyUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *HobbyUpdate) SetNillableDescription(v *string) *HobbyUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *HobbyUpdate) ClearDescription() *HobbyUpdate {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetSkillLevel sets the "skillLevel" field.
+func (_u *HobbyUpdate) SetSkillLevel(v string) *HobbyUpdate {
+	_u.mutation.SetSkillLevel(v)
+	return _u
+}
+
+// SetNillableSkillLevel sets the "skillLevel" field if the given value is not nil.
+func (_u *HobbyUpdate) SetNillableSkillLevel(v *string) *HobbyUpdate {
+	if v != nil {
+		_u.SetSkillLevel(*v)
+	}
+	return _u
+}
+
+// ClearSkillLevel clears the value of the "skillLevel" field.
+func (_u *HobbyUpdate) ClearSkillLevel() *HobbyUpdate {
+	_u.mutation.ClearSkillLevel()
+	return _u
+}
+
+// SetYearsInvolved sets the "yearsInvolved" field.
+func (_u *HobbyUpdate) SetYearsInvolved(v int) *HobbyUpdate {
+	_u.mutation.ResetYearsInvolved()
+	_u.mutation.SetYearsInvolved(v)
+	return _u
+}
+
+// SetNillableYearsInvolved sets the "yearsInvolved" field if the given value is not nil.
+func (_u *HobbyUpdate) SetNillableYearsInvolved(v *int) *HobbyUpdate {
+	if v != nil {
+		_u.SetYearsInvolved(*v)
+	}
+	return _u
+}
+
+// AddYearsInvolved adds value to the "yearsInvolved" field.
+func (_u *HobbyUpdate) AddYearsInvolved(v int) *HobbyUpdate {
+	_u.mutation.AddYearsInvolved(v)
+	return _u
+}
+
+// ClearYearsInvolved clears the value of the "yearsInvolved" field.
+func (_u *HobbyUpdate) ClearYearsInvolved() *HobbyUpdate {
+	_u.mutation.ClearYearsInvolved()
+	return _u
+}
+
+// SetAchievements sets the "achievements" field.
+func (_u *HobbyUpdate) SetAchievements(v string) *HobbyUpdate {
+	_u.mutation.SetAchievements(v)
+	return _u
+}
+
+// SetNillableAchievements sets the "achievements" field if the given value is not nil.
+func (_u *HobbyUpdate) SetNillableAchievements(v *string) *HobbyUpdate {
+	if v != nil {
+		_u.SetAchievements(*v)
+	}
+	return _u
+}
+
+// ClearAchievements clears the value of the "achievements" field.
+func (_u *HobbyUpdate) ClearAchievements() *HobbyUpdate {
+	_u.mutation.ClearAchievements()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *HobbyUpdate) SetOrderIndex(v int) *HobbyUpdate {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *HobbyUpdate) SetNillableOrderIndex(v *int) *HobbyUpdate {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *HobbyUpdate) AddOrderIndex(v int) *HobbyUpdate {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *HobbyUpdate) SetResumeID(id uuid.UUID) *HobbyUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *HobbyUpdate) SetResume(v *Resume) *HobbyUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the HobbyMutation object of the builder.
 func (_u *HobbyUpdate) Mutation() *HobbyMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *HobbyUpdate) ClearResume() *HobbyUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +206,93 @@ func (_u *HobbyUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *HobbyUpdate) check() error {
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Hobby.resume"`)
+	}
+	return nil
+}
+
 func (_u *HobbyUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(hobby.Table, hobby.Columns, sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(hobby.Table, hobby.Columns, sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(hobby.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(hobby.FieldName, field.TypeString)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(hobby.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(hobby.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.SkillLevel(); ok {
+		_spec.SetField(hobby.FieldSkillLevel, field.TypeString, value)
+	}
+	if _u.mutation.SkillLevelCleared() {
+		_spec.ClearField(hobby.FieldSkillLevel, field.TypeString)
+	}
+	if value, ok := _u.mutation.YearsInvolved(); ok {
+		_spec.SetField(hobby.FieldYearsInvolved, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedYearsInvolved(); ok {
+		_spec.AddField(hobby.FieldYearsInvolved, field.TypeInt, value)
+	}
+	if _u.mutation.YearsInvolvedCleared() {
+		_spec.ClearField(hobby.FieldYearsInvolved, field.TypeInt)
+	}
+	if value, ok := _u.mutation.Achievements(); ok {
+		_spec.SetField(hobby.FieldAchievements, field.TypeString, value)
+	}
+	if _u.mutation.AchievementsCleared() {
+		_spec.ClearField(hobby.FieldAchievements, field.TypeString)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(hobby.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(hobby.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hobby.ResumeTable,
+			Columns: []string{hobby.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hobby.ResumeTable,
+			Columns: []string{hobby.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +314,154 @@ type HobbyUpdateOne struct {
 	mutation *HobbyMutation
 }
 
+// SetName sets the "name" field.
+func (_u *HobbyUpdateOne) SetName(v string) *HobbyUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *HobbyUpdateOne) SetNillableName(v *string) *HobbyUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *HobbyUpdateOne) ClearName() *HobbyUpdateOne {
+	_u.mutation.ClearName()
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *HobbyUpdateOne) SetDescription(v string) *HobbyUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *HobbyUpdateOne) SetNillableDescription(v *string) *HobbyUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *HobbyUpdateOne) ClearDescription() *HobbyUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetSkillLevel sets the "skillLevel" field.
+func (_u *HobbyUpdateOne) SetSkillLevel(v string) *HobbyUpdateOne {
+	_u.mutation.SetSkillLevel(v)
+	return _u
+}
+
+// SetNillableSkillLevel sets the "skillLevel" field if the given value is not nil.
+func (_u *HobbyUpdateOne) SetNillableSkillLevel(v *string) *HobbyUpdateOne {
+	if v != nil {
+		_u.SetSkillLevel(*v)
+	}
+	return _u
+}
+
+// ClearSkillLevel clears the value of the "skillLevel" field.
+func (_u *HobbyUpdateOne) ClearSkillLevel() *HobbyUpdateOne {
+	_u.mutation.ClearSkillLevel()
+	return _u
+}
+
+// SetYearsInvolved sets the "yearsInvolved" field.
+func (_u *HobbyUpdateOne) SetYearsInvolved(v int) *HobbyUpdateOne {
+	_u.mutation.ResetYearsInvolved()
+	_u.mutation.SetYearsInvolved(v)
+	return _u
+}
+
+// SetNillableYearsInvolved sets the "yearsInvolved" field if the given value is not nil.
+func (_u *HobbyUpdateOne) SetNillableYearsInvolved(v *int) *HobbyUpdateOne {
+	if v != nil {
+		_u.SetYearsInvolved(*v)
+	}
+	return _u
+}
+
+// AddYearsInvolved adds value to the "yearsInvolved" field.
+func (_u *HobbyUpdateOne) AddYearsInvolved(v int) *HobbyUpdateOne {
+	_u.mutation.AddYearsInvolved(v)
+	return _u
+}
+
+// ClearYearsInvolved clears the value of the "yearsInvolved" field.
+func (_u *HobbyUpdateOne) ClearYearsInvolved() *HobbyUpdateOne {
+	_u.mutation.ClearYearsInvolved()
+	return _u
+}
+
+// SetAchievements sets the "achievements" field.
+func (_u *HobbyUpdateOne) SetAchievements(v string) *HobbyUpdateOne {
+	_u.mutation.SetAchievements(v)
+	return _u
+}
+
+// SetNillableAchievements sets the "achievements" field if the given value is not nil.
+func (_u *HobbyUpdateOne) SetNillableAchievements(v *string) *HobbyUpdateOne {
+	if v != nil {
+		_u.SetAchievements(*v)
+	}
+	return _u
+}
+
+// ClearAchievements clears the value of the "achievements" field.
+func (_u *HobbyUpdateOne) ClearAchievements() *HobbyUpdateOne {
+	_u.mutation.ClearAchievements()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *HobbyUpdateOne) SetOrderIndex(v int) *HobbyUpdateOne {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *HobbyUpdateOne) SetNillableOrderIndex(v *int) *HobbyUpdateOne {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *HobbyUpdateOne) AddOrderIndex(v int) *HobbyUpdateOne {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *HobbyUpdateOne) SetResumeID(id uuid.UUID) *HobbyUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *HobbyUpdateOne) SetResume(v *Resume) *HobbyUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the HobbyMutation object of the builder.
 func (_u *HobbyUpdateOne) Mutation() *HobbyMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *HobbyUpdateOne) ClearResume() *HobbyUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the HobbyUpdate builder.
@@ -133,8 +504,19 @@ func (_u *HobbyUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *HobbyUpdateOne) check() error {
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Hobby.resume"`)
+	}
+	return nil
+}
+
 func (_u *HobbyUpdateOne) sqlSave(ctx context.Context) (_node *Hobby, err error) {
-	_spec := sqlgraph.NewUpdateSpec(hobby.Table, hobby.Columns, sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(hobby.Table, hobby.Columns, sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Hobby.id" for update`)}
@@ -158,6 +540,74 @@ func (_u *HobbyUpdateOne) sqlSave(ctx context.Context) (_node *Hobby, err error)
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(hobby.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(hobby.FieldName, field.TypeString)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(hobby.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(hobby.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.SkillLevel(); ok {
+		_spec.SetField(hobby.FieldSkillLevel, field.TypeString, value)
+	}
+	if _u.mutation.SkillLevelCleared() {
+		_spec.ClearField(hobby.FieldSkillLevel, field.TypeString)
+	}
+	if value, ok := _u.mutation.YearsInvolved(); ok {
+		_spec.SetField(hobby.FieldYearsInvolved, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedYearsInvolved(); ok {
+		_spec.AddField(hobby.FieldYearsInvolved, field.TypeInt, value)
+	}
+	if _u.mutation.YearsInvolvedCleared() {
+		_spec.ClearField(hobby.FieldYearsInvolved, field.TypeInt)
+	}
+	if value, ok := _u.mutation.Achievements(); ok {
+		_spec.SetField(hobby.FieldAchievements, field.TypeString, value)
+	}
+	if _u.mutation.AchievementsCleared() {
+		_spec.ClearField(hobby.FieldAchievements, field.TypeString)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(hobby.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(hobby.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hobby.ResumeTable,
+			Columns: []string{hobby.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hobby.ResumeTable,
+			Columns: []string{hobby.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Hobby{config: _u.config}
 	_spec.Assign = _node.assignValues

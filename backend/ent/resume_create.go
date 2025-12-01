@@ -4,11 +4,25 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"resume-builder-backend/ent/achievement"
+	"resume-builder-backend/ent/certification"
+	"resume-builder-backend/ent/education"
+	"resume-builder-backend/ent/experience"
+	"resume-builder-backend/ent/headercontactinfo"
+	"resume-builder-backend/ent/hobby"
+	"resume-builder-backend/ent/professionalsummary"
+	"resume-builder-backend/ent/project"
 	"resume-builder-backend/ent/resume"
+	"resume-builder-backend/ent/skill"
+	"resume-builder-backend/ent/template"
+	"resume-builder-backend/ent/user"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ResumeCreate is the builder for creating a Resume entity.
@@ -18,6 +32,281 @@ type ResumeCreate struct {
 	hooks    []Hook
 }
 
+// SetUserId sets the "userId" field.
+func (_c *ResumeCreate) SetUserId(v uuid.UUID) *ResumeCreate {
+	_c.mutation.SetUserId(v)
+	return _c
+}
+
+// SetTitle sets the "title" field.
+func (_c *ResumeCreate) SetTitle(v string) *ResumeCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetTemplateId sets the "templateId" field.
+func (_c *ResumeCreate) SetTemplateId(v uuid.UUID) *ResumeCreate {
+	_c.mutation.SetTemplateId(v)
+	return _c
+}
+
+// SetNillableTemplateId sets the "templateId" field if the given value is not nil.
+func (_c *ResumeCreate) SetNillableTemplateId(v *uuid.UUID) *ResumeCreate {
+	if v != nil {
+		_c.SetTemplateId(*v)
+	}
+	return _c
+}
+
+// SetIsAiGenerated sets the "isAiGenerated" field.
+func (_c *ResumeCreate) SetIsAiGenerated(v bool) *ResumeCreate {
+	_c.mutation.SetIsAiGenerated(v)
+	return _c
+}
+
+// SetNillableIsAiGenerated sets the "isAiGenerated" field if the given value is not nil.
+func (_c *ResumeCreate) SetNillableIsAiGenerated(v *bool) *ResumeCreate {
+	if v != nil {
+		_c.SetIsAiGenerated(*v)
+	}
+	return _c
+}
+
+// SetIsPublic sets the "isPublic" field.
+func (_c *ResumeCreate) SetIsPublic(v bool) *ResumeCreate {
+	_c.mutation.SetIsPublic(v)
+	return _c
+}
+
+// SetNillableIsPublic sets the "isPublic" field if the given value is not nil.
+func (_c *ResumeCreate) SetNillableIsPublic(v *bool) *ResumeCreate {
+	if v != nil {
+		_c.SetIsPublic(*v)
+	}
+	return _c
+}
+
+// SetContent sets the "content" field.
+func (_c *ResumeCreate) SetContent(v map[string]interface{}) *ResumeCreate {
+	_c.mutation.SetContent(v)
+	return _c
+}
+
+// SetCreatedAt sets the "createdAt" field.
+func (_c *ResumeCreate) SetCreatedAt(v time.Time) *ResumeCreate {
+	_c.mutation.SetCreatedAt(v)
+	return _c
+}
+
+// SetNillableCreatedAt sets the "createdAt" field if the given value is not nil.
+func (_c *ResumeCreate) SetNillableCreatedAt(v *time.Time) *ResumeCreate {
+	if v != nil {
+		_c.SetCreatedAt(*v)
+	}
+	return _c
+}
+
+// SetUpdatedAt sets the "updatedAt" field.
+func (_c *ResumeCreate) SetUpdatedAt(v time.Time) *ResumeCreate {
+	_c.mutation.SetUpdatedAt(v)
+	return _c
+}
+
+// SetNillableUpdatedAt sets the "updatedAt" field if the given value is not nil.
+func (_c *ResumeCreate) SetNillableUpdatedAt(v *time.Time) *ResumeCreate {
+	if v != nil {
+		_c.SetUpdatedAt(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *ResumeCreate) SetID(v uuid.UUID) *ResumeCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *ResumeCreate) SetNillableID(v *uuid.UUID) *ResumeCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetUserID sets the "user" edge to the User entity by ID.
+func (_c *ResumeCreate) SetUserID(id uuid.UUID) *ResumeCreate {
+	_c.mutation.SetUserID(id)
+	return _c
+}
+
+// SetUser sets the "user" edge to the User entity.
+func (_c *ResumeCreate) SetUser(v *User) *ResumeCreate {
+	return _c.SetUserID(v.ID)
+}
+
+// SetTemplateID sets the "template" edge to the Template entity by ID.
+func (_c *ResumeCreate) SetTemplateID(id uuid.UUID) *ResumeCreate {
+	_c.mutation.SetTemplateID(id)
+	return _c
+}
+
+// SetNillableTemplateID sets the "template" edge to the Template entity by ID if the given value is not nil.
+func (_c *ResumeCreate) SetNillableTemplateID(id *uuid.UUID) *ResumeCreate {
+	if id != nil {
+		_c = _c.SetTemplateID(*id)
+	}
+	return _c
+}
+
+// SetTemplate sets the "template" edge to the Template entity.
+func (_c *ResumeCreate) SetTemplate(v *Template) *ResumeCreate {
+	return _c.SetTemplateID(v.ID)
+}
+
+// SetHeaderContanctInfoID sets the "headerContanctInfo" edge to the HeaderContactInfo entity by ID.
+func (_c *ResumeCreate) SetHeaderContanctInfoID(id uuid.UUID) *ResumeCreate {
+	_c.mutation.SetHeaderContanctInfoID(id)
+	return _c
+}
+
+// SetNillableHeaderContanctInfoID sets the "headerContanctInfo" edge to the HeaderContactInfo entity by ID if the given value is not nil.
+func (_c *ResumeCreate) SetNillableHeaderContanctInfoID(id *uuid.UUID) *ResumeCreate {
+	if id != nil {
+		_c = _c.SetHeaderContanctInfoID(*id)
+	}
+	return _c
+}
+
+// SetHeaderContanctInfo sets the "headerContanctInfo" edge to the HeaderContactInfo entity.
+func (_c *ResumeCreate) SetHeaderContanctInfo(v *HeaderContactInfo) *ResumeCreate {
+	return _c.SetHeaderContanctInfoID(v.ID)
+}
+
+// SetProfessionalSummaryID sets the "professionalSummary" edge to the ProfessionalSummary entity by ID.
+func (_c *ResumeCreate) SetProfessionalSummaryID(id uuid.UUID) *ResumeCreate {
+	_c.mutation.SetProfessionalSummaryID(id)
+	return _c
+}
+
+// SetNillableProfessionalSummaryID sets the "professionalSummary" edge to the ProfessionalSummary entity by ID if the given value is not nil.
+func (_c *ResumeCreate) SetNillableProfessionalSummaryID(id *uuid.UUID) *ResumeCreate {
+	if id != nil {
+		_c = _c.SetProfessionalSummaryID(*id)
+	}
+	return _c
+}
+
+// SetProfessionalSummary sets the "professionalSummary" edge to the ProfessionalSummary entity.
+func (_c *ResumeCreate) SetProfessionalSummary(v *ProfessionalSummary) *ResumeCreate {
+	return _c.SetProfessionalSummaryID(v.ID)
+}
+
+// AddExperienceIDs adds the "experiences" edge to the Experience entity by IDs.
+func (_c *ResumeCreate) AddExperienceIDs(ids ...uuid.UUID) *ResumeCreate {
+	_c.mutation.AddExperienceIDs(ids...)
+	return _c
+}
+
+// AddExperiences adds the "experiences" edges to the Experience entity.
+func (_c *ResumeCreate) AddExperiences(v ...*Experience) *ResumeCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddExperienceIDs(ids...)
+}
+
+// AddEducationIDs adds the "educations" edge to the Education entity by IDs.
+func (_c *ResumeCreate) AddEducationIDs(ids ...uuid.UUID) *ResumeCreate {
+	_c.mutation.AddEducationIDs(ids...)
+	return _c
+}
+
+// AddEducations adds the "educations" edges to the Education entity.
+func (_c *ResumeCreate) AddEducations(v ...*Education) *ResumeCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEducationIDs(ids...)
+}
+
+// AddSkillIDs adds the "skills" edge to the Skill entity by IDs.
+func (_c *ResumeCreate) AddSkillIDs(ids ...uuid.UUID) *ResumeCreate {
+	_c.mutation.AddSkillIDs(ids...)
+	return _c
+}
+
+// AddSkills adds the "skills" edges to the Skill entity.
+func (_c *ResumeCreate) AddSkills(v ...*Skill) *ResumeCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSkillIDs(ids...)
+}
+
+// AddProjectIDs adds the "projects" edge to the Project entity by IDs.
+func (_c *ResumeCreate) AddProjectIDs(ids ...uuid.UUID) *ResumeCreate {
+	_c.mutation.AddProjectIDs(ids...)
+	return _c
+}
+
+// AddProjects adds the "projects" edges to the Project entity.
+func (_c *ResumeCreate) AddProjects(v ...*Project) *ResumeCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddProjectIDs(ids...)
+}
+
+// AddCertificationIDs adds the "certifications" edge to the Certification entity by IDs.
+func (_c *ResumeCreate) AddCertificationIDs(ids ...uuid.UUID) *ResumeCreate {
+	_c.mutation.AddCertificationIDs(ids...)
+	return _c
+}
+
+// AddCertifications adds the "certifications" edges to the Certification entity.
+func (_c *ResumeCreate) AddCertifications(v ...*Certification) *ResumeCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCertificationIDs(ids...)
+}
+
+// AddAchievementIDs adds the "achievements" edge to the Achievement entity by IDs.
+func (_c *ResumeCreate) AddAchievementIDs(ids ...uuid.UUID) *ResumeCreate {
+	_c.mutation.AddAchievementIDs(ids...)
+	return _c
+}
+
+// AddAchievements adds the "achievements" edges to the Achievement entity.
+func (_c *ResumeCreate) AddAchievements(v ...*Achievement) *ResumeCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAchievementIDs(ids...)
+}
+
+// AddHobbyIDs adds the "hobbies" edge to the Hobby entity by IDs.
+func (_c *ResumeCreate) AddHobbyIDs(ids ...uuid.UUID) *ResumeCreate {
+	_c.mutation.AddHobbyIDs(ids...)
+	return _c
+}
+
+// AddHobbies adds the "hobbies" edges to the Hobby entity.
+func (_c *ResumeCreate) AddHobbies(v ...*Hobby) *ResumeCreate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddHobbyIDs(ids...)
+}
+
 // Mutation returns the ResumeMutation object of the builder.
 func (_c *ResumeCreate) Mutation() *ResumeMutation {
 	return _c.mutation
@@ -25,6 +314,7 @@ func (_c *ResumeCreate) Mutation() *ResumeMutation {
 
 // Save creates the Resume in the database.
 func (_c *ResumeCreate) Save(ctx context.Context) (*Resume, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +340,58 @@ func (_c *ResumeCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *ResumeCreate) defaults() {
+	if _, ok := _c.mutation.IsAiGenerated(); !ok {
+		v := resume.DefaultIsAiGenerated
+		_c.mutation.SetIsAiGenerated(v)
+	}
+	if _, ok := _c.mutation.IsPublic(); !ok {
+		v := resume.DefaultIsPublic
+		_c.mutation.SetIsPublic(v)
+	}
+	if _, ok := _c.mutation.CreatedAt(); !ok {
+		v := resume.DefaultCreatedAt()
+		_c.mutation.SetCreatedAt(v)
+	}
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		v := resume.DefaultUpdatedAt()
+		_c.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := resume.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *ResumeCreate) check() error {
+	if _, ok := _c.mutation.UserId(); !ok {
+		return &ValidationError{Name: "userId", err: errors.New(`ent: missing required field "Resume.userId"`)}
+	}
+	if _, ok := _c.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`ent: missing required field "Resume.title"`)}
+	}
+	if v, ok := _c.mutation.Title(); ok {
+		if err := resume.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Resume.title": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.IsAiGenerated(); !ok {
+		return &ValidationError{Name: "isAiGenerated", err: errors.New(`ent: missing required field "Resume.isAiGenerated"`)}
+	}
+	if _, ok := _c.mutation.IsPublic(); !ok {
+		return &ValidationError{Name: "isPublic", err: errors.New(`ent: missing required field "Resume.isPublic"`)}
+	}
+	if _, ok := _c.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "createdAt", err: errors.New(`ent: missing required field "Resume.createdAt"`)}
+	}
+	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updatedAt", err: errors.New(`ent: missing required field "Resume.updatedAt"`)}
+	}
+	if len(_c.mutation.UserIDs()) == 0 {
+		return &ValidationError{Name: "user", err: errors.New(`ent: missing required edge "Resume.user"`)}
+	}
 	return nil
 }
 
@@ -66,8 +406,13 @@ func (_c *ResumeCreate) sqlSave(ctx context.Context) (*Resume, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +421,214 @@ func (_c *ResumeCreate) sqlSave(ctx context.Context) (*Resume, error) {
 func (_c *ResumeCreate) createSpec() (*Resume, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Resume{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(resume.Table, sqlgraph.NewFieldSpec(resume.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(resume.Table, sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(resume.FieldTitle, field.TypeString, value)
+		_node.Title = value
+	}
+	if value, ok := _c.mutation.IsAiGenerated(); ok {
+		_spec.SetField(resume.FieldIsAiGenerated, field.TypeBool, value)
+		_node.IsAiGenerated = value
+	}
+	if value, ok := _c.mutation.IsPublic(); ok {
+		_spec.SetField(resume.FieldIsPublic, field.TypeBool, value)
+		_node.IsPublic = value
+	}
+	if value, ok := _c.mutation.Content(); ok {
+		_spec.SetField(resume.FieldContent, field.TypeJSON, value)
+		_node.Content = value
+	}
+	if value, ok := _c.mutation.CreatedAt(); ok {
+		_spec.SetField(resume.FieldCreatedAt, field.TypeTime, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := _c.mutation.UpdatedAt(); ok {
+		_spec.SetField(resume.FieldUpdatedAt, field.TypeTime, value)
+		_node.UpdatedAt = value
+	}
+	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   resume.UserTable,
+			Columns: []string{resume.UserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.UserId = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TemplateIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   resume.TemplateTable,
+			Columns: []string{resume.TemplateColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TemplateId = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.HeaderContanctInfoIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   resume.HeaderContanctInfoTable,
+			Columns: []string{resume.HeaderContanctInfoColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProfessionalSummaryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   resume.ProfessionalSummaryTable,
+			Columns: []string{resume.ProfessionalSummaryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ExperiencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   resume.ExperiencesTable,
+			Columns: []string{resume.ExperiencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EducationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   resume.EducationsTable,
+			Columns: []string{resume.EducationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(education.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SkillsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   resume.SkillsTable,
+			Columns: []string{resume.SkillsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(skill.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProjectsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   resume.ProjectsTable,
+			Columns: []string{resume.ProjectsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(project.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CertificationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   resume.CertificationsTable,
+			Columns: []string{resume.CertificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(certification.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AchievementsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   resume.AchievementsTable,
+			Columns: []string{resume.AchievementsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(achievement.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.HobbiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   resume.HobbiesTable,
+			Columns: []string{resume.HobbiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +650,7 @@ func (_c *ResumeCreateBulk) Save(ctx context.Context) ([]*Resume, error) {
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ResumeMutation)
 				if !ok {
@@ -125,10 +677,6 @@ func (_c *ResumeCreateBulk) Save(ctx context.Context) ([]*Resume, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

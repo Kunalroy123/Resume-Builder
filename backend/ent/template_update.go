@@ -7,11 +7,13 @@ import (
 	"errors"
 	"fmt"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
 	"resume-builder-backend/ent/template"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // TemplateUpdate is the builder for updating Template entities.
@@ -27,9 +29,141 @@ func (_u *TemplateUpdate) Where(ps ...predicate.Template) *TemplateUpdate {
 	return _u
 }
 
+// SetName sets the "name" field.
+func (_u *TemplateUpdate) SetName(v string) *TemplateUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableName(v *string) *TemplateUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *TemplateUpdate) SetDescription(v string) *TemplateUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableDescription(v *string) *TemplateUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *TemplateUpdate) ClearDescription() *TemplateUpdate {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetHtmlTemplate sets the "htmlTemplate" field.
+func (_u *TemplateUpdate) SetHtmlTemplate(v string) *TemplateUpdate {
+	_u.mutation.SetHtmlTemplate(v)
+	return _u
+}
+
+// SetNillableHtmlTemplate sets the "htmlTemplate" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableHtmlTemplate(v *string) *TemplateUpdate {
+	if v != nil {
+		_u.SetHtmlTemplate(*v)
+	}
+	return _u
+}
+
+// SetCssStyles sets the "cssStyles" field.
+func (_u *TemplateUpdate) SetCssStyles(v string) *TemplateUpdate {
+	_u.mutation.SetCssStyles(v)
+	return _u
+}
+
+// SetNillableCssStyles sets the "cssStyles" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableCssStyles(v *string) *TemplateUpdate {
+	if v != nil {
+		_u.SetCssStyles(*v)
+	}
+	return _u
+}
+
+// SetIsActive sets the "isActive" field.
+func (_u *TemplateUpdate) SetIsActive(v bool) *TemplateUpdate {
+	_u.mutation.SetIsActive(v)
+	return _u
+}
+
+// SetNillableIsActive sets the "isActive" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillableIsActive(v *bool) *TemplateUpdate {
+	if v != nil {
+		_u.SetIsActive(*v)
+	}
+	return _u
+}
+
+// SetPreviewImage sets the "previewImage" field.
+func (_u *TemplateUpdate) SetPreviewImage(v string) *TemplateUpdate {
+	_u.mutation.SetPreviewImage(v)
+	return _u
+}
+
+// SetNillablePreviewImage sets the "previewImage" field if the given value is not nil.
+func (_u *TemplateUpdate) SetNillablePreviewImage(v *string) *TemplateUpdate {
+	if v != nil {
+		_u.SetPreviewImage(*v)
+	}
+	return _u
+}
+
+// ClearPreviewImage clears the value of the "previewImage" field.
+func (_u *TemplateUpdate) ClearPreviewImage() *TemplateUpdate {
+	_u.mutation.ClearPreviewImage()
+	return _u
+}
+
+// AddResumeIDs adds the "resumes" edge to the Resume entity by IDs.
+func (_u *TemplateUpdate) AddResumeIDs(ids ...uuid.UUID) *TemplateUpdate {
+	_u.mutation.AddResumeIDs(ids...)
+	return _u
+}
+
+// AddResumes adds the "resumes" edges to the Resume entity.
+func (_u *TemplateUpdate) AddResumes(v ...*Resume) *TemplateUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddResumeIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_u *TemplateUpdate) Mutation() *TemplateMutation {
 	return _u.mutation
+}
+
+// ClearResumes clears all "resumes" edges to the Resume entity.
+func (_u *TemplateUpdate) ClearResumes() *TemplateUpdate {
+	_u.mutation.ClearResumes()
+	return _u
+}
+
+// RemoveResumeIDs removes the "resumes" edge to Resume entities by IDs.
+func (_u *TemplateUpdate) RemoveResumeIDs(ids ...uuid.UUID) *TemplateUpdate {
+	_u.mutation.RemoveResumeIDs(ids...)
+	return _u
+}
+
+// RemoveResumes removes "resumes" edges to Resume entities.
+func (_u *TemplateUpdate) RemoveResumes(v ...*Resume) *TemplateUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveResumeIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +193,106 @@ func (_u *TemplateUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TemplateUpdate) check() error {
+	if v, ok := _u.mutation.Name(); ok {
+		if err := template.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Template.name": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.HtmlTemplate(); ok {
+		if err := template.HtmlTemplateValidator(v); err != nil {
+			return &ValidationError{Name: "htmlTemplate", err: fmt.Errorf(`ent: validator failed for field "Template.htmlTemplate": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CssStyles(); ok {
+		if err := template.CssStylesValidator(v); err != nil {
+			return &ValidationError{Name: "cssStyles", err: fmt.Errorf(`ent: validator failed for field "Template.cssStyles": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(template.Table, template.Columns, sqlgraph.NewFieldSpec(template.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(template.Table, template.Columns, sqlgraph.NewFieldSpec(template.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(template.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(template.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(template.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.HtmlTemplate(); ok {
+		_spec.SetField(template.FieldHtmlTemplate, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.CssStyles(); ok {
+		_spec.SetField(template.FieldCssStyles, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.IsActive(); ok {
+		_spec.SetField(template.FieldIsActive, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PreviewImage(); ok {
+		_spec.SetField(template.FieldPreviewImage, field.TypeString, value)
+	}
+	if _u.mutation.PreviewImageCleared() {
+		_spec.ClearField(template.FieldPreviewImage, field.TypeString)
+	}
+	if _u.mutation.ResumesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.ResumesTable,
+			Columns: []string{template.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedResumesIDs(); len(nodes) > 0 && !_u.mutation.ResumesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.ResumesTable,
+			Columns: []string{template.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.ResumesTable,
+			Columns: []string{template.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +314,141 @@ type TemplateUpdateOne struct {
 	mutation *TemplateMutation
 }
 
+// SetName sets the "name" field.
+func (_u *TemplateUpdateOne) SetName(v string) *TemplateUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableName(v *string) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *TemplateUpdateOne) SetDescription(v string) *TemplateUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableDescription(v *string) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *TemplateUpdateOne) ClearDescription() *TemplateUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetHtmlTemplate sets the "htmlTemplate" field.
+func (_u *TemplateUpdateOne) SetHtmlTemplate(v string) *TemplateUpdateOne {
+	_u.mutation.SetHtmlTemplate(v)
+	return _u
+}
+
+// SetNillableHtmlTemplate sets the "htmlTemplate" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableHtmlTemplate(v *string) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetHtmlTemplate(*v)
+	}
+	return _u
+}
+
+// SetCssStyles sets the "cssStyles" field.
+func (_u *TemplateUpdateOne) SetCssStyles(v string) *TemplateUpdateOne {
+	_u.mutation.SetCssStyles(v)
+	return _u
+}
+
+// SetNillableCssStyles sets the "cssStyles" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableCssStyles(v *string) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetCssStyles(*v)
+	}
+	return _u
+}
+
+// SetIsActive sets the "isActive" field.
+func (_u *TemplateUpdateOne) SetIsActive(v bool) *TemplateUpdateOne {
+	_u.mutation.SetIsActive(v)
+	return _u
+}
+
+// SetNillableIsActive sets the "isActive" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillableIsActive(v *bool) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetIsActive(*v)
+	}
+	return _u
+}
+
+// SetPreviewImage sets the "previewImage" field.
+func (_u *TemplateUpdateOne) SetPreviewImage(v string) *TemplateUpdateOne {
+	_u.mutation.SetPreviewImage(v)
+	return _u
+}
+
+// SetNillablePreviewImage sets the "previewImage" field if the given value is not nil.
+func (_u *TemplateUpdateOne) SetNillablePreviewImage(v *string) *TemplateUpdateOne {
+	if v != nil {
+		_u.SetPreviewImage(*v)
+	}
+	return _u
+}
+
+// ClearPreviewImage clears the value of the "previewImage" field.
+func (_u *TemplateUpdateOne) ClearPreviewImage() *TemplateUpdateOne {
+	_u.mutation.ClearPreviewImage()
+	return _u
+}
+
+// AddResumeIDs adds the "resumes" edge to the Resume entity by IDs.
+func (_u *TemplateUpdateOne) AddResumeIDs(ids ...uuid.UUID) *TemplateUpdateOne {
+	_u.mutation.AddResumeIDs(ids...)
+	return _u
+}
+
+// AddResumes adds the "resumes" edges to the Resume entity.
+func (_u *TemplateUpdateOne) AddResumes(v ...*Resume) *TemplateUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddResumeIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_u *TemplateUpdateOne) Mutation() *TemplateMutation {
 	return _u.mutation
+}
+
+// ClearResumes clears all "resumes" edges to the Resume entity.
+func (_u *TemplateUpdateOne) ClearResumes() *TemplateUpdateOne {
+	_u.mutation.ClearResumes()
+	return _u
+}
+
+// RemoveResumeIDs removes the "resumes" edge to Resume entities by IDs.
+func (_u *TemplateUpdateOne) RemoveResumeIDs(ids ...uuid.UUID) *TemplateUpdateOne {
+	_u.mutation.RemoveResumeIDs(ids...)
+	return _u
+}
+
+// RemoveResumes removes "resumes" edges to Resume entities.
+func (_u *TemplateUpdateOne) RemoveResumes(v ...*Resume) *TemplateUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveResumeIDs(ids...)
 }
 
 // Where appends a list predicates to the TemplateUpdate builder.
@@ -133,8 +491,31 @@ func (_u *TemplateUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TemplateUpdateOne) check() error {
+	if v, ok := _u.mutation.Name(); ok {
+		if err := template.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Template.name": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.HtmlTemplate(); ok {
+		if err := template.HtmlTemplateValidator(v); err != nil {
+			return &ValidationError{Name: "htmlTemplate", err: fmt.Errorf(`ent: validator failed for field "Template.htmlTemplate": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CssStyles(); ok {
+		if err := template.CssStylesValidator(v); err != nil {
+			return &ValidationError{Name: "cssStyles", err: fmt.Errorf(`ent: validator failed for field "Template.cssStyles": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err error) {
-	_spec := sqlgraph.NewUpdateSpec(template.Table, template.Columns, sqlgraph.NewFieldSpec(template.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(template.Table, template.Columns, sqlgraph.NewFieldSpec(template.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Template.id" for update`)}
@@ -158,6 +539,75 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(template.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(template.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(template.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.HtmlTemplate(); ok {
+		_spec.SetField(template.FieldHtmlTemplate, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.CssStyles(); ok {
+		_spec.SetField(template.FieldCssStyles, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.IsActive(); ok {
+		_spec.SetField(template.FieldIsActive, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.PreviewImage(); ok {
+		_spec.SetField(template.FieldPreviewImage, field.TypeString, value)
+	}
+	if _u.mutation.PreviewImageCleared() {
+		_spec.ClearField(template.FieldPreviewImage, field.TypeString)
+	}
+	if _u.mutation.ResumesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.ResumesTable,
+			Columns: []string{template.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedResumesIDs(); len(nodes) > 0 && !_u.mutation.ResumesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.ResumesTable,
+			Columns: []string{template.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.ResumesTable,
+			Columns: []string{template.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Template{config: _u.config}
 	_spec.Assign = _node.assignValues

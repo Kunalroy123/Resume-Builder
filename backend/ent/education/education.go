@@ -4,6 +4,8 @@ package education
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +13,58 @@ const (
 	Label = "education"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldInstitutionName holds the string denoting the institutionname field in the database.
+	FieldInstitutionName = "institution_name"
+	// FieldDegree holds the string denoting the degree field in the database.
+	FieldDegree = "degree"
+	// FieldFieldOfStudy holds the string denoting the fieldofstudy field in the database.
+	FieldFieldOfStudy = "field_of_study"
+	// FieldStartDate holds the string denoting the startdate field in the database.
+	FieldStartDate = "start_date"
+	// FieldEndDate holds the string denoting the enddate field in the database.
+	FieldEndDate = "end_date"
+	// FieldGpa holds the string denoting the gpa field in the database.
+	FieldGpa = "gpa"
+	// FieldLocation holds the string denoting the location field in the database.
+	FieldLocation = "location"
+	// FieldRelevantCoursework holds the string denoting the relevantcoursework field in the database.
+	FieldRelevantCoursework = "relevant_coursework"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldOrderIndex holds the string denoting the orderindex field in the database.
+	FieldOrderIndex = "order_index"
+	// EdgeResume holds the string denoting the resume edge name in mutations.
+	EdgeResume = "resume"
 	// Table holds the table name of the education in the database.
 	Table = "educations"
+	// ResumeTable is the table that holds the resume relation/edge.
+	ResumeTable = "educations"
+	// ResumeInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumeInverseTable = "resumes"
+	// ResumeColumn is the table column denoting the resume relation/edge.
+	ResumeColumn = "resume_educations"
 )
 
 // Columns holds all SQL columns for education fields.
 var Columns = []string{
 	FieldID,
+	FieldInstitutionName,
+	FieldDegree,
+	FieldFieldOfStudy,
+	FieldStartDate,
+	FieldEndDate,
+	FieldGpa,
+	FieldLocation,
+	FieldRelevantCoursework,
+	FieldDescription,
+	FieldOrderIndex,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "educations"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"resume_educations",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -27,8 +74,26 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
+
+var (
+	// InstitutionNameValidator is a validator for the "institutionName" field. It is called by the builders before save.
+	InstitutionNameValidator func(string) error
+	// DegreeValidator is a validator for the "degree" field. It is called by the builders before save.
+	DegreeValidator func(string) error
+	// FieldOfStudyValidator is a validator for the "fieldOfStudy" field. It is called by the builders before save.
+	FieldOfStudyValidator func(string) error
+	// DefaultOrderIndex holds the default value on creation for the "orderIndex" field.
+	DefaultOrderIndex int
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
 
 // OrderOption defines the ordering options for the Education queries.
 type OrderOption func(*sql.Selector)
@@ -36,4 +101,63 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByInstitutionName orders the results by the institutionName field.
+func ByInstitutionName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInstitutionName, opts...).ToFunc()
+}
+
+// ByDegree orders the results by the degree field.
+func ByDegree(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDegree, opts...).ToFunc()
+}
+
+// ByFieldOfStudy orders the results by the fieldOfStudy field.
+func ByFieldOfStudy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFieldOfStudy, opts...).ToFunc()
+}
+
+// ByStartDate orders the results by the startDate field.
+func ByStartDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStartDate, opts...).ToFunc()
+}
+
+// ByEndDate orders the results by the endDate field.
+func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
+}
+
+// ByGpa orders the results by the gpa field.
+func ByGpa(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGpa, opts...).ToFunc()
+}
+
+// ByLocation orders the results by the location field.
+func ByLocation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLocation, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByOrderIndex orders the results by the orderIndex field.
+func ByOrderIndex(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderIndex, opts...).ToFunc()
+}
+
+// ByResumeField orders the results by resume field.
+func ByResumeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumeStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newResumeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+	)
 }

@@ -4,53 +4,684 @@ package education
 
 import (
 	"resume-builder-backend/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Education {
+func ID(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Education {
+func IDEQ(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Education {
+func IDNEQ(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Education {
+func IDIn(ids ...uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Education {
+func IDNotIn(ids ...uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Education {
+func IDGT(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Education {
+func IDGTE(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Education {
+func IDLT(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Education {
+func IDLTE(id uuid.UUID) predicate.Education {
 	return predicate.Education(sql.FieldLTE(FieldID, id))
+}
+
+// InstitutionName applies equality check predicate on the "institutionName" field. It's identical to InstitutionNameEQ.
+func InstitutionName(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldInstitutionName, v))
+}
+
+// Degree applies equality check predicate on the "degree" field. It's identical to DegreeEQ.
+func Degree(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldDegree, v))
+}
+
+// FieldOfStudy applies equality check predicate on the "fieldOfStudy" field. It's identical to FieldOfStudyEQ.
+func FieldOfStudy(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldFieldOfStudy, v))
+}
+
+// StartDate applies equality check predicate on the "startDate" field. It's identical to StartDateEQ.
+func StartDate(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldStartDate, v))
+}
+
+// EndDate applies equality check predicate on the "endDate" field. It's identical to EndDateEQ.
+func EndDate(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldEndDate, v))
+}
+
+// Gpa applies equality check predicate on the "gpa" field. It's identical to GpaEQ.
+func Gpa(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldGpa, v))
+}
+
+// Location applies equality check predicate on the "location" field. It's identical to LocationEQ.
+func Location(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldLocation, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldDescription, v))
+}
+
+// OrderIndex applies equality check predicate on the "orderIndex" field. It's identical to OrderIndexEQ.
+func OrderIndex(v int) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// InstitutionNameEQ applies the EQ predicate on the "institutionName" field.
+func InstitutionNameEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldInstitutionName, v))
+}
+
+// InstitutionNameNEQ applies the NEQ predicate on the "institutionName" field.
+func InstitutionNameNEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldInstitutionName, v))
+}
+
+// InstitutionNameIn applies the In predicate on the "institutionName" field.
+func InstitutionNameIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldInstitutionName, vs...))
+}
+
+// InstitutionNameNotIn applies the NotIn predicate on the "institutionName" field.
+func InstitutionNameNotIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldInstitutionName, vs...))
+}
+
+// InstitutionNameGT applies the GT predicate on the "institutionName" field.
+func InstitutionNameGT(v string) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldInstitutionName, v))
+}
+
+// InstitutionNameGTE applies the GTE predicate on the "institutionName" field.
+func InstitutionNameGTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldInstitutionName, v))
+}
+
+// InstitutionNameLT applies the LT predicate on the "institutionName" field.
+func InstitutionNameLT(v string) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldInstitutionName, v))
+}
+
+// InstitutionNameLTE applies the LTE predicate on the "institutionName" field.
+func InstitutionNameLTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldInstitutionName, v))
+}
+
+// InstitutionNameContains applies the Contains predicate on the "institutionName" field.
+func InstitutionNameContains(v string) predicate.Education {
+	return predicate.Education(sql.FieldContains(FieldInstitutionName, v))
+}
+
+// InstitutionNameHasPrefix applies the HasPrefix predicate on the "institutionName" field.
+func InstitutionNameHasPrefix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasPrefix(FieldInstitutionName, v))
+}
+
+// InstitutionNameHasSuffix applies the HasSuffix predicate on the "institutionName" field.
+func InstitutionNameHasSuffix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasSuffix(FieldInstitutionName, v))
+}
+
+// InstitutionNameEqualFold applies the EqualFold predicate on the "institutionName" field.
+func InstitutionNameEqualFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldEqualFold(FieldInstitutionName, v))
+}
+
+// InstitutionNameContainsFold applies the ContainsFold predicate on the "institutionName" field.
+func InstitutionNameContainsFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldContainsFold(FieldInstitutionName, v))
+}
+
+// DegreeEQ applies the EQ predicate on the "degree" field.
+func DegreeEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldDegree, v))
+}
+
+// DegreeNEQ applies the NEQ predicate on the "degree" field.
+func DegreeNEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldDegree, v))
+}
+
+// DegreeIn applies the In predicate on the "degree" field.
+func DegreeIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldDegree, vs...))
+}
+
+// DegreeNotIn applies the NotIn predicate on the "degree" field.
+func DegreeNotIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldDegree, vs...))
+}
+
+// DegreeGT applies the GT predicate on the "degree" field.
+func DegreeGT(v string) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldDegree, v))
+}
+
+// DegreeGTE applies the GTE predicate on the "degree" field.
+func DegreeGTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldDegree, v))
+}
+
+// DegreeLT applies the LT predicate on the "degree" field.
+func DegreeLT(v string) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldDegree, v))
+}
+
+// DegreeLTE applies the LTE predicate on the "degree" field.
+func DegreeLTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldDegree, v))
+}
+
+// DegreeContains applies the Contains predicate on the "degree" field.
+func DegreeContains(v string) predicate.Education {
+	return predicate.Education(sql.FieldContains(FieldDegree, v))
+}
+
+// DegreeHasPrefix applies the HasPrefix predicate on the "degree" field.
+func DegreeHasPrefix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasPrefix(FieldDegree, v))
+}
+
+// DegreeHasSuffix applies the HasSuffix predicate on the "degree" field.
+func DegreeHasSuffix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasSuffix(FieldDegree, v))
+}
+
+// DegreeEqualFold applies the EqualFold predicate on the "degree" field.
+func DegreeEqualFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldEqualFold(FieldDegree, v))
+}
+
+// DegreeContainsFold applies the ContainsFold predicate on the "degree" field.
+func DegreeContainsFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldContainsFold(FieldDegree, v))
+}
+
+// FieldOfStudyEQ applies the EQ predicate on the "fieldOfStudy" field.
+func FieldOfStudyEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyNEQ applies the NEQ predicate on the "fieldOfStudy" field.
+func FieldOfStudyNEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyIn applies the In predicate on the "fieldOfStudy" field.
+func FieldOfStudyIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldFieldOfStudy, vs...))
+}
+
+// FieldOfStudyNotIn applies the NotIn predicate on the "fieldOfStudy" field.
+func FieldOfStudyNotIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldFieldOfStudy, vs...))
+}
+
+// FieldOfStudyGT applies the GT predicate on the "fieldOfStudy" field.
+func FieldOfStudyGT(v string) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyGTE applies the GTE predicate on the "fieldOfStudy" field.
+func FieldOfStudyGTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyLT applies the LT predicate on the "fieldOfStudy" field.
+func FieldOfStudyLT(v string) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyLTE applies the LTE predicate on the "fieldOfStudy" field.
+func FieldOfStudyLTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyContains applies the Contains predicate on the "fieldOfStudy" field.
+func FieldOfStudyContains(v string) predicate.Education {
+	return predicate.Education(sql.FieldContains(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyHasPrefix applies the HasPrefix predicate on the "fieldOfStudy" field.
+func FieldOfStudyHasPrefix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasPrefix(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyHasSuffix applies the HasSuffix predicate on the "fieldOfStudy" field.
+func FieldOfStudyHasSuffix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasSuffix(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyEqualFold applies the EqualFold predicate on the "fieldOfStudy" field.
+func FieldOfStudyEqualFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldEqualFold(FieldFieldOfStudy, v))
+}
+
+// FieldOfStudyContainsFold applies the ContainsFold predicate on the "fieldOfStudy" field.
+func FieldOfStudyContainsFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldContainsFold(FieldFieldOfStudy, v))
+}
+
+// StartDateEQ applies the EQ predicate on the "startDate" field.
+func StartDateEQ(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldStartDate, v))
+}
+
+// StartDateNEQ applies the NEQ predicate on the "startDate" field.
+func StartDateNEQ(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldStartDate, v))
+}
+
+// StartDateIn applies the In predicate on the "startDate" field.
+func StartDateIn(vs ...time.Time) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldStartDate, vs...))
+}
+
+// StartDateNotIn applies the NotIn predicate on the "startDate" field.
+func StartDateNotIn(vs ...time.Time) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldStartDate, vs...))
+}
+
+// StartDateGT applies the GT predicate on the "startDate" field.
+func StartDateGT(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldStartDate, v))
+}
+
+// StartDateGTE applies the GTE predicate on the "startDate" field.
+func StartDateGTE(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldStartDate, v))
+}
+
+// StartDateLT applies the LT predicate on the "startDate" field.
+func StartDateLT(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldStartDate, v))
+}
+
+// StartDateLTE applies the LTE predicate on the "startDate" field.
+func StartDateLTE(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldStartDate, v))
+}
+
+// EndDateEQ applies the EQ predicate on the "endDate" field.
+func EndDateEQ(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldEndDate, v))
+}
+
+// EndDateNEQ applies the NEQ predicate on the "endDate" field.
+func EndDateNEQ(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldEndDate, v))
+}
+
+// EndDateIn applies the In predicate on the "endDate" field.
+func EndDateIn(vs ...time.Time) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldEndDate, vs...))
+}
+
+// EndDateNotIn applies the NotIn predicate on the "endDate" field.
+func EndDateNotIn(vs ...time.Time) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldEndDate, vs...))
+}
+
+// EndDateGT applies the GT predicate on the "endDate" field.
+func EndDateGT(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldEndDate, v))
+}
+
+// EndDateGTE applies the GTE predicate on the "endDate" field.
+func EndDateGTE(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldEndDate, v))
+}
+
+// EndDateLT applies the LT predicate on the "endDate" field.
+func EndDateLT(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldEndDate, v))
+}
+
+// EndDateLTE applies the LTE predicate on the "endDate" field.
+func EndDateLTE(v time.Time) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldEndDate, v))
+}
+
+// EndDateIsNil applies the IsNil predicate on the "endDate" field.
+func EndDateIsNil() predicate.Education {
+	return predicate.Education(sql.FieldIsNull(FieldEndDate))
+}
+
+// EndDateNotNil applies the NotNil predicate on the "endDate" field.
+func EndDateNotNil() predicate.Education {
+	return predicate.Education(sql.FieldNotNull(FieldEndDate))
+}
+
+// GpaEQ applies the EQ predicate on the "gpa" field.
+func GpaEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldGpa, v))
+}
+
+// GpaNEQ applies the NEQ predicate on the "gpa" field.
+func GpaNEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldGpa, v))
+}
+
+// GpaIn applies the In predicate on the "gpa" field.
+func GpaIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldGpa, vs...))
+}
+
+// GpaNotIn applies the NotIn predicate on the "gpa" field.
+func GpaNotIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldGpa, vs...))
+}
+
+// GpaGT applies the GT predicate on the "gpa" field.
+func GpaGT(v string) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldGpa, v))
+}
+
+// GpaGTE applies the GTE predicate on the "gpa" field.
+func GpaGTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldGpa, v))
+}
+
+// GpaLT applies the LT predicate on the "gpa" field.
+func GpaLT(v string) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldGpa, v))
+}
+
+// GpaLTE applies the LTE predicate on the "gpa" field.
+func GpaLTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldGpa, v))
+}
+
+// GpaContains applies the Contains predicate on the "gpa" field.
+func GpaContains(v string) predicate.Education {
+	return predicate.Education(sql.FieldContains(FieldGpa, v))
+}
+
+// GpaHasPrefix applies the HasPrefix predicate on the "gpa" field.
+func GpaHasPrefix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasPrefix(FieldGpa, v))
+}
+
+// GpaHasSuffix applies the HasSuffix predicate on the "gpa" field.
+func GpaHasSuffix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasSuffix(FieldGpa, v))
+}
+
+// GpaIsNil applies the IsNil predicate on the "gpa" field.
+func GpaIsNil() predicate.Education {
+	return predicate.Education(sql.FieldIsNull(FieldGpa))
+}
+
+// GpaNotNil applies the NotNil predicate on the "gpa" field.
+func GpaNotNil() predicate.Education {
+	return predicate.Education(sql.FieldNotNull(FieldGpa))
+}
+
+// GpaEqualFold applies the EqualFold predicate on the "gpa" field.
+func GpaEqualFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldEqualFold(FieldGpa, v))
+}
+
+// GpaContainsFold applies the ContainsFold predicate on the "gpa" field.
+func GpaContainsFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldContainsFold(FieldGpa, v))
+}
+
+// LocationEQ applies the EQ predicate on the "location" field.
+func LocationEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldLocation, v))
+}
+
+// LocationNEQ applies the NEQ predicate on the "location" field.
+func LocationNEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldLocation, v))
+}
+
+// LocationIn applies the In predicate on the "location" field.
+func LocationIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldLocation, vs...))
+}
+
+// LocationNotIn applies the NotIn predicate on the "location" field.
+func LocationNotIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldLocation, vs...))
+}
+
+// LocationGT applies the GT predicate on the "location" field.
+func LocationGT(v string) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldLocation, v))
+}
+
+// LocationGTE applies the GTE predicate on the "location" field.
+func LocationGTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldLocation, v))
+}
+
+// LocationLT applies the LT predicate on the "location" field.
+func LocationLT(v string) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldLocation, v))
+}
+
+// LocationLTE applies the LTE predicate on the "location" field.
+func LocationLTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldLocation, v))
+}
+
+// LocationContains applies the Contains predicate on the "location" field.
+func LocationContains(v string) predicate.Education {
+	return predicate.Education(sql.FieldContains(FieldLocation, v))
+}
+
+// LocationHasPrefix applies the HasPrefix predicate on the "location" field.
+func LocationHasPrefix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasPrefix(FieldLocation, v))
+}
+
+// LocationHasSuffix applies the HasSuffix predicate on the "location" field.
+func LocationHasSuffix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasSuffix(FieldLocation, v))
+}
+
+// LocationIsNil applies the IsNil predicate on the "location" field.
+func LocationIsNil() predicate.Education {
+	return predicate.Education(sql.FieldIsNull(FieldLocation))
+}
+
+// LocationNotNil applies the NotNil predicate on the "location" field.
+func LocationNotNil() predicate.Education {
+	return predicate.Education(sql.FieldNotNull(FieldLocation))
+}
+
+// LocationEqualFold applies the EqualFold predicate on the "location" field.
+func LocationEqualFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldEqualFold(FieldLocation, v))
+}
+
+// LocationContainsFold applies the ContainsFold predicate on the "location" field.
+func LocationContainsFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldContainsFold(FieldLocation, v))
+}
+
+// RelevantCourseworkIsNil applies the IsNil predicate on the "relevantCoursework" field.
+func RelevantCourseworkIsNil() predicate.Education {
+	return predicate.Education(sql.FieldIsNull(FieldRelevantCoursework))
+}
+
+// RelevantCourseworkNotNil applies the NotNil predicate on the "relevantCoursework" field.
+func RelevantCourseworkNotNil() predicate.Education {
+	return predicate.Education(sql.FieldNotNull(FieldRelevantCoursework))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Education {
+	return predicate.Education(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Education {
+	return predicate.Education(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Education {
+	return predicate.Education(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Education {
+	return predicate.Education(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Education {
+	return predicate.Education(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// OrderIndexEQ applies the EQ predicate on the "orderIndex" field.
+func OrderIndexEQ(v int) predicate.Education {
+	return predicate.Education(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexNEQ applies the NEQ predicate on the "orderIndex" field.
+func OrderIndexNEQ(v int) predicate.Education {
+	return predicate.Education(sql.FieldNEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexIn applies the In predicate on the "orderIndex" field.
+func OrderIndexIn(vs ...int) predicate.Education {
+	return predicate.Education(sql.FieldIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexNotIn applies the NotIn predicate on the "orderIndex" field.
+func OrderIndexNotIn(vs ...int) predicate.Education {
+	return predicate.Education(sql.FieldNotIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexGT applies the GT predicate on the "orderIndex" field.
+func OrderIndexGT(v int) predicate.Education {
+	return predicate.Education(sql.FieldGT(FieldOrderIndex, v))
+}
+
+// OrderIndexGTE applies the GTE predicate on the "orderIndex" field.
+func OrderIndexGTE(v int) predicate.Education {
+	return predicate.Education(sql.FieldGTE(FieldOrderIndex, v))
+}
+
+// OrderIndexLT applies the LT predicate on the "orderIndex" field.
+func OrderIndexLT(v int) predicate.Education {
+	return predicate.Education(sql.FieldLT(FieldOrderIndex, v))
+}
+
+// OrderIndexLTE applies the LTE predicate on the "orderIndex" field.
+func OrderIndexLTE(v int) predicate.Education {
+	return predicate.Education(sql.FieldLTE(FieldOrderIndex, v))
+}
+
+// HasResume applies the HasEdge predicate on the "resume" edge.
+func HasResume() predicate.Education {
+	return predicate.Education(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResumeWith applies the HasEdge predicate on the "resume" edge with a given conditions (other predicates).
+func HasResumeWith(preds ...predicate.Resume) predicate.Education {
+	return predicate.Education(func(s *sql.Selector) {
+		step := newResumeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

@@ -3,7 +3,11 @@
 package skill
 
 import (
+	"fmt"
+
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +15,46 @@ const (
 	Label = "skill"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldCategory holds the string denoting the category field in the database.
+	FieldCategory = "category"
+	// FieldSkillType holds the string denoting the skilltype field in the database.
+	FieldSkillType = "skill_type"
+	// FieldProficiencyLevel holds the string denoting the proficiencylevel field in the database.
+	FieldProficiencyLevel = "proficiency_level"
+	// FieldYearsOfExperience holds the string denoting the yearsofexperience field in the database.
+	FieldYearsOfExperience = "years_of_experience"
+	// FieldOrderIndex holds the string denoting the orderindex field in the database.
+	FieldOrderIndex = "order_index"
+	// EdgeResume holds the string denoting the resume edge name in mutations.
+	EdgeResume = "resume"
 	// Table holds the table name of the skill in the database.
 	Table = "skills"
+	// ResumeTable is the table that holds the resume relation/edge.
+	ResumeTable = "skills"
+	// ResumeInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumeInverseTable = "resumes"
+	// ResumeColumn is the table column denoting the resume relation/edge.
+	ResumeColumn = "resume_skills"
 )
 
 // Columns holds all SQL columns for skill fields.
 var Columns = []string{
 	FieldID,
+	FieldName,
+	FieldCategory,
+	FieldSkillType,
+	FieldProficiencyLevel,
+	FieldYearsOfExperience,
+	FieldOrderIndex,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "skills"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"resume_skills",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -27,7 +64,77 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
+}
+
+var (
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
+	// CategoryValidator is a validator for the "category" field. It is called by the builders before save.
+	CategoryValidator func(string) error
+	// DefaultOrderIndex holds the default value on creation for the "orderIndex" field.
+	DefaultOrderIndex int
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
+
+// SkillType defines the type for the "skillType" enum field.
+type SkillType string
+
+// SkillTypeTECHNICAL is the default value of the SkillType enum.
+const DefaultSkillType = SkillTypeTECHNICAL
+
+// SkillType values.
+const (
+	SkillTypeTECHNICAL SkillType = "TECHNICAL"
+	SkillTypeSOFT      SkillType = "SOFT"
+)
+
+func (st SkillType) String() string {
+	return string(st)
+}
+
+// SkillTypeValidator is a validator for the "skillType" field enum values. It is called by the builders before save.
+func SkillTypeValidator(st SkillType) error {
+	switch st {
+	case SkillTypeTECHNICAL, SkillTypeSOFT:
+		return nil
+	default:
+		return fmt.Errorf("skill: invalid enum value for skillType field: %q", st)
+	}
+}
+
+// ProficiencyLevel defines the type for the "proficiencyLevel" enum field.
+type ProficiencyLevel string
+
+// ProficiencyLevelINTERMEDIATE is the default value of the ProficiencyLevel enum.
+const DefaultProficiencyLevel = ProficiencyLevelINTERMEDIATE
+
+// ProficiencyLevel values.
+const (
+	ProficiencyLevelBEGINNER     ProficiencyLevel = "BEGINNER"
+	ProficiencyLevelINTERMEDIATE ProficiencyLevel = "INTERMEDIATE"
+	ProficiencyLevelADVANCED     ProficiencyLevel = "ADVANCED"
+	ProficiencyLevelEXPERT       ProficiencyLevel = "EXPERT"
+)
+
+func (pl ProficiencyLevel) String() string {
+	return string(pl)
+}
+
+// ProficiencyLevelValidator is a validator for the "proficiencyLevel" field enum values. It is called by the builders before save.
+func ProficiencyLevelValidator(pl ProficiencyLevel) error {
+	switch pl {
+	case ProficiencyLevelBEGINNER, ProficiencyLevelINTERMEDIATE, ProficiencyLevelADVANCED, ProficiencyLevelEXPERT:
+		return nil
+	default:
+		return fmt.Errorf("skill: invalid enum value for proficiencyLevel field: %q", pl)
+	}
 }
 
 // OrderOption defines the ordering options for the Skill queries.
@@ -36,4 +143,48 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByCategory orders the results by the category field.
+func ByCategory(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCategory, opts...).ToFunc()
+}
+
+// BySkillType orders the results by the skillType field.
+func BySkillType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSkillType, opts...).ToFunc()
+}
+
+// ByProficiencyLevel orders the results by the proficiencyLevel field.
+func ByProficiencyLevel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProficiencyLevel, opts...).ToFunc()
+}
+
+// ByYearsOfExperience orders the results by the yearsOfExperience field.
+func ByYearsOfExperience(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldYearsOfExperience, opts...).ToFunc()
+}
+
+// ByOrderIndex orders the results by the orderIndex field.
+func ByOrderIndex(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderIndex, opts...).ToFunc()
+}
+
+// ByResumeField orders the results by resume field.
+func ByResumeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumeStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newResumeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+	)
 }

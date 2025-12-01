@@ -9,14 +9,48 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Template is the model entity for the Template schema.
 type Template struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// HtmlTemplate holds the value of the "htmlTemplate" field.
+	HtmlTemplate string `json:"htmlTemplate,omitempty"`
+	// CssStyles holds the value of the "cssStyles" field.
+	CssStyles string `json:"cssStyles,omitempty"`
+	// IsActive holds the value of the "isActive" field.
+	IsActive bool `json:"isActive,omitempty"`
+	// PreviewImage holds the value of the "previewImage" field.
+	PreviewImage string `json:"previewImage,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the TemplateQuery when eager-loading is set.
+	Edges        TemplateEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// TemplateEdges holds the relations/edges for other nodes in the graph.
+type TemplateEdges struct {
+	// Resumes holds the value of the resumes edge.
+	Resumes []*Resume `json:"resumes,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumesOrErr returns the Resumes value or an error if the edge
+// was not loaded in eager-loading.
+func (e TemplateEdges) ResumesOrErr() ([]*Resume, error) {
+	if e.loadedTypes[0] {
+		return e.Resumes, nil
+	}
+	return nil, &NotLoadedError{edge: "resumes"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +58,12 @@ func (*Template) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case template.FieldIsActive:
+			values[i] = new(sql.NullBool)
+		case template.FieldName, template.FieldDescription, template.FieldHtmlTemplate, template.FieldCssStyles, template.FieldPreviewImage:
+			values[i] = new(sql.NullString)
 		case template.FieldID:
-			values[i] = new(sql.NullInt64)
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +80,47 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case template.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case template.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				_m.Name = value.String
+			}
+		case template.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
+			}
+		case template.FieldHtmlTemplate:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field htmlTemplate", values[i])
+			} else if value.Valid {
+				_m.HtmlTemplate = value.String
+			}
+		case template.FieldCssStyles:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field cssStyles", values[i])
+			} else if value.Valid {
+				_m.CssStyles = value.String
+			}
+		case template.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field isActive", values[i])
+			} else if value.Valid {
+				_m.IsActive = value.Bool
+			}
+		case template.FieldPreviewImage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field previewImage", values[i])
+			} else if value.Valid {
+				_m.PreviewImage = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +132,11 @@ func (_m *Template) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Template) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResumes queries the "resumes" edge of the Template entity.
+func (_m *Template) QueryResumes() *ResumeQuery {
+	return NewTemplateClient(_m.config).QueryResumes(_m)
 }
 
 // Update returns a builder for updating this Template.
@@ -82,7 +161,24 @@ func (_m *Template) Unwrap() *Template {
 func (_m *Template) String() string {
 	var builder strings.Builder
 	builder.WriteString("Template(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("name=")
+	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("htmlTemplate=")
+	builder.WriteString(_m.HtmlTemplate)
+	builder.WriteString(", ")
+	builder.WriteString("cssStyles=")
+	builder.WriteString(_m.CssStyles)
+	builder.WriteString(", ")
+	builder.WriteString("isActive=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsActive))
+	builder.WriteString(", ")
+	builder.WriteString("previewImage=")
+	builder.WriteString(_m.PreviewImage)
 	builder.WriteByte(')')
 	return builder.String()
 }

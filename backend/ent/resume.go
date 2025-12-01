@@ -3,20 +3,182 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
+	"resume-builder-backend/ent/headercontactinfo"
+	"resume-builder-backend/ent/professionalsummary"
 	"resume-builder-backend/ent/resume"
+	"resume-builder-backend/ent/template"
+	"resume-builder-backend/ent/user"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Resume is the model entity for the Resume schema.
 type Resume struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
+	// UserId holds the value of the "userId" field.
+	UserId uuid.UUID `json:"userId,omitempty"`
+	// Title holds the value of the "title" field.
+	Title string `json:"title,omitempty"`
+	// TemplateId holds the value of the "templateId" field.
+	TemplateId *uuid.UUID `json:"templateId,omitempty"`
+	// IsAiGenerated holds the value of the "isAiGenerated" field.
+	IsAiGenerated bool `json:"isAiGenerated,omitempty"`
+	// IsPublic holds the value of the "isPublic" field.
+	IsPublic bool `json:"isPublic,omitempty"`
+	// Content holds the value of the "content" field.
+	Content map[string]interface{} `json:"content,omitempty"`
+	// CreatedAt holds the value of the "createdAt" field.
+	CreatedAt time.Time `json:"createdAt,omitempty"`
+	// UpdatedAt holds the value of the "updatedAt" field.
+	UpdatedAt time.Time `json:"updatedAt,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ResumeQuery when eager-loading is set.
+	Edges        ResumeEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// ResumeEdges holds the relations/edges for other nodes in the graph.
+type ResumeEdges struct {
+	// User holds the value of the user edge.
+	User *User `json:"user,omitempty"`
+	// Template holds the value of the template edge.
+	Template *Template `json:"template,omitempty"`
+	// HeaderContanctInfo holds the value of the headerContanctInfo edge.
+	HeaderContanctInfo *HeaderContactInfo `json:"headerContanctInfo,omitempty"`
+	// ProfessionalSummary holds the value of the professionalSummary edge.
+	ProfessionalSummary *ProfessionalSummary `json:"professionalSummary,omitempty"`
+	// Experiences holds the value of the experiences edge.
+	Experiences []*Experience `json:"experiences,omitempty"`
+	// Educations holds the value of the educations edge.
+	Educations []*Education `json:"educations,omitempty"`
+	// Skills holds the value of the skills edge.
+	Skills []*Skill `json:"skills,omitempty"`
+	// Projects holds the value of the projects edge.
+	Projects []*Project `json:"projects,omitempty"`
+	// Certifications holds the value of the certifications edge.
+	Certifications []*Certification `json:"certifications,omitempty"`
+	// Achievements holds the value of the achievements edge.
+	Achievements []*Achievement `json:"achievements,omitempty"`
+	// Hobbies holds the value of the hobbies edge.
+	Hobbies []*Hobby `json:"hobbies,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [11]bool
+}
+
+// UserOrErr returns the User value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ResumeEdges) UserOrErr() (*User, error) {
+	if e.User != nil {
+		return e.User, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "user"}
+}
+
+// TemplateOrErr returns the Template value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ResumeEdges) TemplateOrErr() (*Template, error) {
+	if e.Template != nil {
+		return e.Template, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: template.Label}
+	}
+	return nil, &NotLoadedError{edge: "template"}
+}
+
+// HeaderContanctInfoOrErr returns the HeaderContanctInfo value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ResumeEdges) HeaderContanctInfoOrErr() (*HeaderContactInfo, error) {
+	if e.HeaderContanctInfo != nil {
+		return e.HeaderContanctInfo, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: headercontactinfo.Label}
+	}
+	return nil, &NotLoadedError{edge: "headerContanctInfo"}
+}
+
+// ProfessionalSummaryOrErr returns the ProfessionalSummary value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ResumeEdges) ProfessionalSummaryOrErr() (*ProfessionalSummary, error) {
+	if e.ProfessionalSummary != nil {
+		return e.ProfessionalSummary, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: professionalsummary.Label}
+	}
+	return nil, &NotLoadedError{edge: "professionalSummary"}
+}
+
+// ExperiencesOrErr returns the Experiences value or an error if the edge
+// was not loaded in eager-loading.
+func (e ResumeEdges) ExperiencesOrErr() ([]*Experience, error) {
+	if e.loadedTypes[4] {
+		return e.Experiences, nil
+	}
+	return nil, &NotLoadedError{edge: "experiences"}
+}
+
+// EducationsOrErr returns the Educations value or an error if the edge
+// was not loaded in eager-loading.
+func (e ResumeEdges) EducationsOrErr() ([]*Education, error) {
+	if e.loadedTypes[5] {
+		return e.Educations, nil
+	}
+	return nil, &NotLoadedError{edge: "educations"}
+}
+
+// SkillsOrErr returns the Skills value or an error if the edge
+// was not loaded in eager-loading.
+func (e ResumeEdges) SkillsOrErr() ([]*Skill, error) {
+	if e.loadedTypes[6] {
+		return e.Skills, nil
+	}
+	return nil, &NotLoadedError{edge: "skills"}
+}
+
+// ProjectsOrErr returns the Projects value or an error if the edge
+// was not loaded in eager-loading.
+func (e ResumeEdges) ProjectsOrErr() ([]*Project, error) {
+	if e.loadedTypes[7] {
+		return e.Projects, nil
+	}
+	return nil, &NotLoadedError{edge: "projects"}
+}
+
+// CertificationsOrErr returns the Certifications value or an error if the edge
+// was not loaded in eager-loading.
+func (e ResumeEdges) CertificationsOrErr() ([]*Certification, error) {
+	if e.loadedTypes[8] {
+		return e.Certifications, nil
+	}
+	return nil, &NotLoadedError{edge: "certifications"}
+}
+
+// AchievementsOrErr returns the Achievements value or an error if the edge
+// was not loaded in eager-loading.
+func (e ResumeEdges) AchievementsOrErr() ([]*Achievement, error) {
+	if e.loadedTypes[9] {
+		return e.Achievements, nil
+	}
+	return nil, &NotLoadedError{edge: "achievements"}
+}
+
+// HobbiesOrErr returns the Hobbies value or an error if the edge
+// was not loaded in eager-loading.
+func (e ResumeEdges) HobbiesOrErr() ([]*Hobby, error) {
+	if e.loadedTypes[10] {
+		return e.Hobbies, nil
+	}
+	return nil, &NotLoadedError{edge: "hobbies"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +186,18 @@ func (*Resume) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case resume.FieldID:
-			values[i] = new(sql.NullInt64)
+		case resume.FieldTemplateId:
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case resume.FieldContent:
+			values[i] = new([]byte)
+		case resume.FieldIsAiGenerated, resume.FieldIsPublic:
+			values[i] = new(sql.NullBool)
+		case resume.FieldTitle:
+			values[i] = new(sql.NullString)
+		case resume.FieldCreatedAt, resume.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
+		case resume.FieldID, resume.FieldUserId:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +214,62 @@ func (_m *Resume) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case resume.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case resume.FieldUserId:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field userId", values[i])
+			} else if value != nil {
+				_m.UserId = *value
+			}
+		case resume.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = value.String
+			}
+		case resume.FieldTemplateId:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field templateId", values[i])
+			} else if value.Valid {
+				_m.TemplateId = new(uuid.UUID)
+				*_m.TemplateId = *value.S.(*uuid.UUID)
+			}
+		case resume.FieldIsAiGenerated:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field isAiGenerated", values[i])
+			} else if value.Valid {
+				_m.IsAiGenerated = value.Bool
+			}
+		case resume.FieldIsPublic:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field isPublic", values[i])
+			} else if value.Valid {
+				_m.IsPublic = value.Bool
+			}
+		case resume.FieldContent:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field content", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Content); err != nil {
+					return fmt.Errorf("unmarshal field content: %w", err)
+				}
+			}
+		case resume.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field createdAt", values[i])
+			} else if value.Valid {
+				_m.CreatedAt = value.Time
+			}
+		case resume.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updatedAt", values[i])
+			} else if value.Valid {
+				_m.UpdatedAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +281,61 @@ func (_m *Resume) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Resume) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryUser queries the "user" edge of the Resume entity.
+func (_m *Resume) QueryUser() *UserQuery {
+	return NewResumeClient(_m.config).QueryUser(_m)
+}
+
+// QueryTemplate queries the "template" edge of the Resume entity.
+func (_m *Resume) QueryTemplate() *TemplateQuery {
+	return NewResumeClient(_m.config).QueryTemplate(_m)
+}
+
+// QueryHeaderContanctInfo queries the "headerContanctInfo" edge of the Resume entity.
+func (_m *Resume) QueryHeaderContanctInfo() *HeaderContactInfoQuery {
+	return NewResumeClient(_m.config).QueryHeaderContanctInfo(_m)
+}
+
+// QueryProfessionalSummary queries the "professionalSummary" edge of the Resume entity.
+func (_m *Resume) QueryProfessionalSummary() *ProfessionalSummaryQuery {
+	return NewResumeClient(_m.config).QueryProfessionalSummary(_m)
+}
+
+// QueryExperiences queries the "experiences" edge of the Resume entity.
+func (_m *Resume) QueryExperiences() *ExperienceQuery {
+	return NewResumeClient(_m.config).QueryExperiences(_m)
+}
+
+// QueryEducations queries the "educations" edge of the Resume entity.
+func (_m *Resume) QueryEducations() *EducationQuery {
+	return NewResumeClient(_m.config).QueryEducations(_m)
+}
+
+// QuerySkills queries the "skills" edge of the Resume entity.
+func (_m *Resume) QuerySkills() *SkillQuery {
+	return NewResumeClient(_m.config).QuerySkills(_m)
+}
+
+// QueryProjects queries the "projects" edge of the Resume entity.
+func (_m *Resume) QueryProjects() *ProjectQuery {
+	return NewResumeClient(_m.config).QueryProjects(_m)
+}
+
+// QueryCertifications queries the "certifications" edge of the Resume entity.
+func (_m *Resume) QueryCertifications() *CertificationQuery {
+	return NewResumeClient(_m.config).QueryCertifications(_m)
+}
+
+// QueryAchievements queries the "achievements" edge of the Resume entity.
+func (_m *Resume) QueryAchievements() *AchievementQuery {
+	return NewResumeClient(_m.config).QueryAchievements(_m)
+}
+
+// QueryHobbies queries the "hobbies" edge of the Resume entity.
+func (_m *Resume) QueryHobbies() *HobbyQuery {
+	return NewResumeClient(_m.config).QueryHobbies(_m)
 }
 
 // Update returns a builder for updating this Resume.
@@ -82,7 +360,32 @@ func (_m *Resume) Unwrap() *Resume {
 func (_m *Resume) String() string {
 	var builder strings.Builder
 	builder.WriteString("Resume(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("userId=")
+	builder.WriteString(fmt.Sprintf("%v", _m.UserId))
+	builder.WriteString(", ")
+	builder.WriteString("title=")
+	builder.WriteString(_m.Title)
+	builder.WriteString(", ")
+	if v := _m.TemplateId; v != nil {
+		builder.WriteString("templateId=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("isAiGenerated=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsAiGenerated))
+	builder.WriteString(", ")
+	builder.WriteString("isPublic=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsPublic))
+	builder.WriteString(", ")
+	builder.WriteString("content=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Content))
+	builder.WriteString(", ")
+	builder.WriteString("createdAt=")
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updatedAt=")
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

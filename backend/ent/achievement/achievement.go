@@ -3,7 +3,11 @@
 package achievement
 
 import (
+	"fmt"
+
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +15,49 @@ const (
 	Label = "achievement"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldDiscription holds the string denoting the discription field in the database.
+	FieldDiscription = "discription"
+	// FieldDateAchieved holds the string denoting the dateachieved field in the database.
+	FieldDateAchieved = "date_achieved"
+	// FieldIssuingOrganization holds the string denoting the issuingorganization field in the database.
+	FieldIssuingOrganization = "issuing_organization"
+	// FieldAchievementType holds the string denoting the achievementtype field in the database.
+	FieldAchievementType = "achievement_type"
+	// FieldAchievementUrl holds the string denoting the achievementurl field in the database.
+	FieldAchievementUrl = "achievement_url"
+	// FieldImpactMetrics holds the string denoting the impactmetrics field in the database.
+	FieldImpactMetrics = "impact_metrics"
+	// FieldOrderIndex holds the string denoting the orderindex field in the database.
+	FieldOrderIndex = "order_index"
+	// EdgeResume holds the string denoting the resume edge name in mutations.
+	EdgeResume = "resume"
 	// Table holds the table name of the achievement in the database.
 	Table = "achievements"
+	// ResumeTable is the table that holds the resume relation/edge.
+	ResumeTable = "achievements"
+	// ResumeInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumeInverseTable = "resumes"
+	// ResumeColumn is the table column denoting the resume relation/edge.
+	ResumeColumn = "resume_achievements"
 )
 
 // Columns holds all SQL columns for achievement fields.
 var Columns = []string{
 	FieldID,
+	FieldDiscription,
+	FieldDateAchieved,
+	FieldIssuingOrganization,
+	FieldAchievementType,
+	FieldAchievementUrl,
+	FieldImpactMetrics,
+	FieldOrderIndex,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "achievements"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"resume_achievements",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -27,7 +67,53 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
+}
+
+var (
+	// DiscriptionValidator is a validator for the "discription" field. It is called by the builders before save.
+	DiscriptionValidator func(string) error
+	// DefaultOrderIndex holds the default value on creation for the "orderIndex" field.
+	DefaultOrderIndex int
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
+
+// AchievementType defines the type for the "achievementType" enum field.
+type AchievementType string
+
+// AchievementTypeAWARD is the default value of the AchievementType enum.
+const DefaultAchievementType = AchievementTypeAWARD
+
+// AchievementType values.
+const (
+	AchievementTypeAWARD       AchievementType = "AWARD"
+	AchievementTypeRECOGNITION AchievementType = "RECOGNITION"
+	AchievementTypePUBLICATION AchievementType = "PUBLICATION"
+	AchievementTypePATENT      AchievementType = "PATENT"
+	AchievementTypePROMOTION   AchievementType = "PROMOTION"
+	AchievementTypePERFORMANCE AchievementType = "PERFORMANCE"
+	AchievementTypeLEADERSHIP  AchievementType = "LEADERSHIP"
+	AchievementTypeOTHER       AchievementType = "OTHER"
+)
+
+func (at AchievementType) String() string {
+	return string(at)
+}
+
+// AchievementTypeValidator is a validator for the "achievementType" field enum values. It is called by the builders before save.
+func AchievementTypeValidator(at AchievementType) error {
+	switch at {
+	case AchievementTypeAWARD, AchievementTypeRECOGNITION, AchievementTypePUBLICATION, AchievementTypePATENT, AchievementTypePROMOTION, AchievementTypePERFORMANCE, AchievementTypeLEADERSHIP, AchievementTypeOTHER:
+		return nil
+	default:
+		return fmt.Errorf("achievement: invalid enum value for achievementType field: %q", at)
+	}
 }
 
 // OrderOption defines the ordering options for the Achievement queries.
@@ -36,4 +122,53 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByDiscription orders the results by the discription field.
+func ByDiscription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDiscription, opts...).ToFunc()
+}
+
+// ByDateAchieved orders the results by the dateAchieved field.
+func ByDateAchieved(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDateAchieved, opts...).ToFunc()
+}
+
+// ByIssuingOrganization orders the results by the issuingOrganization field.
+func ByIssuingOrganization(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIssuingOrganization, opts...).ToFunc()
+}
+
+// ByAchievementType orders the results by the achievementType field.
+func ByAchievementType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAchievementType, opts...).ToFunc()
+}
+
+// ByAchievementUrl orders the results by the achievementUrl field.
+func ByAchievementUrl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAchievementUrl, opts...).ToFunc()
+}
+
+// ByImpactMetrics orders the results by the impactMetrics field.
+func ByImpactMetrics(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldImpactMetrics, opts...).ToFunc()
+}
+
+// ByOrderIndex orders the results by the orderIndex field.
+func ByOrderIndex(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderIndex, opts...).ToFunc()
+}
+
+// ByResumeField orders the results by resume field.
+func ByResumeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumeStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newResumeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+	)
 }

@@ -8,10 +8,13 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/experience"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ExperienceUpdate is the builder for updating Experience entities.
@@ -27,9 +30,181 @@ func (_u *ExperienceUpdate) Where(ps ...predicate.Experience) *ExperienceUpdate 
 	return _u
 }
 
+// SetCompanyName sets the "companyName" field.
+func (_u *ExperienceUpdate) SetCompanyName(v string) *ExperienceUpdate {
+	_u.mutation.SetCompanyName(v)
+	return _u
+}
+
+// SetNillableCompanyName sets the "companyName" field if the given value is not nil.
+func (_u *ExperienceUpdate) SetNillableCompanyName(v *string) *ExperienceUpdate {
+	if v != nil {
+		_u.SetCompanyName(*v)
+	}
+	return _u
+}
+
+// SetPosition sets the "position" field.
+func (_u *ExperienceUpdate) SetPosition(v string) *ExperienceUpdate {
+	_u.mutation.SetPosition(v)
+	return _u
+}
+
+// SetNillablePosition sets the "position" field if the given value is not nil.
+func (_u *ExperienceUpdate) SetNillablePosition(v *string) *ExperienceUpdate {
+	if v != nil {
+		_u.SetPosition(*v)
+	}
+	return _u
+}
+
+// SetStartDate sets the "startDate" field.
+func (_u *ExperienceUpdate) SetStartDate(v time.Time) *ExperienceUpdate {
+	_u.mutation.SetStartDate(v)
+	return _u
+}
+
+// SetNillableStartDate sets the "startDate" field if the given value is not nil.
+func (_u *ExperienceUpdate) SetNillableStartDate(v *time.Time) *ExperienceUpdate {
+	if v != nil {
+		_u.SetStartDate(*v)
+	}
+	return _u
+}
+
+// SetEndDate sets the "endDate" field.
+func (_u *ExperienceUpdate) SetEndDate(v time.Time) *ExperienceUpdate {
+	_u.mutation.SetEndDate(v)
+	return _u
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_u *ExperienceUpdate) SetNillableEndDate(v *time.Time) *ExperienceUpdate {
+	if v != nil {
+		_u.SetEndDate(*v)
+	}
+	return _u
+}
+
+// ClearEndDate clears the value of the "endDate" field.
+func (_u *ExperienceUpdate) ClearEndDate() *ExperienceUpdate {
+	_u.mutation.ClearEndDate()
+	return _u
+}
+
+// SetIsCurrent sets the "isCurrent" field.
+func (_u *ExperienceUpdate) SetIsCurrent(v bool) *ExperienceUpdate {
+	_u.mutation.SetIsCurrent(v)
+	return _u
+}
+
+// SetNillableIsCurrent sets the "isCurrent" field if the given value is not nil.
+func (_u *ExperienceUpdate) SetNillableIsCurrent(v *bool) *ExperienceUpdate {
+	if v != nil {
+		_u.SetIsCurrent(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *ExperienceUpdate) SetDescription(v string) *ExperienceUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *ExperienceUpdate) SetNillableDescription(v *string) *ExperienceUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// SetLocation sets the "location" field.
+func (_u *ExperienceUpdate) SetLocation(v string) *ExperienceUpdate {
+	_u.mutation.SetLocation(v)
+	return _u
+}
+
+// SetNillableLocation sets the "location" field if the given value is not nil.
+func (_u *ExperienceUpdate) SetNillableLocation(v *string) *ExperienceUpdate {
+	if v != nil {
+		_u.SetLocation(*v)
+	}
+	return _u
+}
+
+// ClearLocation clears the value of the "location" field.
+func (_u *ExperienceUpdate) ClearLocation() *ExperienceUpdate {
+	_u.mutation.ClearLocation()
+	return _u
+}
+
+// SetAcheivements sets the "acheivements" field.
+func (_u *ExperienceUpdate) SetAcheivements(v map[string]interface{}) *ExperienceUpdate {
+	_u.mutation.SetAcheivements(v)
+	return _u
+}
+
+// ClearAcheivements clears the value of the "acheivements" field.
+func (_u *ExperienceUpdate) ClearAcheivements() *ExperienceUpdate {
+	_u.mutation.ClearAcheivements()
+	return _u
+}
+
+// SetTechnologiesUsed sets the "technologiesUsed" field.
+func (_u *ExperienceUpdate) SetTechnologiesUsed(v map[string]interface{}) *ExperienceUpdate {
+	_u.mutation.SetTechnologiesUsed(v)
+	return _u
+}
+
+// ClearTechnologiesUsed clears the value of the "technologiesUsed" field.
+func (_u *ExperienceUpdate) ClearTechnologiesUsed() *ExperienceUpdate {
+	_u.mutation.ClearTechnologiesUsed()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *ExperienceUpdate) SetOrderIndex(v int) *ExperienceUpdate {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *ExperienceUpdate) SetNillableOrderIndex(v *int) *ExperienceUpdate {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *ExperienceUpdate) AddOrderIndex(v int) *ExperienceUpdate {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *ExperienceUpdate) SetResumeID(id uuid.UUID) *ExperienceUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *ExperienceUpdate) SetResume(v *Resume) *ExperienceUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the ExperienceMutation object of the builder.
 func (_u *ExperienceUpdate) Mutation() *ExperienceMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *ExperienceUpdate) ClearResume() *ExperienceUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +234,114 @@ func (_u *ExperienceUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *ExperienceUpdate) check() error {
+	if v, ok := _u.mutation.CompanyName(); ok {
+		if err := experience.CompanyNameValidator(v); err != nil {
+			return &ValidationError{Name: "companyName", err: fmt.Errorf(`ent: validator failed for field "Experience.companyName": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Position(); ok {
+		if err := experience.PositionValidator(v); err != nil {
+			return &ValidationError{Name: "position", err: fmt.Errorf(`ent: validator failed for field "Experience.position": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Description(); ok {
+		if err := experience.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Experience.description": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Experience.resume"`)
+	}
+	return nil
+}
+
 func (_u *ExperienceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.CompanyName(); ok {
+		_spec.SetField(experience.FieldCompanyName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Position(); ok {
+		_spec.SetField(experience.FieldPosition, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.StartDate(); ok {
+		_spec.SetField(experience.FieldStartDate, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.EndDate(); ok {
+		_spec.SetField(experience.FieldEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.EndDateCleared() {
+		_spec.ClearField(experience.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.IsCurrent(); ok {
+		_spec.SetField(experience.FieldIsCurrent, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(experience.FieldDescription, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Location(); ok {
+		_spec.SetField(experience.FieldLocation, field.TypeString, value)
+	}
+	if _u.mutation.LocationCleared() {
+		_spec.ClearField(experience.FieldLocation, field.TypeString)
+	}
+	if value, ok := _u.mutation.Acheivements(); ok {
+		_spec.SetField(experience.FieldAcheivements, field.TypeJSON, value)
+	}
+	if _u.mutation.AcheivementsCleared() {
+		_spec.ClearField(experience.FieldAcheivements, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TechnologiesUsed(); ok {
+		_spec.SetField(experience.FieldTechnologiesUsed, field.TypeJSON, value)
+	}
+	if _u.mutation.TechnologiesUsedCleared() {
+		_spec.ClearField(experience.FieldTechnologiesUsed, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(experience.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(experience.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   experience.ResumeTable,
+			Columns: []string{experience.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   experience.ResumeTable,
+			Columns: []string{experience.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +363,181 @@ type ExperienceUpdateOne struct {
 	mutation *ExperienceMutation
 }
 
+// SetCompanyName sets the "companyName" field.
+func (_u *ExperienceUpdateOne) SetCompanyName(v string) *ExperienceUpdateOne {
+	_u.mutation.SetCompanyName(v)
+	return _u
+}
+
+// SetNillableCompanyName sets the "companyName" field if the given value is not nil.
+func (_u *ExperienceUpdateOne) SetNillableCompanyName(v *string) *ExperienceUpdateOne {
+	if v != nil {
+		_u.SetCompanyName(*v)
+	}
+	return _u
+}
+
+// SetPosition sets the "position" field.
+func (_u *ExperienceUpdateOne) SetPosition(v string) *ExperienceUpdateOne {
+	_u.mutation.SetPosition(v)
+	return _u
+}
+
+// SetNillablePosition sets the "position" field if the given value is not nil.
+func (_u *ExperienceUpdateOne) SetNillablePosition(v *string) *ExperienceUpdateOne {
+	if v != nil {
+		_u.SetPosition(*v)
+	}
+	return _u
+}
+
+// SetStartDate sets the "startDate" field.
+func (_u *ExperienceUpdateOne) SetStartDate(v time.Time) *ExperienceUpdateOne {
+	_u.mutation.SetStartDate(v)
+	return _u
+}
+
+// SetNillableStartDate sets the "startDate" field if the given value is not nil.
+func (_u *ExperienceUpdateOne) SetNillableStartDate(v *time.Time) *ExperienceUpdateOne {
+	if v != nil {
+		_u.SetStartDate(*v)
+	}
+	return _u
+}
+
+// SetEndDate sets the "endDate" field.
+func (_u *ExperienceUpdateOne) SetEndDate(v time.Time) *ExperienceUpdateOne {
+	_u.mutation.SetEndDate(v)
+	return _u
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_u *ExperienceUpdateOne) SetNillableEndDate(v *time.Time) *ExperienceUpdateOne {
+	if v != nil {
+		_u.SetEndDate(*v)
+	}
+	return _u
+}
+
+// ClearEndDate clears the value of the "endDate" field.
+func (_u *ExperienceUpdateOne) ClearEndDate() *ExperienceUpdateOne {
+	_u.mutation.ClearEndDate()
+	return _u
+}
+
+// SetIsCurrent sets the "isCurrent" field.
+func (_u *ExperienceUpdateOne) SetIsCurrent(v bool) *ExperienceUpdateOne {
+	_u.mutation.SetIsCurrent(v)
+	return _u
+}
+
+// SetNillableIsCurrent sets the "isCurrent" field if the given value is not nil.
+func (_u *ExperienceUpdateOne) SetNillableIsCurrent(v *bool) *ExperienceUpdateOne {
+	if v != nil {
+		_u.SetIsCurrent(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *ExperienceUpdateOne) SetDescription(v string) *ExperienceUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *ExperienceUpdateOne) SetNillableDescription(v *string) *ExperienceUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// SetLocation sets the "location" field.
+func (_u *ExperienceUpdateOne) SetLocation(v string) *ExperienceUpdateOne {
+	_u.mutation.SetLocation(v)
+	return _u
+}
+
+// SetNillableLocation sets the "location" field if the given value is not nil.
+func (_u *ExperienceUpdateOne) SetNillableLocation(v *string) *ExperienceUpdateOne {
+	if v != nil {
+		_u.SetLocation(*v)
+	}
+	return _u
+}
+
+// ClearLocation clears the value of the "location" field.
+func (_u *ExperienceUpdateOne) ClearLocation() *ExperienceUpdateOne {
+	_u.mutation.ClearLocation()
+	return _u
+}
+
+// SetAcheivements sets the "acheivements" field.
+func (_u *ExperienceUpdateOne) SetAcheivements(v map[string]interface{}) *ExperienceUpdateOne {
+	_u.mutation.SetAcheivements(v)
+	return _u
+}
+
+// ClearAcheivements clears the value of the "acheivements" field.
+func (_u *ExperienceUpdateOne) ClearAcheivements() *ExperienceUpdateOne {
+	_u.mutation.ClearAcheivements()
+	return _u
+}
+
+// SetTechnologiesUsed sets the "technologiesUsed" field.
+func (_u *ExperienceUpdateOne) SetTechnologiesUsed(v map[string]interface{}) *ExperienceUpdateOne {
+	_u.mutation.SetTechnologiesUsed(v)
+	return _u
+}
+
+// ClearTechnologiesUsed clears the value of the "technologiesUsed" field.
+func (_u *ExperienceUpdateOne) ClearTechnologiesUsed() *ExperienceUpdateOne {
+	_u.mutation.ClearTechnologiesUsed()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *ExperienceUpdateOne) SetOrderIndex(v int) *ExperienceUpdateOne {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *ExperienceUpdateOne) SetNillableOrderIndex(v *int) *ExperienceUpdateOne {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *ExperienceUpdateOne) AddOrderIndex(v int) *ExperienceUpdateOne {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *ExperienceUpdateOne) SetResumeID(id uuid.UUID) *ExperienceUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *ExperienceUpdateOne) SetResume(v *Resume) *ExperienceUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the ExperienceMutation object of the builder.
 func (_u *ExperienceUpdateOne) Mutation() *ExperienceMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *ExperienceUpdateOne) ClearResume() *ExperienceUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the ExperienceUpdate builder.
@@ -133,8 +580,34 @@ func (_u *ExperienceUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *ExperienceUpdateOne) check() error {
+	if v, ok := _u.mutation.CompanyName(); ok {
+		if err := experience.CompanyNameValidator(v); err != nil {
+			return &ValidationError{Name: "companyName", err: fmt.Errorf(`ent: validator failed for field "Experience.companyName": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Position(); ok {
+		if err := experience.PositionValidator(v); err != nil {
+			return &ValidationError{Name: "position", err: fmt.Errorf(`ent: validator failed for field "Experience.position": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Description(); ok {
+		if err := experience.DescriptionValidator(v); err != nil {
+			return &ValidationError{Name: "description", err: fmt.Errorf(`ent: validator failed for field "Experience.description": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Experience.resume"`)
+	}
+	return nil
+}
+
 func (_u *ExperienceUpdateOne) sqlSave(ctx context.Context) (_node *Experience, err error) {
-	_spec := sqlgraph.NewUpdateSpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(experience.Table, experience.Columns, sqlgraph.NewFieldSpec(experience.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Experience.id" for update`)}
@@ -158,6 +631,80 @@ func (_u *ExperienceUpdateOne) sqlSave(ctx context.Context) (_node *Experience, 
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.CompanyName(); ok {
+		_spec.SetField(experience.FieldCompanyName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Position(); ok {
+		_spec.SetField(experience.FieldPosition, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.StartDate(); ok {
+		_spec.SetField(experience.FieldStartDate, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.EndDate(); ok {
+		_spec.SetField(experience.FieldEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.EndDateCleared() {
+		_spec.ClearField(experience.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.IsCurrent(); ok {
+		_spec.SetField(experience.FieldIsCurrent, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(experience.FieldDescription, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Location(); ok {
+		_spec.SetField(experience.FieldLocation, field.TypeString, value)
+	}
+	if _u.mutation.LocationCleared() {
+		_spec.ClearField(experience.FieldLocation, field.TypeString)
+	}
+	if value, ok := _u.mutation.Acheivements(); ok {
+		_spec.SetField(experience.FieldAcheivements, field.TypeJSON, value)
+	}
+	if _u.mutation.AcheivementsCleared() {
+		_spec.ClearField(experience.FieldAcheivements, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TechnologiesUsed(); ok {
+		_spec.SetField(experience.FieldTechnologiesUsed, field.TypeJSON, value)
+	}
+	if _u.mutation.TechnologiesUsedCleared() {
+		_spec.ClearField(experience.FieldTechnologiesUsed, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(experience.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(experience.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   experience.ResumeTable,
+			Columns: []string{experience.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   experience.ResumeTable,
+			Columns: []string{experience.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Experience{config: _u.config}
 	_spec.Assign = _node.assignValues

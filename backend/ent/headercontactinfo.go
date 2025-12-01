@@ -5,18 +5,68 @@ package ent
 import (
 	"fmt"
 	"resume-builder-backend/ent/headercontactinfo"
+	"resume-builder-backend/ent/resume"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // HeaderContactInfo is the model entity for the HeaderContactInfo schema.
 type HeaderContactInfo struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID uuid.UUID `json:"id,omitempty"`
+	// Fullname holds the value of the "fullname" field.
+	Fullname string `json:"fullname,omitempty"`
+	// ProfessionalTitle holds the value of the "professionalTitle" field.
+	ProfessionalTitle string `json:"professionalTitle,omitempty"`
+	// Address holds the value of the "address" field.
+	Address string `json:"address,omitempty"`
+	// Phone holds the value of the "phone" field.
+	Phone string `json:"phone,omitempty"`
+	// Email holds the value of the "email" field.
+	Email string `json:"email,omitempty"`
+	// City holds the value of the "city" field.
+	City string `json:"city,omitempty"`
+	// State holds the value of the "state" field.
+	State string `json:"state,omitempty"`
+	// ZipCode holds the value of the "zipCode" field.
+	ZipCode string `json:"zipCode,omitempty"`
+	// Country holds the value of the "country" field.
+	Country string `json:"country,omitempty"`
+	// LinkedinUrl holds the value of the "linkedinUrl" field.
+	LinkedinUrl string `json:"linkedinUrl,omitempty"`
+	// GithubUrl holds the value of the "githubUrl" field.
+	GithubUrl string `json:"githubUrl,omitempty"`
+	// PortfolioUrl holds the value of the "portfolioUrl" field.
+	PortfolioUrl string `json:"portfolioUrl,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the HeaderContactInfoQuery when eager-loading is set.
+	Edges                       HeaderContactInfoEdges `json:"edges"`
+	resume_header_contanct_info *uuid.UUID
+	selectValues                sql.SelectValues
+}
+
+// HeaderContactInfoEdges holds the relations/edges for other nodes in the graph.
+type HeaderContactInfoEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e HeaderContactInfoEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +74,12 @@ func (*HeaderContactInfo) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case headercontactinfo.FieldFullname, headercontactinfo.FieldProfessionalTitle, headercontactinfo.FieldAddress, headercontactinfo.FieldPhone, headercontactinfo.FieldEmail, headercontactinfo.FieldCity, headercontactinfo.FieldState, headercontactinfo.FieldZipCode, headercontactinfo.FieldCountry, headercontactinfo.FieldLinkedinUrl, headercontactinfo.FieldGithubUrl, headercontactinfo.FieldPortfolioUrl:
+			values[i] = new(sql.NullString)
 		case headercontactinfo.FieldID:
-			values[i] = new(sql.NullInt64)
+			values[i] = new(uuid.UUID)
+		case headercontactinfo.ForeignKeys[0]: // resume_header_contanct_info
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +96,90 @@ func (_m *HeaderContactInfo) assignValues(columns []string, values []any) error 
 	for i := range columns {
 		switch columns[i] {
 		case headercontactinfo.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case headercontactinfo.FieldFullname:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field fullname", values[i])
+			} else if value.Valid {
+				_m.Fullname = value.String
+			}
+		case headercontactinfo.FieldProfessionalTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field professionalTitle", values[i])
+			} else if value.Valid {
+				_m.ProfessionalTitle = value.String
+			}
+		case headercontactinfo.FieldAddress:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field address", values[i])
+			} else if value.Valid {
+				_m.Address = value.String
+			}
+		case headercontactinfo.FieldPhone:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field phone", values[i])
+			} else if value.Valid {
+				_m.Phone = value.String
+			}
+		case headercontactinfo.FieldEmail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email", values[i])
+			} else if value.Valid {
+				_m.Email = value.String
+			}
+		case headercontactinfo.FieldCity:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field city", values[i])
+			} else if value.Valid {
+				_m.City = value.String
+			}
+		case headercontactinfo.FieldState:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field state", values[i])
+			} else if value.Valid {
+				_m.State = value.String
+			}
+		case headercontactinfo.FieldZipCode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field zipCode", values[i])
+			} else if value.Valid {
+				_m.ZipCode = value.String
+			}
+		case headercontactinfo.FieldCountry:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field country", values[i])
+			} else if value.Valid {
+				_m.Country = value.String
+			}
+		case headercontactinfo.FieldLinkedinUrl:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field linkedinUrl", values[i])
+			} else if value.Valid {
+				_m.LinkedinUrl = value.String
+			}
+		case headercontactinfo.FieldGithubUrl:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field githubUrl", values[i])
+			} else if value.Valid {
+				_m.GithubUrl = value.String
+			}
+		case headercontactinfo.FieldPortfolioUrl:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field portfolioUrl", values[i])
+			} else if value.Valid {
+				_m.PortfolioUrl = value.String
+			}
+		case headercontactinfo.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field resume_header_contanct_info", values[i])
+			} else if value.Valid {
+				_m.resume_header_contanct_info = new(uuid.UUID)
+				*_m.resume_header_contanct_info = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +191,11 @@ func (_m *HeaderContactInfo) assignValues(columns []string, values []any) error 
 // This includes values selected through modifiers, order, etc.
 func (_m *HeaderContactInfo) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the HeaderContactInfo entity.
+func (_m *HeaderContactInfo) QueryResume() *ResumeQuery {
+	return NewHeaderContactInfoClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this HeaderContactInfo.
@@ -82,7 +220,42 @@ func (_m *HeaderContactInfo) Unwrap() *HeaderContactInfo {
 func (_m *HeaderContactInfo) String() string {
 	var builder strings.Builder
 	builder.WriteString("HeaderContactInfo(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("fullname=")
+	builder.WriteString(_m.Fullname)
+	builder.WriteString(", ")
+	builder.WriteString("professionalTitle=")
+	builder.WriteString(_m.ProfessionalTitle)
+	builder.WriteString(", ")
+	builder.WriteString("address=")
+	builder.WriteString(_m.Address)
+	builder.WriteString(", ")
+	builder.WriteString("phone=")
+	builder.WriteString(_m.Phone)
+	builder.WriteString(", ")
+	builder.WriteString("email=")
+	builder.WriteString(_m.Email)
+	builder.WriteString(", ")
+	builder.WriteString("city=")
+	builder.WriteString(_m.City)
+	builder.WriteString(", ")
+	builder.WriteString("state=")
+	builder.WriteString(_m.State)
+	builder.WriteString(", ")
+	builder.WriteString("zipCode=")
+	builder.WriteString(_m.ZipCode)
+	builder.WriteString(", ")
+	builder.WriteString("country=")
+	builder.WriteString(_m.Country)
+	builder.WriteString(", ")
+	builder.WriteString("linkedinUrl=")
+	builder.WriteString(_m.LinkedinUrl)
+	builder.WriteString(", ")
+	builder.WriteString("githubUrl=")
+	builder.WriteString(_m.GithubUrl)
+	builder.WriteString(", ")
+	builder.WriteString("portfolioUrl=")
+	builder.WriteString(_m.PortfolioUrl)
 	builder.WriteByte(')')
 	return builder.String()
 }

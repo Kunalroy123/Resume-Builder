@@ -3,7 +3,11 @@
 package user
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +15,43 @@ const (
 	Label = "user"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldEmail holds the string denoting the email field in the database.
+	FieldEmail = "email"
+	// FieldPasswordHash holds the string denoting the passwordhash field in the database.
+	FieldPasswordHash = "password_hash"
+	// FieldFirstName holds the string denoting the firstname field in the database.
+	FieldFirstName = "first_name"
+	// FieldLastName holds the string denoting the lastname field in the database.
+	FieldLastName = "last_name"
+	// FieldIsActive holds the string denoting the isactive field in the database.
+	FieldIsActive = "is_active"
+	// FieldCreatedAt holds the string denoting the createdat field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updatedat field in the database.
+	FieldUpdatedAt = "updated_at"
+	// EdgeResumes holds the string denoting the resumes edge name in mutations.
+	EdgeResumes = "resumes"
 	// Table holds the table name of the user in the database.
 	Table = "users"
+	// ResumesTable is the table that holds the resumes relation/edge.
+	ResumesTable = "resumes"
+	// ResumesInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumesInverseTable = "resumes"
+	// ResumesColumn is the table column denoting the resumes relation/edge.
+	ResumesColumn = "user_id"
 )
 
 // Columns holds all SQL columns for user fields.
 var Columns = []string{
 	FieldID,
+	FieldEmail,
+	FieldPasswordHash,
+	FieldFirstName,
+	FieldLastName,
+	FieldIsActive,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -30,10 +64,87 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	EmailValidator func(string) error
+	// PasswordHashValidator is a validator for the "passwordHash" field. It is called by the builders before save.
+	PasswordHashValidator func(string) error
+	// FirstNameValidator is a validator for the "firstName" field. It is called by the builders before save.
+	FirstNameValidator func(string) error
+	// LastNameValidator is a validator for the "lastName" field. It is called by the builders before save.
+	LastNameValidator func(string) error
+	// DefaultIsActive holds the default value on creation for the "isActive" field.
+	DefaultIsActive bool
+	// DefaultCreatedAt holds the default value on creation for the "createdAt" field.
+	DefaultCreatedAt func() time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updatedAt" field.
+	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updatedAt" field.
+	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
+
 // OrderOption defines the ordering options for the User queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByEmail orders the results by the email field.
+func ByEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// ByPasswordHash orders the results by the passwordHash field.
+func ByPasswordHash(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPasswordHash, opts...).ToFunc()
+}
+
+// ByFirstName orders the results by the firstName field.
+func ByFirstName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFirstName, opts...).ToFunc()
+}
+
+// ByLastName orders the results by the lastName field.
+func ByLastName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastName, opts...).ToFunc()
+}
+
+// ByIsActive orders the results by the isActive field.
+func ByIsActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsActive, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the createdAt field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updatedAt field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByResumesCount orders the results by resumes count.
+func ByResumesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newResumesStep(), opts...)
+	}
+}
+
+// ByResumes orders the results by resumes terms.
+func ByResumes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newResumesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ResumesTable, ResumesColumn),
+	)
 }

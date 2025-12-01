@@ -40,7 +40,7 @@ func (_d *HobbyDelete) ExecX(ctx context.Context) int {
 }
 
 func (_d *HobbyDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(hobby.Table, sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(hobby.Table, sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeUUID))
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

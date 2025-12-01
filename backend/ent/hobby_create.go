@@ -4,11 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"resume-builder-backend/ent/hobby"
+	"resume-builder-backend/ent/resume"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // HobbyCreate is the builder for creating a Hobby entity.
@@ -18,6 +21,115 @@ type HobbyCreate struct {
 	hooks    []Hook
 }
 
+// SetName sets the "name" field.
+func (_c *HobbyCreate) SetName(v string) *HobbyCreate {
+	_c.mutation.SetName(v)
+	return _c
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_c *HobbyCreate) SetNillableName(v *string) *HobbyCreate {
+	if v != nil {
+		_c.SetName(*v)
+	}
+	return _c
+}
+
+// SetDescription sets the "description" field.
+func (_c *HobbyCreate) SetDescription(v string) *HobbyCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *HobbyCreate) SetNillableDescription(v *string) *HobbyCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
+	return _c
+}
+
+// SetSkillLevel sets the "skillLevel" field.
+func (_c *HobbyCreate) SetSkillLevel(v string) *HobbyCreate {
+	_c.mutation.SetSkillLevel(v)
+	return _c
+}
+
+// SetNillableSkillLevel sets the "skillLevel" field if the given value is not nil.
+func (_c *HobbyCreate) SetNillableSkillLevel(v *string) *HobbyCreate {
+	if v != nil {
+		_c.SetSkillLevel(*v)
+	}
+	return _c
+}
+
+// SetYearsInvolved sets the "yearsInvolved" field.
+func (_c *HobbyCreate) SetYearsInvolved(v int) *HobbyCreate {
+	_c.mutation.SetYearsInvolved(v)
+	return _c
+}
+
+// SetNillableYearsInvolved sets the "yearsInvolved" field if the given value is not nil.
+func (_c *HobbyCreate) SetNillableYearsInvolved(v *int) *HobbyCreate {
+	if v != nil {
+		_c.SetYearsInvolved(*v)
+	}
+	return _c
+}
+
+// SetAchievements sets the "achievements" field.
+func (_c *HobbyCreate) SetAchievements(v string) *HobbyCreate {
+	_c.mutation.SetAchievements(v)
+	return _c
+}
+
+// SetNillableAchievements sets the "achievements" field if the given value is not nil.
+func (_c *HobbyCreate) SetNillableAchievements(v *string) *HobbyCreate {
+	if v != nil {
+		_c.SetAchievements(*v)
+	}
+	return _c
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_c *HobbyCreate) SetOrderIndex(v int) *HobbyCreate {
+	_c.mutation.SetOrderIndex(v)
+	return _c
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_c *HobbyCreate) SetNillableOrderIndex(v *int) *HobbyCreate {
+	if v != nil {
+		_c.SetOrderIndex(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *HobbyCreate) SetID(v uuid.UUID) *HobbyCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *HobbyCreate) SetNillableID(v *uuid.UUID) *HobbyCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *HobbyCreate) SetResumeID(id uuid.UUID) *HobbyCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *HobbyCreate) SetResume(v *Resume) *HobbyCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the HobbyMutation object of the builder.
 func (_c *HobbyCreate) Mutation() *HobbyMutation {
 	return _c.mutation
@@ -25,6 +137,7 @@ func (_c *HobbyCreate) Mutation() *HobbyMutation {
 
 // Save creates the Hobby in the database.
 func (_c *HobbyCreate) Save(ctx context.Context) (*Hobby, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +163,26 @@ func (_c *HobbyCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *HobbyCreate) defaults() {
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		v := hobby.DefaultOrderIndex
+		_c.mutation.SetOrderIndex(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := hobby.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *HobbyCreate) check() error {
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		return &ValidationError{Name: "orderIndex", err: errors.New(`ent: missing required field "Hobby.orderIndex"`)}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "Hobby.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +197,13 @@ func (_c *HobbyCreate) sqlSave(ctx context.Context) (*Hobby, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +212,53 @@ func (_c *HobbyCreate) sqlSave(ctx context.Context) (*Hobby, error) {
 func (_c *HobbyCreate) createSpec() (*Hobby, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Hobby{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(hobby.Table, sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(hobby.Table, sqlgraph.NewFieldSpec(hobby.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Name(); ok {
+		_spec.SetField(hobby.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(hobby.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := _c.mutation.SkillLevel(); ok {
+		_spec.SetField(hobby.FieldSkillLevel, field.TypeString, value)
+		_node.SkillLevel = value
+	}
+	if value, ok := _c.mutation.YearsInvolved(); ok {
+		_spec.SetField(hobby.FieldYearsInvolved, field.TypeInt, value)
+		_node.YearsInvolved = &value
+	}
+	if value, ok := _c.mutation.Achievements(); ok {
+		_spec.SetField(hobby.FieldAchievements, field.TypeString, value)
+		_node.Achievements = value
+	}
+	if value, ok := _c.mutation.OrderIndex(); ok {
+		_spec.SetField(hobby.FieldOrderIndex, field.TypeInt, value)
+		_node.OrderIndex = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   hobby.ResumeTable,
+			Columns: []string{hobby.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.resume_hobbies = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +280,7 @@ func (_c *HobbyCreateBulk) Save(ctx context.Context) ([]*Hobby, error) {
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*HobbyMutation)
 				if !ok {
@@ -125,10 +307,6 @@ func (_c *HobbyCreateBulk) Save(ctx context.Context) ([]*Hobby, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

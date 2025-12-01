@@ -4,6 +4,8 @@ package professionalsummary
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +13,37 @@ const (
 	Label = "professional_summary"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldResumeId holds the string denoting the resumeid field in the database.
+	FieldResumeId = "resume_id"
+	// FieldSummary holds the string denoting the summary field in the database.
+	FieldSummary = "summary"
+	// FieldYearsOfExperience holds the string denoting the yearsofexperience field in the database.
+	FieldYearsOfExperience = "years_of_experience"
+	// FieldKeyStrengths holds the string denoting the keystrengths field in the database.
+	FieldKeyStrengths = "key_strengths"
+	// FieldCareerObjective holds the string denoting the careerobjective field in the database.
+	FieldCareerObjective = "career_objective"
+	// EdgeResume holds the string denoting the resume edge name in mutations.
+	EdgeResume = "resume"
 	// Table holds the table name of the professionalsummary in the database.
 	Table = "professional_summaries"
+	// ResumeTable is the table that holds the resume relation/edge.
+	ResumeTable = "professional_summaries"
+	// ResumeInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumeInverseTable = "resumes"
+	// ResumeColumn is the table column denoting the resume relation/edge.
+	ResumeColumn = "resume_id"
 )
 
 // Columns holds all SQL columns for professionalsummary fields.
 var Columns = []string{
 	FieldID,
+	FieldResumeId,
+	FieldSummary,
+	FieldYearsOfExperience,
+	FieldKeyStrengths,
+	FieldCareerObjective,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -30,10 +56,51 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// SummaryValidator is a validator for the "summary" field. It is called by the builders before save.
+	SummaryValidator func(string) error
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
+
 // OrderOption defines the ordering options for the ProfessionalSummary queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByResumeId orders the results by the resumeId field.
+func ByResumeId(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResumeId, opts...).ToFunc()
+}
+
+// BySummary orders the results by the summary field.
+func BySummary(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSummary, opts...).ToFunc()
+}
+
+// ByYearsOfExperience orders the results by the yearsOfExperience field.
+func ByYearsOfExperience(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldYearsOfExperience, opts...).ToFunc()
+}
+
+// ByCareerObjective orders the results by the careerObjective field.
+func ByCareerObjective(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCareerObjective, opts...).ToFunc()
+}
+
+// ByResumeField orders the results by resume field.
+func ByResumeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumeStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newResumeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, true, ResumeTable, ResumeColumn),
+	)
 }

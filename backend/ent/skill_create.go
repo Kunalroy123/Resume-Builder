@@ -4,11 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"resume-builder-backend/ent/resume"
 	"resume-builder-backend/ent/skill"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // SkillCreate is the builder for creating a Skill entity.
@@ -18,6 +21,99 @@ type SkillCreate struct {
 	hooks    []Hook
 }
 
+// SetName sets the "name" field.
+func (_c *SkillCreate) SetName(v string) *SkillCreate {
+	_c.mutation.SetName(v)
+	return _c
+}
+
+// SetCategory sets the "category" field.
+func (_c *SkillCreate) SetCategory(v string) *SkillCreate {
+	_c.mutation.SetCategory(v)
+	return _c
+}
+
+// SetSkillType sets the "skillType" field.
+func (_c *SkillCreate) SetSkillType(v skill.SkillType) *SkillCreate {
+	_c.mutation.SetSkillType(v)
+	return _c
+}
+
+// SetNillableSkillType sets the "skillType" field if the given value is not nil.
+func (_c *SkillCreate) SetNillableSkillType(v *skill.SkillType) *SkillCreate {
+	if v != nil {
+		_c.SetSkillType(*v)
+	}
+	return _c
+}
+
+// SetProficiencyLevel sets the "proficiencyLevel" field.
+func (_c *SkillCreate) SetProficiencyLevel(v skill.ProficiencyLevel) *SkillCreate {
+	_c.mutation.SetProficiencyLevel(v)
+	return _c
+}
+
+// SetNillableProficiencyLevel sets the "proficiencyLevel" field if the given value is not nil.
+func (_c *SkillCreate) SetNillableProficiencyLevel(v *skill.ProficiencyLevel) *SkillCreate {
+	if v != nil {
+		_c.SetProficiencyLevel(*v)
+	}
+	return _c
+}
+
+// SetYearsOfExperience sets the "yearsOfExperience" field.
+func (_c *SkillCreate) SetYearsOfExperience(v int) *SkillCreate {
+	_c.mutation.SetYearsOfExperience(v)
+	return _c
+}
+
+// SetNillableYearsOfExperience sets the "yearsOfExperience" field if the given value is not nil.
+func (_c *SkillCreate) SetNillableYearsOfExperience(v *int) *SkillCreate {
+	if v != nil {
+		_c.SetYearsOfExperience(*v)
+	}
+	return _c
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_c *SkillCreate) SetOrderIndex(v int) *SkillCreate {
+	_c.mutation.SetOrderIndex(v)
+	return _c
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_c *SkillCreate) SetNillableOrderIndex(v *int) *SkillCreate {
+	if v != nil {
+		_c.SetOrderIndex(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *SkillCreate) SetID(v uuid.UUID) *SkillCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *SkillCreate) SetNillableID(v *uuid.UUID) *SkillCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *SkillCreate) SetResumeID(id uuid.UUID) *SkillCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *SkillCreate) SetResume(v *Resume) *SkillCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the SkillMutation object of the builder.
 func (_c *SkillCreate) Mutation() *SkillMutation {
 	return _c.mutation
@@ -25,6 +121,7 @@ func (_c *SkillCreate) Mutation() *SkillMutation {
 
 // Save creates the Skill in the database.
 func (_c *SkillCreate) Save(ctx context.Context) (*Skill, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +147,66 @@ func (_c *SkillCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *SkillCreate) defaults() {
+	if _, ok := _c.mutation.SkillType(); !ok {
+		v := skill.DefaultSkillType
+		_c.mutation.SetSkillType(v)
+	}
+	if _, ok := _c.mutation.ProficiencyLevel(); !ok {
+		v := skill.DefaultProficiencyLevel
+		_c.mutation.SetProficiencyLevel(v)
+	}
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		v := skill.DefaultOrderIndex
+		_c.mutation.SetOrderIndex(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := skill.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *SkillCreate) check() error {
+	if _, ok := _c.mutation.Name(); !ok {
+		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "Skill.name"`)}
+	}
+	if v, ok := _c.mutation.Name(); ok {
+		if err := skill.NameValidator(v); err != nil {
+			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Skill.name": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Category(); !ok {
+		return &ValidationError{Name: "category", err: errors.New(`ent: missing required field "Skill.category"`)}
+	}
+	if v, ok := _c.mutation.Category(); ok {
+		if err := skill.CategoryValidator(v); err != nil {
+			return &ValidationError{Name: "category", err: fmt.Errorf(`ent: validator failed for field "Skill.category": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.SkillType(); !ok {
+		return &ValidationError{Name: "skillType", err: errors.New(`ent: missing required field "Skill.skillType"`)}
+	}
+	if v, ok := _c.mutation.SkillType(); ok {
+		if err := skill.SkillTypeValidator(v); err != nil {
+			return &ValidationError{Name: "skillType", err: fmt.Errorf(`ent: validator failed for field "Skill.skillType": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.ProficiencyLevel(); !ok {
+		return &ValidationError{Name: "proficiencyLevel", err: errors.New(`ent: missing required field "Skill.proficiencyLevel"`)}
+	}
+	if v, ok := _c.mutation.ProficiencyLevel(); ok {
+		if err := skill.ProficiencyLevelValidator(v); err != nil {
+			return &ValidationError{Name: "proficiencyLevel", err: fmt.Errorf(`ent: validator failed for field "Skill.proficiencyLevel": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		return &ValidationError{Name: "orderIndex", err: errors.New(`ent: missing required field "Skill.orderIndex"`)}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "Skill.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +221,13 @@ func (_c *SkillCreate) sqlSave(ctx context.Context) (*Skill, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +236,53 @@ func (_c *SkillCreate) sqlSave(ctx context.Context) (*Skill, error) {
 func (_c *SkillCreate) createSpec() (*Skill, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Skill{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(skill.Table, sqlgraph.NewFieldSpec(skill.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(skill.Table, sqlgraph.NewFieldSpec(skill.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Name(); ok {
+		_spec.SetField(skill.FieldName, field.TypeString, value)
+		_node.Name = value
+	}
+	if value, ok := _c.mutation.Category(); ok {
+		_spec.SetField(skill.FieldCategory, field.TypeString, value)
+		_node.Category = value
+	}
+	if value, ok := _c.mutation.SkillType(); ok {
+		_spec.SetField(skill.FieldSkillType, field.TypeEnum, value)
+		_node.SkillType = value
+	}
+	if value, ok := _c.mutation.ProficiencyLevel(); ok {
+		_spec.SetField(skill.FieldProficiencyLevel, field.TypeEnum, value)
+		_node.ProficiencyLevel = value
+	}
+	if value, ok := _c.mutation.YearsOfExperience(); ok {
+		_spec.SetField(skill.FieldYearsOfExperience, field.TypeInt, value)
+		_node.YearsOfExperience = &value
+	}
+	if value, ok := _c.mutation.OrderIndex(); ok {
+		_spec.SetField(skill.FieldOrderIndex, field.TypeInt, value)
+		_node.OrderIndex = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   skill.ResumeTable,
+			Columns: []string{skill.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.resume_skills = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +304,7 @@ func (_c *SkillCreateBulk) Save(ctx context.Context) ([]*Skill, error) {
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*SkillMutation)
 				if !ok {
@@ -125,10 +331,6 @@ func (_c *SkillCreateBulk) Save(ctx context.Context) ([]*Skill, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

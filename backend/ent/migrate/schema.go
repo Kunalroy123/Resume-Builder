@@ -10,139 +10,538 @@ import (
 var (
 	// AchievementsColumns holds the columns for the "achievements" table.
 	AchievementsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "discription", Type: field.TypeString, Size: 2147483647},
+		{Name: "date_achieved", Type: field.TypeTime, Nullable: true},
+		{Name: "issuing_organization", Type: field.TypeString, Nullable: true},
+		{Name: "achievement_type", Type: field.TypeEnum, Enums: []string{"AWARD", "RECOGNITION", "PUBLICATION", "PATENT", "PROMOTION", "PERFORMANCE", "LEADERSHIP", "OTHER"}, Default: "AWARD"},
+		{Name: "achievement_url", Type: field.TypeString, Nullable: true},
+		{Name: "impact_metrics", Type: field.TypeString, Nullable: true},
+		{Name: "order_index", Type: field.TypeInt, Default: 0},
+		{Name: "resume_achievements", Type: field.TypeUUID},
 	}
 	// AchievementsTable holds the schema information for the "achievements" table.
 	AchievementsTable = &schema.Table{
 		Name:       "achievements",
 		Columns:    AchievementsColumns,
 		PrimaryKey: []*schema.Column{AchievementsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "achievements_resumes_achievements",
+				Columns:    []*schema.Column{AchievementsColumns[8]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "achievement_id",
+				Unique:  true,
+				Columns: []*schema.Column{AchievementsColumns[0]},
+			},
+			{
+				Name:    "achievement_achievement_type",
+				Unique:  false,
+				Columns: []*schema.Column{AchievementsColumns[4]},
+			},
+		},
 	}
 	// CertificationsColumns holds the columns for the "certifications" table.
 	CertificationsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString, Nullable: true},
+		{Name: "issuing_organization", Type: field.TypeString, Nullable: true},
+		{Name: "issue_date", Type: field.TypeTime, Nullable: true},
+		{Name: "expiry_date", Type: field.TypeTime, Nullable: true},
+		{Name: "credential_id", Type: field.TypeString, Nullable: true},
+		{Name: "credential_url", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "order_index", Type: field.TypeInt, Default: 0},
+		{Name: "resume_certifications", Type: field.TypeUUID},
 	}
 	// CertificationsTable holds the schema information for the "certifications" table.
 	CertificationsTable = &schema.Table{
 		Name:       "certifications",
 		Columns:    CertificationsColumns,
 		PrimaryKey: []*schema.Column{CertificationsColumns[0]},
-	}
-	// CoursesColumns holds the columns for the "courses" table.
-	CoursesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-	}
-	// CoursesTable holds the schema information for the "courses" table.
-	CoursesTable = &schema.Table{
-		Name:       "courses",
-		Columns:    CoursesColumns,
-		PrimaryKey: []*schema.Column{CoursesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "certifications_resumes_certifications",
+				Columns:    []*schema.Column{CertificationsColumns[9]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "certification_id",
+				Unique:  true,
+				Columns: []*schema.Column{CertificationsColumns[0]},
+			},
+			{
+				Name:    "certification_name",
+				Unique:  false,
+				Columns: []*schema.Column{CertificationsColumns[1]},
+			},
+			{
+				Name:    "certification_credential_id",
+				Unique:  false,
+				Columns: []*schema.Column{CertificationsColumns[5]},
+			},
+			{
+				Name:    "certification_issue_date",
+				Unique:  false,
+				Columns: []*schema.Column{CertificationsColumns[3]},
+			},
+			{
+				Name:    "certification_expiry_date",
+				Unique:  false,
+				Columns: []*schema.Column{CertificationsColumns[4]},
+			},
+		},
 	}
 	// EducationsColumns holds the columns for the "educations" table.
 	EducationsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "institution_name", Type: field.TypeString},
+		{Name: "degree", Type: field.TypeString},
+		{Name: "field_of_study", Type: field.TypeString},
+		{Name: "start_date", Type: field.TypeTime},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "gpa", Type: field.TypeString, Nullable: true},
+		{Name: "location", Type: field.TypeString, Nullable: true},
+		{Name: "relevant_coursework", Type: field.TypeJSON, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "order_index", Type: field.TypeInt, Default: 0},
+		{Name: "resume_educations", Type: field.TypeUUID},
 	}
 	// EducationsTable holds the schema information for the "educations" table.
 	EducationsTable = &schema.Table{
 		Name:       "educations",
 		Columns:    EducationsColumns,
 		PrimaryKey: []*schema.Column{EducationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "educations_resumes_educations",
+				Columns:    []*schema.Column{EducationsColumns[11]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "education_id",
+				Unique:  true,
+				Columns: []*schema.Column{EducationsColumns[0]},
+			},
+			{
+				Name:    "education_institution_name",
+				Unique:  false,
+				Columns: []*schema.Column{EducationsColumns[1]},
+			},
+			{
+				Name:    "education_field_of_study",
+				Unique:  false,
+				Columns: []*schema.Column{EducationsColumns[3]},
+			},
+		},
 	}
 	// ExperiencesColumns holds the columns for the "experiences" table.
 	ExperiencesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "company_name", Type: field.TypeString},
+		{Name: "position", Type: field.TypeString},
+		{Name: "start_date", Type: field.TypeTime},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "is_current", Type: field.TypeBool, Default: false},
+		{Name: "description", Type: field.TypeString, Size: 2147483647},
+		{Name: "location", Type: field.TypeString, Nullable: true},
+		{Name: "acheivements", Type: field.TypeJSON, Nullable: true},
+		{Name: "technologies_used", Type: field.TypeJSON, Nullable: true},
+		{Name: "order_index", Type: field.TypeInt, Default: 0},
+		{Name: "resume_experiences", Type: field.TypeUUID},
 	}
 	// ExperiencesTable holds the schema information for the "experiences" table.
 	ExperiencesTable = &schema.Table{
 		Name:       "experiences",
 		Columns:    ExperiencesColumns,
 		PrimaryKey: []*schema.Column{ExperiencesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "experiences_resumes_experiences",
+				Columns:    []*schema.Column{ExperiencesColumns[11]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "experience_id",
+				Unique:  true,
+				Columns: []*schema.Column{ExperiencesColumns[0]},
+			},
+			{
+				Name:    "experience_company_name",
+				Unique:  false,
+				Columns: []*schema.Column{ExperiencesColumns[1]},
+			},
+		},
 	}
 	// HeaderContactInfosColumns holds the columns for the "header_contact_infos" table.
 	HeaderContactInfosColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "fullname", Type: field.TypeString},
+		{Name: "professional_title", Type: field.TypeString, Nullable: true},
+		{Name: "address", Type: field.TypeString, Nullable: true},
+		{Name: "phone", Type: field.TypeString, Nullable: true},
+		{Name: "email", Type: field.TypeString},
+		{Name: "city", Type: field.TypeString, Nullable: true},
+		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "zip_code", Type: field.TypeString, Nullable: true},
+		{Name: "country", Type: field.TypeString, Nullable: true},
+		{Name: "linkedin_url", Type: field.TypeString, Nullable: true},
+		{Name: "github_url", Type: field.TypeString, Nullable: true},
+		{Name: "portfolio_url", Type: field.TypeString, Nullable: true},
+		{Name: "resume_header_contanct_info", Type: field.TypeUUID, Unique: true},
 	}
 	// HeaderContactInfosTable holds the schema information for the "header_contact_infos" table.
 	HeaderContactInfosTable = &schema.Table{
 		Name:       "header_contact_infos",
 		Columns:    HeaderContactInfosColumns,
 		PrimaryKey: []*schema.Column{HeaderContactInfosColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "header_contact_infos_resumes_headerContanctInfo",
+				Columns:    []*schema.Column{HeaderContactInfosColumns[13]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "headercontactinfo_id",
+				Unique:  true,
+				Columns: []*schema.Column{HeaderContactInfosColumns[0]},
+			},
+			{
+				Name:    "headercontactinfo_phone",
+				Unique:  false,
+				Columns: []*schema.Column{HeaderContactInfosColumns[4]},
+			},
+			{
+				Name:    "headercontactinfo_email",
+				Unique:  false,
+				Columns: []*schema.Column{HeaderContactInfosColumns[5]},
+			},
+		},
 	}
 	// HobbiesColumns holds the columns for the "hobbies" table.
 	HobbiesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "skill_level", Type: field.TypeString, Nullable: true},
+		{Name: "years_involved", Type: field.TypeInt, Nullable: true},
+		{Name: "achievements", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "order_index", Type: field.TypeInt, Default: 0},
+		{Name: "resume_hobbies", Type: field.TypeUUID},
 	}
 	// HobbiesTable holds the schema information for the "hobbies" table.
 	HobbiesTable = &schema.Table{
 		Name:       "hobbies",
 		Columns:    HobbiesColumns,
 		PrimaryKey: []*schema.Column{HobbiesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "hobbies_resumes_hobbies",
+				Columns:    []*schema.Column{HobbiesColumns[7]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "hobby_id",
+				Unique:  true,
+				Columns: []*schema.Column{HobbiesColumns[0]},
+			},
+		},
 	}
 	// ProfessionalSummariesColumns holds the columns for the "professional_summaries" table.
 	ProfessionalSummariesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "summary", Type: field.TypeString, Size: 2147483647},
+		{Name: "years_of_experience", Type: field.TypeInt, Nullable: true},
+		{Name: "key_strengths", Type: field.TypeJSON, Nullable: true},
+		{Name: "career_objective", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "resume_id", Type: field.TypeUUID, Unique: true},
 	}
 	// ProfessionalSummariesTable holds the schema information for the "professional_summaries" table.
 	ProfessionalSummariesTable = &schema.Table{
 		Name:       "professional_summaries",
 		Columns:    ProfessionalSummariesColumns,
 		PrimaryKey: []*schema.Column{ProfessionalSummariesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "professional_summaries_resumes_professionalSummary",
+				Columns:    []*schema.Column{ProfessionalSummariesColumns[5]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "professionalsummary_id",
+				Unique:  true,
+				Columns: []*schema.Column{ProfessionalSummariesColumns[0]},
+			},
+			{
+				Name:    "professionalsummary_years_of_experience",
+				Unique:  false,
+				Columns: []*schema.Column{ProfessionalSummariesColumns[2]},
+			},
+		},
 	}
 	// ProjectsColumns holds the columns for the "projects" table.
 	ProjectsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "start_date", Type: field.TypeTime, Nullable: true},
+		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "project_url", Type: field.TypeString, Nullable: true},
+		{Name: "github_url", Type: field.TypeString, Nullable: true},
+		{Name: "demo_url", Type: field.TypeString, Nullable: true},
+		{Name: "technologies_used", Type: field.TypeJSON, Nullable: true},
+		{Name: "key_features", Type: field.TypeJSON, Nullable: true},
+		{Name: "role", Type: field.TypeString, Nullable: true},
+		{Name: "team_size", Type: field.TypeInt, Nullable: true},
+		{Name: "order_index", Type: field.TypeInt, Default: 0},
+		{Name: "resume_projects", Type: field.TypeUUID},
 	}
 	// ProjectsTable holds the schema information for the "projects" table.
 	ProjectsTable = &schema.Table{
 		Name:       "projects",
 		Columns:    ProjectsColumns,
 		PrimaryKey: []*schema.Column{ProjectsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "projects_resumes_projects",
+				Columns:    []*schema.Column{ProjectsColumns[13]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "project_id",
+				Unique:  true,
+				Columns: []*schema.Column{ProjectsColumns[0]},
+			},
+			{
+				Name:    "project_project_url",
+				Unique:  false,
+				Columns: []*schema.Column{ProjectsColumns[5]},
+			},
+		},
 	}
 	// ResumesColumns holds the columns for the "resumes" table.
 	ResumesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "is_ai_generated", Type: field.TypeBool, Default: false},
+		{Name: "is_public", Type: field.TypeBool, Default: false},
+		{Name: "content", Type: field.TypeJSON, Nullable: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "template_id", Type: field.TypeUUID, Nullable: true},
+		{Name: "user_id", Type: field.TypeUUID},
 	}
 	// ResumesTable holds the schema information for the "resumes" table.
 	ResumesTable = &schema.Table{
 		Name:       "resumes",
 		Columns:    ResumesColumns,
 		PrimaryKey: []*schema.Column{ResumesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "resumes_templates_resumes",
+				Columns:    []*schema.Column{ResumesColumns[7]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "resumes_users_resumes",
+				Columns:    []*schema.Column{ResumesColumns[8]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "resume_id",
+				Unique:  true,
+				Columns: []*schema.Column{ResumesColumns[0]},
+			},
+			{
+				Name:    "resume_user_id",
+				Unique:  true,
+				Columns: []*schema.Column{ResumesColumns[8]},
+			},
+			{
+				Name:    "resume_template_id",
+				Unique:  false,
+				Columns: []*schema.Column{ResumesColumns[7]},
+			},
+			{
+				Name:    "resume_is_ai_generated",
+				Unique:  false,
+				Columns: []*schema.Column{ResumesColumns[2]},
+			},
+			{
+				Name:    "resume_is_public",
+				Unique:  false,
+				Columns: []*schema.Column{ResumesColumns[3]},
+			},
+			{
+				Name:    "resume_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{ResumesColumns[5]},
+			},
+			{
+				Name:    "resume_user_id_is_public",
+				Unique:  false,
+				Columns: []*schema.Column{ResumesColumns[8], ResumesColumns[3]},
+			},
+		},
 	}
 	// SkillsColumns holds the columns for the "skills" table.
 	SkillsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "category", Type: field.TypeString},
+		{Name: "skill_type", Type: field.TypeEnum, Enums: []string{"TECHNICAL", "SOFT"}, Default: "TECHNICAL"},
+		{Name: "proficiency_level", Type: field.TypeEnum, Enums: []string{"BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"}, Default: "INTERMEDIATE"},
+		{Name: "years_of_experience", Type: field.TypeInt, Nullable: true},
+		{Name: "order_index", Type: field.TypeInt, Default: 0},
+		{Name: "resume_skills", Type: field.TypeUUID},
 	}
 	// SkillsTable holds the schema information for the "skills" table.
 	SkillsTable = &schema.Table{
 		Name:       "skills",
 		Columns:    SkillsColumns,
 		PrimaryKey: []*schema.Column{SkillsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "skills_resumes_skills",
+				Columns:    []*schema.Column{SkillsColumns[7]},
+				RefColumns: []*schema.Column{ResumesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "skill_id",
+				Unique:  true,
+				Columns: []*schema.Column{SkillsColumns[0]},
+			},
+			{
+				Name:    "skill_category",
+				Unique:  false,
+				Columns: []*schema.Column{SkillsColumns[2]},
+			},
+			{
+				Name:    "skill_years_of_experience",
+				Unique:  false,
+				Columns: []*schema.Column{SkillsColumns[5]},
+			},
+			{
+				Name:    "skill_skill_type",
+				Unique:  false,
+				Columns: []*schema.Column{SkillsColumns[3]},
+			},
+			{
+				Name:    "skill_proficiency_level",
+				Unique:  false,
+				Columns: []*schema.Column{SkillsColumns[4]},
+			},
+		},
 	}
 	// TemplatesColumns holds the columns for the "templates" table.
 	TemplatesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "html_template", Type: field.TypeString, Size: 2147483647},
+		{Name: "css_styles", Type: field.TypeString, Size: 2147483647},
+		{Name: "is_active", Type: field.TypeBool, Default: true},
+		{Name: "preview_image", Type: field.TypeString, Nullable: true},
 	}
 	// TemplatesTable holds the schema information for the "templates" table.
 	TemplatesTable = &schema.Table{
 		Name:       "templates",
 		Columns:    TemplatesColumns,
 		PrimaryKey: []*schema.Column{TemplatesColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "template_id",
+				Unique:  true,
+				Columns: []*schema.Column{TemplatesColumns[0]},
+			},
+			{
+				Name:    "template_is_active",
+				Unique:  false,
+				Columns: []*schema.Column{TemplatesColumns[5]},
+			},
+			{
+				Name:    "template_name",
+				Unique:  false,
+				Columns: []*schema.Column{TemplatesColumns[1]},
+			},
+		},
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "email", Type: field.TypeString, Unique: true},
+		{Name: "password_hash", Type: field.TypeString},
+		{Name: "first_name", Type: field.TypeString},
+		{Name: "last_name", Type: field.TypeString},
+		{Name: "is_active", Type: field.TypeBool, Default: true},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{
 		Name:       "users",
 		Columns:    UsersColumns,
 		PrimaryKey: []*schema.Column{UsersColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "user_email",
+				Unique:  true,
+				Columns: []*schema.Column{UsersColumns[1]},
+			},
+			{
+				Name:    "user_id",
+				Unique:  true,
+				Columns: []*schema.Column{UsersColumns[0]},
+			},
+			{
+				Name:    "user_is_active",
+				Unique:  false,
+				Columns: []*schema.Column{UsersColumns[5]},
+			},
+			{
+				Name:    "user_created_at",
+				Unique:  false,
+				Columns: []*schema.Column{UsersColumns[6]},
+			},
+		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AchievementsTable,
 		CertificationsTable,
-		CoursesTable,
 		EducationsTable,
 		ExperiencesTable,
 		HeaderContactInfosTable,
@@ -157,4 +556,15 @@ var (
 )
 
 func init() {
+	AchievementsTable.ForeignKeys[0].RefTable = ResumesTable
+	CertificationsTable.ForeignKeys[0].RefTable = ResumesTable
+	EducationsTable.ForeignKeys[0].RefTable = ResumesTable
+	ExperiencesTable.ForeignKeys[0].RefTable = ResumesTable
+	HeaderContactInfosTable.ForeignKeys[0].RefTable = ResumesTable
+	HobbiesTable.ForeignKeys[0].RefTable = ResumesTable
+	ProfessionalSummariesTable.ForeignKeys[0].RefTable = ResumesTable
+	ProjectsTable.ForeignKeys[0].RefTable = ResumesTable
+	ResumesTable.ForeignKeys[0].RefTable = TemplatesTable
+	ResumesTable.ForeignKeys[1].RefTable = UsersTable
+	SkillsTable.ForeignKeys[0].RefTable = ResumesTable
 }

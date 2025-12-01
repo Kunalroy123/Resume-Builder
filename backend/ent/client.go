@@ -27,6 +27,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // Client is the client that holds all ent builders.
@@ -245,9 +247,9 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.Achievement, c.Certification, c.Education, c.Experience,
-		c.HeaderContactInfo, c.Hobby, c.ProfessionalSummary, c.Project, c.Resume,
-		c.Skill, c.Template, c.User,
+		c.Achievement, c.Certification, c.Education, c.Experience, c.HeaderContactInfo,
+		c.Hobby, c.ProfessionalSummary, c.Project, c.Resume, c.Skill, c.Template,
+		c.User,
 	} {
 		n.Use(hooks...)
 	}
@@ -257,9 +259,9 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.Achievement, c.Certification, c.Education, c.Experience,
-		c.HeaderContactInfo, c.Hobby, c.ProfessionalSummary, c.Project, c.Resume,
-		c.Skill, c.Template, c.User,
+		c.Achievement, c.Certification, c.Education, c.Experience, c.HeaderContactInfo,
+		c.Hobby, c.ProfessionalSummary, c.Project, c.Resume, c.Skill, c.Template,
+		c.User,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -358,7 +360,7 @@ func (c *AchievementClient) UpdateOne(_m *Achievement) *AchievementUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *AchievementClient) UpdateOneID(id int) *AchievementUpdateOne {
+func (c *AchievementClient) UpdateOneID(id uuid.UUID) *AchievementUpdateOne {
 	mutation := newAchievementMutation(c.config, OpUpdateOne, withAchievementID(id))
 	return &AchievementUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -375,7 +377,7 @@ func (c *AchievementClient) DeleteOne(_m *Achievement) *AchievementDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *AchievementClient) DeleteOneID(id int) *AchievementDeleteOne {
+func (c *AchievementClient) DeleteOneID(id uuid.UUID) *AchievementDeleteOne {
 	builder := c.Delete().Where(achievement.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -392,17 +394,33 @@ func (c *AchievementClient) Query() *AchievementQuery {
 }
 
 // Get returns a Achievement entity by its id.
-func (c *AchievementClient) Get(ctx context.Context, id int) (*Achievement, error) {
+func (c *AchievementClient) Get(ctx context.Context, id uuid.UUID) (*Achievement, error) {
 	return c.Query().Where(achievement.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *AchievementClient) GetX(ctx context.Context, id int) *Achievement {
+func (c *AchievementClient) GetX(ctx context.Context, id uuid.UUID) *Achievement {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a Achievement.
+func (c *AchievementClient) QueryResume(_m *Achievement) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(achievement.Table, achievement.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, achievement.ResumeTable, achievement.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -491,7 +509,7 @@ func (c *CertificationClient) UpdateOne(_m *Certification) *CertificationUpdateO
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *CertificationClient) UpdateOneID(id int) *CertificationUpdateOne {
+func (c *CertificationClient) UpdateOneID(id uuid.UUID) *CertificationUpdateOne {
 	mutation := newCertificationMutation(c.config, OpUpdateOne, withCertificationID(id))
 	return &CertificationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -508,7 +526,7 @@ func (c *CertificationClient) DeleteOne(_m *Certification) *CertificationDeleteO
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *CertificationClient) DeleteOneID(id int) *CertificationDeleteOne {
+func (c *CertificationClient) DeleteOneID(id uuid.UUID) *CertificationDeleteOne {
 	builder := c.Delete().Where(certification.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -525,17 +543,33 @@ func (c *CertificationClient) Query() *CertificationQuery {
 }
 
 // Get returns a Certification entity by its id.
-func (c *CertificationClient) Get(ctx context.Context, id int) (*Certification, error) {
+func (c *CertificationClient) Get(ctx context.Context, id uuid.UUID) (*Certification, error) {
 	return c.Query().Where(certification.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *CertificationClient) GetX(ctx context.Context, id int) *Certification {
+func (c *CertificationClient) GetX(ctx context.Context, id uuid.UUID) *Certification {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a Certification.
+func (c *CertificationClient) QueryResume(_m *Certification) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(certification.Table, certification.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, certification.ResumeTable, certification.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -624,7 +658,7 @@ func (c *EducationClient) UpdateOne(_m *Education) *EducationUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *EducationClient) UpdateOneID(id int) *EducationUpdateOne {
+func (c *EducationClient) UpdateOneID(id uuid.UUID) *EducationUpdateOne {
 	mutation := newEducationMutation(c.config, OpUpdateOne, withEducationID(id))
 	return &EducationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -641,7 +675,7 @@ func (c *EducationClient) DeleteOne(_m *Education) *EducationDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *EducationClient) DeleteOneID(id int) *EducationDeleteOne {
+func (c *EducationClient) DeleteOneID(id uuid.UUID) *EducationDeleteOne {
 	builder := c.Delete().Where(education.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -658,17 +692,33 @@ func (c *EducationClient) Query() *EducationQuery {
 }
 
 // Get returns a Education entity by its id.
-func (c *EducationClient) Get(ctx context.Context, id int) (*Education, error) {
+func (c *EducationClient) Get(ctx context.Context, id uuid.UUID) (*Education, error) {
 	return c.Query().Where(education.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *EducationClient) GetX(ctx context.Context, id int) *Education {
+func (c *EducationClient) GetX(ctx context.Context, id uuid.UUID) *Education {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a Education.
+func (c *EducationClient) QueryResume(_m *Education) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(education.Table, education.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, education.ResumeTable, education.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -757,7 +807,7 @@ func (c *ExperienceClient) UpdateOne(_m *Experience) *ExperienceUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ExperienceClient) UpdateOneID(id int) *ExperienceUpdateOne {
+func (c *ExperienceClient) UpdateOneID(id uuid.UUID) *ExperienceUpdateOne {
 	mutation := newExperienceMutation(c.config, OpUpdateOne, withExperienceID(id))
 	return &ExperienceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -774,7 +824,7 @@ func (c *ExperienceClient) DeleteOne(_m *Experience) *ExperienceDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ExperienceClient) DeleteOneID(id int) *ExperienceDeleteOne {
+func (c *ExperienceClient) DeleteOneID(id uuid.UUID) *ExperienceDeleteOne {
 	builder := c.Delete().Where(experience.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -791,17 +841,33 @@ func (c *ExperienceClient) Query() *ExperienceQuery {
 }
 
 // Get returns a Experience entity by its id.
-func (c *ExperienceClient) Get(ctx context.Context, id int) (*Experience, error) {
+func (c *ExperienceClient) Get(ctx context.Context, id uuid.UUID) (*Experience, error) {
 	return c.Query().Where(experience.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ExperienceClient) GetX(ctx context.Context, id int) *Experience {
+func (c *ExperienceClient) GetX(ctx context.Context, id uuid.UUID) *Experience {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a Experience.
+func (c *ExperienceClient) QueryResume(_m *Experience) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(experience.Table, experience.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, experience.ResumeTable, experience.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -890,7 +956,7 @@ func (c *HeaderContactInfoClient) UpdateOne(_m *HeaderContactInfo) *HeaderContac
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *HeaderContactInfoClient) UpdateOneID(id int) *HeaderContactInfoUpdateOne {
+func (c *HeaderContactInfoClient) UpdateOneID(id uuid.UUID) *HeaderContactInfoUpdateOne {
 	mutation := newHeaderContactInfoMutation(c.config, OpUpdateOne, withHeaderContactInfoID(id))
 	return &HeaderContactInfoUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -907,7 +973,7 @@ func (c *HeaderContactInfoClient) DeleteOne(_m *HeaderContactInfo) *HeaderContac
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *HeaderContactInfoClient) DeleteOneID(id int) *HeaderContactInfoDeleteOne {
+func (c *HeaderContactInfoClient) DeleteOneID(id uuid.UUID) *HeaderContactInfoDeleteOne {
 	builder := c.Delete().Where(headercontactinfo.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -924,17 +990,33 @@ func (c *HeaderContactInfoClient) Query() *HeaderContactInfoQuery {
 }
 
 // Get returns a HeaderContactInfo entity by its id.
-func (c *HeaderContactInfoClient) Get(ctx context.Context, id int) (*HeaderContactInfo, error) {
+func (c *HeaderContactInfoClient) Get(ctx context.Context, id uuid.UUID) (*HeaderContactInfo, error) {
 	return c.Query().Where(headercontactinfo.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *HeaderContactInfoClient) GetX(ctx context.Context, id int) *HeaderContactInfo {
+func (c *HeaderContactInfoClient) GetX(ctx context.Context, id uuid.UUID) *HeaderContactInfo {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a HeaderContactInfo.
+func (c *HeaderContactInfoClient) QueryResume(_m *HeaderContactInfo) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(headercontactinfo.Table, headercontactinfo.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, headercontactinfo.ResumeTable, headercontactinfo.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1023,7 +1105,7 @@ func (c *HobbyClient) UpdateOne(_m *Hobby) *HobbyUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *HobbyClient) UpdateOneID(id int) *HobbyUpdateOne {
+func (c *HobbyClient) UpdateOneID(id uuid.UUID) *HobbyUpdateOne {
 	mutation := newHobbyMutation(c.config, OpUpdateOne, withHobbyID(id))
 	return &HobbyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1040,7 +1122,7 @@ func (c *HobbyClient) DeleteOne(_m *Hobby) *HobbyDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *HobbyClient) DeleteOneID(id int) *HobbyDeleteOne {
+func (c *HobbyClient) DeleteOneID(id uuid.UUID) *HobbyDeleteOne {
 	builder := c.Delete().Where(hobby.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1057,17 +1139,33 @@ func (c *HobbyClient) Query() *HobbyQuery {
 }
 
 // Get returns a Hobby entity by its id.
-func (c *HobbyClient) Get(ctx context.Context, id int) (*Hobby, error) {
+func (c *HobbyClient) Get(ctx context.Context, id uuid.UUID) (*Hobby, error) {
 	return c.Query().Where(hobby.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *HobbyClient) GetX(ctx context.Context, id int) *Hobby {
+func (c *HobbyClient) GetX(ctx context.Context, id uuid.UUID) *Hobby {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a Hobby.
+func (c *HobbyClient) QueryResume(_m *Hobby) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(hobby.Table, hobby.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, hobby.ResumeTable, hobby.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1156,7 +1254,7 @@ func (c *ProfessionalSummaryClient) UpdateOne(_m *ProfessionalSummary) *Professi
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ProfessionalSummaryClient) UpdateOneID(id int) *ProfessionalSummaryUpdateOne {
+func (c *ProfessionalSummaryClient) UpdateOneID(id uuid.UUID) *ProfessionalSummaryUpdateOne {
 	mutation := newProfessionalSummaryMutation(c.config, OpUpdateOne, withProfessionalSummaryID(id))
 	return &ProfessionalSummaryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1173,7 +1271,7 @@ func (c *ProfessionalSummaryClient) DeleteOne(_m *ProfessionalSummary) *Professi
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ProfessionalSummaryClient) DeleteOneID(id int) *ProfessionalSummaryDeleteOne {
+func (c *ProfessionalSummaryClient) DeleteOneID(id uuid.UUID) *ProfessionalSummaryDeleteOne {
 	builder := c.Delete().Where(professionalsummary.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1190,17 +1288,33 @@ func (c *ProfessionalSummaryClient) Query() *ProfessionalSummaryQuery {
 }
 
 // Get returns a ProfessionalSummary entity by its id.
-func (c *ProfessionalSummaryClient) Get(ctx context.Context, id int) (*ProfessionalSummary, error) {
+func (c *ProfessionalSummaryClient) Get(ctx context.Context, id uuid.UUID) (*ProfessionalSummary, error) {
 	return c.Query().Where(professionalsummary.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ProfessionalSummaryClient) GetX(ctx context.Context, id int) *ProfessionalSummary {
+func (c *ProfessionalSummaryClient) GetX(ctx context.Context, id uuid.UUID) *ProfessionalSummary {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a ProfessionalSummary.
+func (c *ProfessionalSummaryClient) QueryResume(_m *ProfessionalSummary) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(professionalsummary.Table, professionalsummary.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, professionalsummary.ResumeTable, professionalsummary.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1289,7 +1403,7 @@ func (c *ProjectClient) UpdateOne(_m *Project) *ProjectUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ProjectClient) UpdateOneID(id int) *ProjectUpdateOne {
+func (c *ProjectClient) UpdateOneID(id uuid.UUID) *ProjectUpdateOne {
 	mutation := newProjectMutation(c.config, OpUpdateOne, withProjectID(id))
 	return &ProjectUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1306,7 +1420,7 @@ func (c *ProjectClient) DeleteOne(_m *Project) *ProjectDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ProjectClient) DeleteOneID(id int) *ProjectDeleteOne {
+func (c *ProjectClient) DeleteOneID(id uuid.UUID) *ProjectDeleteOne {
 	builder := c.Delete().Where(project.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1323,17 +1437,33 @@ func (c *ProjectClient) Query() *ProjectQuery {
 }
 
 // Get returns a Project entity by its id.
-func (c *ProjectClient) Get(ctx context.Context, id int) (*Project, error) {
+func (c *ProjectClient) Get(ctx context.Context, id uuid.UUID) (*Project, error) {
 	return c.Query().Where(project.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ProjectClient) GetX(ctx context.Context, id int) *Project {
+func (c *ProjectClient) GetX(ctx context.Context, id uuid.UUID) *Project {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a Project.
+func (c *ProjectClient) QueryResume(_m *Project) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(project.Table, project.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, project.ResumeTable, project.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1422,7 +1552,7 @@ func (c *ResumeClient) UpdateOne(_m *Resume) *ResumeUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ResumeClient) UpdateOneID(id int) *ResumeUpdateOne {
+func (c *ResumeClient) UpdateOneID(id uuid.UUID) *ResumeUpdateOne {
 	mutation := newResumeMutation(c.config, OpUpdateOne, withResumeID(id))
 	return &ResumeUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1439,7 +1569,7 @@ func (c *ResumeClient) DeleteOne(_m *Resume) *ResumeDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ResumeClient) DeleteOneID(id int) *ResumeDeleteOne {
+func (c *ResumeClient) DeleteOneID(id uuid.UUID) *ResumeDeleteOne {
 	builder := c.Delete().Where(resume.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1456,17 +1586,193 @@ func (c *ResumeClient) Query() *ResumeQuery {
 }
 
 // Get returns a Resume entity by its id.
-func (c *ResumeClient) Get(ctx context.Context, id int) (*Resume, error) {
+func (c *ResumeClient) Get(ctx context.Context, id uuid.UUID) (*Resume, error) {
 	return c.Query().Where(resume.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ResumeClient) GetX(ctx context.Context, id int) *Resume {
+func (c *ResumeClient) GetX(ctx context.Context, id uuid.UUID) *Resume {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryUser queries the user edge of a Resume.
+func (c *ResumeClient) QueryUser(_m *Resume) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, resume.UserTable, resume.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTemplate queries the template edge of a Resume.
+func (c *ResumeClient) QueryTemplate(_m *Resume) *TemplateQuery {
+	query := (&TemplateClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, resume.TemplateTable, resume.TemplateColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryHeaderContanctInfo queries the headerContanctInfo edge of a Resume.
+func (c *ResumeClient) QueryHeaderContanctInfo(_m *Resume) *HeaderContactInfoQuery {
+	query := (&HeaderContactInfoClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(headercontactinfo.Table, headercontactinfo.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, resume.HeaderContanctInfoTable, resume.HeaderContanctInfoColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProfessionalSummary queries the professionalSummary edge of a Resume.
+func (c *ResumeClient) QueryProfessionalSummary(_m *Resume) *ProfessionalSummaryQuery {
+	query := (&ProfessionalSummaryClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(professionalsummary.Table, professionalsummary.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, resume.ProfessionalSummaryTable, resume.ProfessionalSummaryColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryExperiences queries the experiences edge of a Resume.
+func (c *ResumeClient) QueryExperiences(_m *Resume) *ExperienceQuery {
+	query := (&ExperienceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(experience.Table, experience.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.ExperiencesTable, resume.ExperiencesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEducations queries the educations edge of a Resume.
+func (c *ResumeClient) QueryEducations(_m *Resume) *EducationQuery {
+	query := (&EducationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(education.Table, education.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.EducationsTable, resume.EducationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySkills queries the skills edge of a Resume.
+func (c *ResumeClient) QuerySkills(_m *Resume) *SkillQuery {
+	query := (&SkillClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(skill.Table, skill.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.SkillsTable, resume.SkillsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProjects queries the projects edge of a Resume.
+func (c *ResumeClient) QueryProjects(_m *Resume) *ProjectQuery {
+	query := (&ProjectClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(project.Table, project.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.ProjectsTable, resume.ProjectsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCertifications queries the certifications edge of a Resume.
+func (c *ResumeClient) QueryCertifications(_m *Resume) *CertificationQuery {
+	query := (&CertificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(certification.Table, certification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.CertificationsTable, resume.CertificationsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAchievements queries the achievements edge of a Resume.
+func (c *ResumeClient) QueryAchievements(_m *Resume) *AchievementQuery {
+	query := (&AchievementClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(achievement.Table, achievement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.AchievementsTable, resume.AchievementsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryHobbies queries the hobbies edge of a Resume.
+func (c *ResumeClient) QueryHobbies(_m *Resume) *HobbyQuery {
+	query := (&HobbyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, id),
+			sqlgraph.To(hobby.Table, hobby.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.HobbiesTable, resume.HobbiesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1555,7 +1861,7 @@ func (c *SkillClient) UpdateOne(_m *Skill) *SkillUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *SkillClient) UpdateOneID(id int) *SkillUpdateOne {
+func (c *SkillClient) UpdateOneID(id uuid.UUID) *SkillUpdateOne {
 	mutation := newSkillMutation(c.config, OpUpdateOne, withSkillID(id))
 	return &SkillUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1572,7 +1878,7 @@ func (c *SkillClient) DeleteOne(_m *Skill) *SkillDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *SkillClient) DeleteOneID(id int) *SkillDeleteOne {
+func (c *SkillClient) DeleteOneID(id uuid.UUID) *SkillDeleteOne {
 	builder := c.Delete().Where(skill.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1589,17 +1895,33 @@ func (c *SkillClient) Query() *SkillQuery {
 }
 
 // Get returns a Skill entity by its id.
-func (c *SkillClient) Get(ctx context.Context, id int) (*Skill, error) {
+func (c *SkillClient) Get(ctx context.Context, id uuid.UUID) (*Skill, error) {
 	return c.Query().Where(skill.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *SkillClient) GetX(ctx context.Context, id int) *Skill {
+func (c *SkillClient) GetX(ctx context.Context, id uuid.UUID) *Skill {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResume queries the resume edge of a Skill.
+func (c *SkillClient) QueryResume(_m *Skill) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(skill.Table, skill.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, skill.ResumeTable, skill.ResumeColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1688,7 +2010,7 @@ func (c *TemplateClient) UpdateOne(_m *Template) *TemplateUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *TemplateClient) UpdateOneID(id int) *TemplateUpdateOne {
+func (c *TemplateClient) UpdateOneID(id uuid.UUID) *TemplateUpdateOne {
 	mutation := newTemplateMutation(c.config, OpUpdateOne, withTemplateID(id))
 	return &TemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1705,7 +2027,7 @@ func (c *TemplateClient) DeleteOne(_m *Template) *TemplateDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *TemplateClient) DeleteOneID(id int) *TemplateDeleteOne {
+func (c *TemplateClient) DeleteOneID(id uuid.UUID) *TemplateDeleteOne {
 	builder := c.Delete().Where(template.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1722,17 +2044,33 @@ func (c *TemplateClient) Query() *TemplateQuery {
 }
 
 // Get returns a Template entity by its id.
-func (c *TemplateClient) Get(ctx context.Context, id int) (*Template, error) {
+func (c *TemplateClient) Get(ctx context.Context, id uuid.UUID) (*Template, error) {
 	return c.Query().Where(template.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *TemplateClient) GetX(ctx context.Context, id int) *Template {
+func (c *TemplateClient) GetX(ctx context.Context, id uuid.UUID) *Template {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResumes queries the resumes edge of a Template.
+func (c *TemplateClient) QueryResumes(_m *Template) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, template.ResumesTable, template.ResumesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1821,7 +2159,7 @@ func (c *UserClient) UpdateOne(_m *User) *UserUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *UserClient) UpdateOneID(id int) *UserUpdateOne {
+func (c *UserClient) UpdateOneID(id uuid.UUID) *UserUpdateOne {
 	mutation := newUserMutation(c.config, OpUpdateOne, withUserID(id))
 	return &UserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -1838,7 +2176,7 @@ func (c *UserClient) DeleteOne(_m *User) *UserDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *UserClient) DeleteOneID(id int) *UserDeleteOne {
+func (c *UserClient) DeleteOneID(id uuid.UUID) *UserDeleteOne {
 	builder := c.Delete().Where(user.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -1855,17 +2193,33 @@ func (c *UserClient) Query() *UserQuery {
 }
 
 // Get returns a User entity by its id.
-func (c *UserClient) Get(ctx context.Context, id int) (*User, error) {
+func (c *UserClient) Get(ctx context.Context, id uuid.UUID) (*User, error) {
 	return c.Query().Where(user.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *UserClient) GetX(ctx context.Context, id int) *User {
+func (c *UserClient) GetX(ctx context.Context, id uuid.UUID) *User {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryResumes queries the resumes edge of a User.
+func (c *UserClient) QueryResumes(_m *User) *ResumeQuery {
+	query := (&ResumeClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.ResumesTable, user.ResumesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // Hooks returns the client hooks.
@@ -1896,12 +2250,11 @@ func (c *UserClient) mutate(ctx context.Context, m *UserMutation) (Value, error)
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Achievement, Certification, Course, Education, Experience, HeaderContactInfo,
-		Hobby, ProfessionalSummary, Project, Resume, Skill, Template, User []ent.Hook
+		Achievement, Certification, Education, Experience, HeaderContactInfo, Hobby,
+		ProfessionalSummary, Project, Resume, Skill, Template, User []ent.Hook
 	}
 	inters struct {
-		Achievement, Certification, Course, Education, Experience, HeaderContactInfo,
-		Hobby, ProfessionalSummary, Project, Resume, Skill, Template,
-		User []ent.Interceptor
+		Achievement, Certification, Education, Experience, HeaderContactInfo, Hobby,
+		ProfessionalSummary, Project, Resume, Skill, Template, User []ent.Interceptor
 	}
 )

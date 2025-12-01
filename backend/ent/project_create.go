@@ -4,11 +4,15 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"resume-builder-backend/ent/project"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ProjectCreate is the builder for creating a Project entity.
@@ -18,6 +22,183 @@ type ProjectCreate struct {
 	hooks    []Hook
 }
 
+// SetTitle sets the "title" field.
+func (_c *ProjectCreate) SetTitle(v string) *ProjectCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableTitle(v *string) *ProjectCreate {
+	if v != nil {
+		_c.SetTitle(*v)
+	}
+	return _c
+}
+
+// SetDescription sets the "description" field.
+func (_c *ProjectCreate) SetDescription(v string) *ProjectCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableDescription(v *string) *ProjectCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
+	return _c
+}
+
+// SetStartDate sets the "startDate" field.
+func (_c *ProjectCreate) SetStartDate(v time.Time) *ProjectCreate {
+	_c.mutation.SetStartDate(v)
+	return _c
+}
+
+// SetNillableStartDate sets the "startDate" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableStartDate(v *time.Time) *ProjectCreate {
+	if v != nil {
+		_c.SetStartDate(*v)
+	}
+	return _c
+}
+
+// SetEndDate sets the "endDate" field.
+func (_c *ProjectCreate) SetEndDate(v time.Time) *ProjectCreate {
+	_c.mutation.SetEndDate(v)
+	return _c
+}
+
+// SetNillableEndDate sets the "endDate" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableEndDate(v *time.Time) *ProjectCreate {
+	if v != nil {
+		_c.SetEndDate(*v)
+	}
+	return _c
+}
+
+// SetProjectUrl sets the "projectUrl" field.
+func (_c *ProjectCreate) SetProjectUrl(v string) *ProjectCreate {
+	_c.mutation.SetProjectUrl(v)
+	return _c
+}
+
+// SetNillableProjectUrl sets the "projectUrl" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableProjectUrl(v *string) *ProjectCreate {
+	if v != nil {
+		_c.SetProjectUrl(*v)
+	}
+	return _c
+}
+
+// SetGithubUrl sets the "githubUrl" field.
+func (_c *ProjectCreate) SetGithubUrl(v string) *ProjectCreate {
+	_c.mutation.SetGithubUrl(v)
+	return _c
+}
+
+// SetNillableGithubUrl sets the "githubUrl" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableGithubUrl(v *string) *ProjectCreate {
+	if v != nil {
+		_c.SetGithubUrl(*v)
+	}
+	return _c
+}
+
+// SetDemoUrl sets the "demoUrl" field.
+func (_c *ProjectCreate) SetDemoUrl(v string) *ProjectCreate {
+	_c.mutation.SetDemoUrl(v)
+	return _c
+}
+
+// SetNillableDemoUrl sets the "demoUrl" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableDemoUrl(v *string) *ProjectCreate {
+	if v != nil {
+		_c.SetDemoUrl(*v)
+	}
+	return _c
+}
+
+// SetTechnologiesUsed sets the "technologiesUsed" field.
+func (_c *ProjectCreate) SetTechnologiesUsed(v map[string]interface{}) *ProjectCreate {
+	_c.mutation.SetTechnologiesUsed(v)
+	return _c
+}
+
+// SetKeyFeatures sets the "keyFeatures" field.
+func (_c *ProjectCreate) SetKeyFeatures(v map[string]interface{}) *ProjectCreate {
+	_c.mutation.SetKeyFeatures(v)
+	return _c
+}
+
+// SetRole sets the "role" field.
+func (_c *ProjectCreate) SetRole(v string) *ProjectCreate {
+	_c.mutation.SetRole(v)
+	return _c
+}
+
+// SetNillableRole sets the "role" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableRole(v *string) *ProjectCreate {
+	if v != nil {
+		_c.SetRole(*v)
+	}
+	return _c
+}
+
+// SetTeamSize sets the "teamSize" field.
+func (_c *ProjectCreate) SetTeamSize(v int) *ProjectCreate {
+	_c.mutation.SetTeamSize(v)
+	return _c
+}
+
+// SetNillableTeamSize sets the "teamSize" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableTeamSize(v *int) *ProjectCreate {
+	if v != nil {
+		_c.SetTeamSize(*v)
+	}
+	return _c
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_c *ProjectCreate) SetOrderIndex(v int) *ProjectCreate {
+	_c.mutation.SetOrderIndex(v)
+	return _c
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableOrderIndex(v *int) *ProjectCreate {
+	if v != nil {
+		_c.SetOrderIndex(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *ProjectCreate) SetID(v uuid.UUID) *ProjectCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *ProjectCreate) SetNillableID(v *uuid.UUID) *ProjectCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *ProjectCreate) SetResumeID(id uuid.UUID) *ProjectCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *ProjectCreate) SetResume(v *Resume) *ProjectCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the ProjectMutation object of the builder.
 func (_c *ProjectCreate) Mutation() *ProjectMutation {
 	return _c.mutation
@@ -25,6 +206,7 @@ func (_c *ProjectCreate) Mutation() *ProjectMutation {
 
 // Save creates the Project in the database.
 func (_c *ProjectCreate) Save(ctx context.Context) (*Project, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +232,26 @@ func (_c *ProjectCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *ProjectCreate) defaults() {
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		v := project.DefaultOrderIndex
+		_c.mutation.SetOrderIndex(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := project.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *ProjectCreate) check() error {
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		return &ValidationError{Name: "orderIndex", err: errors.New(`ent: missing required field "Project.orderIndex"`)}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "Project.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +266,13 @@ func (_c *ProjectCreate) sqlSave(ctx context.Context) (*Project, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +281,77 @@ func (_c *ProjectCreate) sqlSave(ctx context.Context) (*Project, error) {
 func (_c *ProjectCreate) createSpec() (*Project, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Project{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(project.Table, sqlgraph.NewFieldSpec(project.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(project.Table, sqlgraph.NewFieldSpec(project.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(project.FieldTitle, field.TypeString, value)
+		_node.Title = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(project.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
+	if value, ok := _c.mutation.StartDate(); ok {
+		_spec.SetField(project.FieldStartDate, field.TypeTime, value)
+		_node.StartDate = &value
+	}
+	if value, ok := _c.mutation.EndDate(); ok {
+		_spec.SetField(project.FieldEndDate, field.TypeTime, value)
+		_node.EndDate = &value
+	}
+	if value, ok := _c.mutation.ProjectUrl(); ok {
+		_spec.SetField(project.FieldProjectUrl, field.TypeString, value)
+		_node.ProjectUrl = value
+	}
+	if value, ok := _c.mutation.GithubUrl(); ok {
+		_spec.SetField(project.FieldGithubUrl, field.TypeString, value)
+		_node.GithubUrl = value
+	}
+	if value, ok := _c.mutation.DemoUrl(); ok {
+		_spec.SetField(project.FieldDemoUrl, field.TypeString, value)
+		_node.DemoUrl = value
+	}
+	if value, ok := _c.mutation.TechnologiesUsed(); ok {
+		_spec.SetField(project.FieldTechnologiesUsed, field.TypeJSON, value)
+		_node.TechnologiesUsed = value
+	}
+	if value, ok := _c.mutation.KeyFeatures(); ok {
+		_spec.SetField(project.FieldKeyFeatures, field.TypeJSON, value)
+		_node.KeyFeatures = value
+	}
+	if value, ok := _c.mutation.Role(); ok {
+		_spec.SetField(project.FieldRole, field.TypeString, value)
+		_node.Role = value
+	}
+	if value, ok := _c.mutation.TeamSize(); ok {
+		_spec.SetField(project.FieldTeamSize, field.TypeInt, value)
+		_node.TeamSize = &value
+	}
+	if value, ok := _c.mutation.OrderIndex(); ok {
+		_spec.SetField(project.FieldOrderIndex, field.TypeInt, value)
+		_node.OrderIndex = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   project.ResumeTable,
+			Columns: []string{project.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.resume_projects = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +373,7 @@ func (_c *ProjectCreateBulk) Save(ctx context.Context) ([]*Project, error) {
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProjectMutation)
 				if !ok {
@@ -125,10 +400,6 @@ func (_c *ProjectCreateBulk) Save(ctx context.Context) ([]*Project, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

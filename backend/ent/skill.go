@@ -4,19 +4,57 @@ package ent
 
 import (
 	"fmt"
+	"resume-builder-backend/ent/resume"
 	"resume-builder-backend/ent/skill"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Skill is the model entity for the Skill schema.
 type Skill struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID uuid.UUID `json:"id,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
+	// Category holds the value of the "category" field.
+	Category string `json:"category,omitempty"`
+	// SkillType holds the value of the "skillType" field.
+	SkillType skill.SkillType `json:"skillType,omitempty"`
+	// ProficiencyLevel holds the value of the "proficiencyLevel" field.
+	ProficiencyLevel skill.ProficiencyLevel `json:"proficiencyLevel,omitempty"`
+	// YearsOfExperience holds the value of the "yearsOfExperience" field.
+	YearsOfExperience *int `json:"yearsOfExperience,omitempty"`
+	// OrderIndex holds the value of the "orderIndex" field.
+	OrderIndex int `json:"orderIndex,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the SkillQuery when eager-loading is set.
+	Edges         SkillEdges `json:"edges"`
+	resume_skills *uuid.UUID
+	selectValues  sql.SelectValues
+}
+
+// SkillEdges holds the relations/edges for other nodes in the graph.
+type SkillEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e SkillEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +62,14 @@ func (*Skill) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case skill.FieldID:
+		case skill.FieldYearsOfExperience, skill.FieldOrderIndex:
 			values[i] = new(sql.NullInt64)
+		case skill.FieldName, skill.FieldCategory, skill.FieldSkillType, skill.FieldProficiencyLevel:
+			values[i] = new(sql.NullString)
+		case skill.FieldID:
+			values[i] = new(uuid.UUID)
+		case skill.ForeignKeys[0]: // resume_skills
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +86,55 @@ func (_m *Skill) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case skill.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case skill.FieldName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field name", values[i])
+			} else if value.Valid {
+				_m.Name = value.String
+			}
+		case skill.FieldCategory:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field category", values[i])
+			} else if value.Valid {
+				_m.Category = value.String
+			}
+		case skill.FieldSkillType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field skillType", values[i])
+			} else if value.Valid {
+				_m.SkillType = skill.SkillType(value.String)
+			}
+		case skill.FieldProficiencyLevel:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field proficiencyLevel", values[i])
+			} else if value.Valid {
+				_m.ProficiencyLevel = skill.ProficiencyLevel(value.String)
+			}
+		case skill.FieldYearsOfExperience:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field yearsOfExperience", values[i])
+			} else if value.Valid {
+				_m.YearsOfExperience = new(int)
+				*_m.YearsOfExperience = int(value.Int64)
+			}
+		case skill.FieldOrderIndex:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field orderIndex", values[i])
+			} else if value.Valid {
+				_m.OrderIndex = int(value.Int64)
+			}
+		case skill.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field resume_skills", values[i])
+			} else if value.Valid {
+				_m.resume_skills = new(uuid.UUID)
+				*_m.resume_skills = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +146,11 @@ func (_m *Skill) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Skill) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the Skill entity.
+func (_m *Skill) QueryResume() *ResumeQuery {
+	return NewSkillClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this Skill.
@@ -82,7 +175,26 @@ func (_m *Skill) Unwrap() *Skill {
 func (_m *Skill) String() string {
 	var builder strings.Builder
 	builder.WriteString("Skill(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("name=")
+	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("category=")
+	builder.WriteString(_m.Category)
+	builder.WriteString(", ")
+	builder.WriteString("skillType=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SkillType))
+	builder.WriteString(", ")
+	builder.WriteString("proficiencyLevel=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProficiencyLevel))
+	builder.WriteString(", ")
+	if v := _m.YearsOfExperience; v != nil {
+		builder.WriteString("yearsOfExperience=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("orderIndex=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OrderIndex))
 	builder.WriteByte(')')
 	return builder.String()
 }

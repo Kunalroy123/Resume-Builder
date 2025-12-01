@@ -4,53 +4,509 @@ package achievement
 
 import (
 	"resume-builder-backend/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Achievement {
+func ID(id uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Achievement {
+func IDEQ(id uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Achievement {
+func IDNEQ(id uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Achievement {
+func IDIn(ids ...uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Achievement {
+func IDNotIn(ids ...uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Achievement {
+func IDGT(id uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Achievement {
+func IDGTE(id uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Achievement {
+func IDLT(id uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Achievement {
+func IDLTE(id uuid.UUID) predicate.Achievement {
 	return predicate.Achievement(sql.FieldLTE(FieldID, id))
+}
+
+// Discription applies equality check predicate on the "discription" field. It's identical to DiscriptionEQ.
+func Discription(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldDiscription, v))
+}
+
+// DateAchieved applies equality check predicate on the "dateAchieved" field. It's identical to DateAchievedEQ.
+func DateAchieved(v time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldDateAchieved, v))
+}
+
+// IssuingOrganization applies equality check predicate on the "issuingOrganization" field. It's identical to IssuingOrganizationEQ.
+func IssuingOrganization(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldIssuingOrganization, v))
+}
+
+// AchievementUrl applies equality check predicate on the "achievementUrl" field. It's identical to AchievementUrlEQ.
+func AchievementUrl(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldAchievementUrl, v))
+}
+
+// ImpactMetrics applies equality check predicate on the "impactMetrics" field. It's identical to ImpactMetricsEQ.
+func ImpactMetrics(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldImpactMetrics, v))
+}
+
+// OrderIndex applies equality check predicate on the "orderIndex" field. It's identical to OrderIndexEQ.
+func OrderIndex(v int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// DiscriptionEQ applies the EQ predicate on the "discription" field.
+func DiscriptionEQ(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldDiscription, v))
+}
+
+// DiscriptionNEQ applies the NEQ predicate on the "discription" field.
+func DiscriptionNEQ(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNEQ(FieldDiscription, v))
+}
+
+// DiscriptionIn applies the In predicate on the "discription" field.
+func DiscriptionIn(vs ...string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldIn(FieldDiscription, vs...))
+}
+
+// DiscriptionNotIn applies the NotIn predicate on the "discription" field.
+func DiscriptionNotIn(vs ...string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotIn(FieldDiscription, vs...))
+}
+
+// DiscriptionGT applies the GT predicate on the "discription" field.
+func DiscriptionGT(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGT(FieldDiscription, v))
+}
+
+// DiscriptionGTE applies the GTE predicate on the "discription" field.
+func DiscriptionGTE(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGTE(FieldDiscription, v))
+}
+
+// DiscriptionLT applies the LT predicate on the "discription" field.
+func DiscriptionLT(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLT(FieldDiscription, v))
+}
+
+// DiscriptionLTE applies the LTE predicate on the "discription" field.
+func DiscriptionLTE(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLTE(FieldDiscription, v))
+}
+
+// DiscriptionContains applies the Contains predicate on the "discription" field.
+func DiscriptionContains(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldContains(FieldDiscription, v))
+}
+
+// DiscriptionHasPrefix applies the HasPrefix predicate on the "discription" field.
+func DiscriptionHasPrefix(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldHasPrefix(FieldDiscription, v))
+}
+
+// DiscriptionHasSuffix applies the HasSuffix predicate on the "discription" field.
+func DiscriptionHasSuffix(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldHasSuffix(FieldDiscription, v))
+}
+
+// DiscriptionEqualFold applies the EqualFold predicate on the "discription" field.
+func DiscriptionEqualFold(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEqualFold(FieldDiscription, v))
+}
+
+// DiscriptionContainsFold applies the ContainsFold predicate on the "discription" field.
+func DiscriptionContainsFold(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldContainsFold(FieldDiscription, v))
+}
+
+// DateAchievedEQ applies the EQ predicate on the "dateAchieved" field.
+func DateAchievedEQ(v time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldDateAchieved, v))
+}
+
+// DateAchievedNEQ applies the NEQ predicate on the "dateAchieved" field.
+func DateAchievedNEQ(v time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNEQ(FieldDateAchieved, v))
+}
+
+// DateAchievedIn applies the In predicate on the "dateAchieved" field.
+func DateAchievedIn(vs ...time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldIn(FieldDateAchieved, vs...))
+}
+
+// DateAchievedNotIn applies the NotIn predicate on the "dateAchieved" field.
+func DateAchievedNotIn(vs ...time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotIn(FieldDateAchieved, vs...))
+}
+
+// DateAchievedGT applies the GT predicate on the "dateAchieved" field.
+func DateAchievedGT(v time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGT(FieldDateAchieved, v))
+}
+
+// DateAchievedGTE applies the GTE predicate on the "dateAchieved" field.
+func DateAchievedGTE(v time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGTE(FieldDateAchieved, v))
+}
+
+// DateAchievedLT applies the LT predicate on the "dateAchieved" field.
+func DateAchievedLT(v time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLT(FieldDateAchieved, v))
+}
+
+// DateAchievedLTE applies the LTE predicate on the "dateAchieved" field.
+func DateAchievedLTE(v time.Time) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLTE(FieldDateAchieved, v))
+}
+
+// DateAchievedIsNil applies the IsNil predicate on the "dateAchieved" field.
+func DateAchievedIsNil() predicate.Achievement {
+	return predicate.Achievement(sql.FieldIsNull(FieldDateAchieved))
+}
+
+// DateAchievedNotNil applies the NotNil predicate on the "dateAchieved" field.
+func DateAchievedNotNil() predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotNull(FieldDateAchieved))
+}
+
+// IssuingOrganizationEQ applies the EQ predicate on the "issuingOrganization" field.
+func IssuingOrganizationEQ(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationNEQ applies the NEQ predicate on the "issuingOrganization" field.
+func IssuingOrganizationNEQ(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNEQ(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationIn applies the In predicate on the "issuingOrganization" field.
+func IssuingOrganizationIn(vs ...string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldIn(FieldIssuingOrganization, vs...))
+}
+
+// IssuingOrganizationNotIn applies the NotIn predicate on the "issuingOrganization" field.
+func IssuingOrganizationNotIn(vs ...string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotIn(FieldIssuingOrganization, vs...))
+}
+
+// IssuingOrganizationGT applies the GT predicate on the "issuingOrganization" field.
+func IssuingOrganizationGT(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGT(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationGTE applies the GTE predicate on the "issuingOrganization" field.
+func IssuingOrganizationGTE(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGTE(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationLT applies the LT predicate on the "issuingOrganization" field.
+func IssuingOrganizationLT(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLT(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationLTE applies the LTE predicate on the "issuingOrganization" field.
+func IssuingOrganizationLTE(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLTE(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationContains applies the Contains predicate on the "issuingOrganization" field.
+func IssuingOrganizationContains(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldContains(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationHasPrefix applies the HasPrefix predicate on the "issuingOrganization" field.
+func IssuingOrganizationHasPrefix(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldHasPrefix(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationHasSuffix applies the HasSuffix predicate on the "issuingOrganization" field.
+func IssuingOrganizationHasSuffix(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldHasSuffix(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationIsNil applies the IsNil predicate on the "issuingOrganization" field.
+func IssuingOrganizationIsNil() predicate.Achievement {
+	return predicate.Achievement(sql.FieldIsNull(FieldIssuingOrganization))
+}
+
+// IssuingOrganizationNotNil applies the NotNil predicate on the "issuingOrganization" field.
+func IssuingOrganizationNotNil() predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotNull(FieldIssuingOrganization))
+}
+
+// IssuingOrganizationEqualFold applies the EqualFold predicate on the "issuingOrganization" field.
+func IssuingOrganizationEqualFold(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEqualFold(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationContainsFold applies the ContainsFold predicate on the "issuingOrganization" field.
+func IssuingOrganizationContainsFold(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldContainsFold(FieldIssuingOrganization, v))
+}
+
+// AchievementTypeEQ applies the EQ predicate on the "achievementType" field.
+func AchievementTypeEQ(v AchievementType) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldAchievementType, v))
+}
+
+// AchievementTypeNEQ applies the NEQ predicate on the "achievementType" field.
+func AchievementTypeNEQ(v AchievementType) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNEQ(FieldAchievementType, v))
+}
+
+// AchievementTypeIn applies the In predicate on the "achievementType" field.
+func AchievementTypeIn(vs ...AchievementType) predicate.Achievement {
+	return predicate.Achievement(sql.FieldIn(FieldAchievementType, vs...))
+}
+
+// AchievementTypeNotIn applies the NotIn predicate on the "achievementType" field.
+func AchievementTypeNotIn(vs ...AchievementType) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotIn(FieldAchievementType, vs...))
+}
+
+// AchievementUrlEQ applies the EQ predicate on the "achievementUrl" field.
+func AchievementUrlEQ(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldAchievementUrl, v))
+}
+
+// AchievementUrlNEQ applies the NEQ predicate on the "achievementUrl" field.
+func AchievementUrlNEQ(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNEQ(FieldAchievementUrl, v))
+}
+
+// AchievementUrlIn applies the In predicate on the "achievementUrl" field.
+func AchievementUrlIn(vs ...string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldIn(FieldAchievementUrl, vs...))
+}
+
+// AchievementUrlNotIn applies the NotIn predicate on the "achievementUrl" field.
+func AchievementUrlNotIn(vs ...string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotIn(FieldAchievementUrl, vs...))
+}
+
+// AchievementUrlGT applies the GT predicate on the "achievementUrl" field.
+func AchievementUrlGT(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGT(FieldAchievementUrl, v))
+}
+
+// AchievementUrlGTE applies the GTE predicate on the "achievementUrl" field.
+func AchievementUrlGTE(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGTE(FieldAchievementUrl, v))
+}
+
+// AchievementUrlLT applies the LT predicate on the "achievementUrl" field.
+func AchievementUrlLT(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLT(FieldAchievementUrl, v))
+}
+
+// AchievementUrlLTE applies the LTE predicate on the "achievementUrl" field.
+func AchievementUrlLTE(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLTE(FieldAchievementUrl, v))
+}
+
+// AchievementUrlContains applies the Contains predicate on the "achievementUrl" field.
+func AchievementUrlContains(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldContains(FieldAchievementUrl, v))
+}
+
+// AchievementUrlHasPrefix applies the HasPrefix predicate on the "achievementUrl" field.
+func AchievementUrlHasPrefix(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldHasPrefix(FieldAchievementUrl, v))
+}
+
+// AchievementUrlHasSuffix applies the HasSuffix predicate on the "achievementUrl" field.
+func AchievementUrlHasSuffix(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldHasSuffix(FieldAchievementUrl, v))
+}
+
+// AchievementUrlIsNil applies the IsNil predicate on the "achievementUrl" field.
+func AchievementUrlIsNil() predicate.Achievement {
+	return predicate.Achievement(sql.FieldIsNull(FieldAchievementUrl))
+}
+
+// AchievementUrlNotNil applies the NotNil predicate on the "achievementUrl" field.
+func AchievementUrlNotNil() predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotNull(FieldAchievementUrl))
+}
+
+// AchievementUrlEqualFold applies the EqualFold predicate on the "achievementUrl" field.
+func AchievementUrlEqualFold(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEqualFold(FieldAchievementUrl, v))
+}
+
+// AchievementUrlContainsFold applies the ContainsFold predicate on the "achievementUrl" field.
+func AchievementUrlContainsFold(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldContainsFold(FieldAchievementUrl, v))
+}
+
+// ImpactMetricsEQ applies the EQ predicate on the "impactMetrics" field.
+func ImpactMetricsEQ(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsNEQ applies the NEQ predicate on the "impactMetrics" field.
+func ImpactMetricsNEQ(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNEQ(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsIn applies the In predicate on the "impactMetrics" field.
+func ImpactMetricsIn(vs ...string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldIn(FieldImpactMetrics, vs...))
+}
+
+// ImpactMetricsNotIn applies the NotIn predicate on the "impactMetrics" field.
+func ImpactMetricsNotIn(vs ...string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotIn(FieldImpactMetrics, vs...))
+}
+
+// ImpactMetricsGT applies the GT predicate on the "impactMetrics" field.
+func ImpactMetricsGT(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGT(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsGTE applies the GTE predicate on the "impactMetrics" field.
+func ImpactMetricsGTE(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGTE(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsLT applies the LT predicate on the "impactMetrics" field.
+func ImpactMetricsLT(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLT(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsLTE applies the LTE predicate on the "impactMetrics" field.
+func ImpactMetricsLTE(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLTE(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsContains applies the Contains predicate on the "impactMetrics" field.
+func ImpactMetricsContains(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldContains(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsHasPrefix applies the HasPrefix predicate on the "impactMetrics" field.
+func ImpactMetricsHasPrefix(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldHasPrefix(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsHasSuffix applies the HasSuffix predicate on the "impactMetrics" field.
+func ImpactMetricsHasSuffix(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldHasSuffix(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsIsNil applies the IsNil predicate on the "impactMetrics" field.
+func ImpactMetricsIsNil() predicate.Achievement {
+	return predicate.Achievement(sql.FieldIsNull(FieldImpactMetrics))
+}
+
+// ImpactMetricsNotNil applies the NotNil predicate on the "impactMetrics" field.
+func ImpactMetricsNotNil() predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotNull(FieldImpactMetrics))
+}
+
+// ImpactMetricsEqualFold applies the EqualFold predicate on the "impactMetrics" field.
+func ImpactMetricsEqualFold(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEqualFold(FieldImpactMetrics, v))
+}
+
+// ImpactMetricsContainsFold applies the ContainsFold predicate on the "impactMetrics" field.
+func ImpactMetricsContainsFold(v string) predicate.Achievement {
+	return predicate.Achievement(sql.FieldContainsFold(FieldImpactMetrics, v))
+}
+
+// OrderIndexEQ applies the EQ predicate on the "orderIndex" field.
+func OrderIndexEQ(v int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexNEQ applies the NEQ predicate on the "orderIndex" field.
+func OrderIndexNEQ(v int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexIn applies the In predicate on the "orderIndex" field.
+func OrderIndexIn(vs ...int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexNotIn applies the NotIn predicate on the "orderIndex" field.
+func OrderIndexNotIn(vs ...int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldNotIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexGT applies the GT predicate on the "orderIndex" field.
+func OrderIndexGT(v int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGT(FieldOrderIndex, v))
+}
+
+// OrderIndexGTE applies the GTE predicate on the "orderIndex" field.
+func OrderIndexGTE(v int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldGTE(FieldOrderIndex, v))
+}
+
+// OrderIndexLT applies the LT predicate on the "orderIndex" field.
+func OrderIndexLT(v int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLT(FieldOrderIndex, v))
+}
+
+// OrderIndexLTE applies the LTE predicate on the "orderIndex" field.
+func OrderIndexLTE(v int) predicate.Achievement {
+	return predicate.Achievement(sql.FieldLTE(FieldOrderIndex, v))
+}
+
+// HasResume applies the HasEdge predicate on the "resume" edge.
+func HasResume() predicate.Achievement {
+	return predicate.Achievement(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResumeWith applies the HasEdge predicate on the "resume" edge with a given conditions (other predicates).
+func HasResumeWith(preds ...predicate.Resume) predicate.Achievement {
+	return predicate.Achievement(func(s *sql.Selector) {
+		step := newResumeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

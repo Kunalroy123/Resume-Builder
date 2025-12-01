@@ -4,6 +4,8 @@ package project
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +13,64 @@ const (
 	Label = "project"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldStartDate holds the string denoting the startdate field in the database.
+	FieldStartDate = "start_date"
+	// FieldEndDate holds the string denoting the enddate field in the database.
+	FieldEndDate = "end_date"
+	// FieldProjectUrl holds the string denoting the projecturl field in the database.
+	FieldProjectUrl = "project_url"
+	// FieldGithubUrl holds the string denoting the githuburl field in the database.
+	FieldGithubUrl = "github_url"
+	// FieldDemoUrl holds the string denoting the demourl field in the database.
+	FieldDemoUrl = "demo_url"
+	// FieldTechnologiesUsed holds the string denoting the technologiesused field in the database.
+	FieldTechnologiesUsed = "technologies_used"
+	// FieldKeyFeatures holds the string denoting the keyfeatures field in the database.
+	FieldKeyFeatures = "key_features"
+	// FieldRole holds the string denoting the role field in the database.
+	FieldRole = "role"
+	// FieldTeamSize holds the string denoting the teamsize field in the database.
+	FieldTeamSize = "team_size"
+	// FieldOrderIndex holds the string denoting the orderindex field in the database.
+	FieldOrderIndex = "order_index"
+	// EdgeResume holds the string denoting the resume edge name in mutations.
+	EdgeResume = "resume"
 	// Table holds the table name of the project in the database.
 	Table = "projects"
+	// ResumeTable is the table that holds the resume relation/edge.
+	ResumeTable = "projects"
+	// ResumeInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumeInverseTable = "resumes"
+	// ResumeColumn is the table column denoting the resume relation/edge.
+	ResumeColumn = "resume_projects"
 )
 
 // Columns holds all SQL columns for project fields.
 var Columns = []string{
 	FieldID,
+	FieldTitle,
+	FieldDescription,
+	FieldStartDate,
+	FieldEndDate,
+	FieldProjectUrl,
+	FieldGithubUrl,
+	FieldDemoUrl,
+	FieldTechnologiesUsed,
+	FieldKeyFeatures,
+	FieldRole,
+	FieldTeamSize,
+	FieldOrderIndex,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "projects"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"resume_projects",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -27,8 +80,20 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
+
+var (
+	// DefaultOrderIndex holds the default value on creation for the "orderIndex" field.
+	DefaultOrderIndex int
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
 
 // OrderOption defines the ordering options for the Project queries.
 type OrderOption func(*sql.Selector)
@@ -36,4 +101,68 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByTitle orders the results by the title field.
+func ByTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTitle, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByStartDate orders the results by the startDate field.
+func ByStartDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStartDate, opts...).ToFunc()
+}
+
+// ByEndDate orders the results by the endDate field.
+func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
+}
+
+// ByProjectUrl orders the results by the projectUrl field.
+func ByProjectUrl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProjectUrl, opts...).ToFunc()
+}
+
+// ByGithubUrl orders the results by the githubUrl field.
+func ByGithubUrl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGithubUrl, opts...).ToFunc()
+}
+
+// ByDemoUrl orders the results by the demoUrl field.
+func ByDemoUrl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDemoUrl, opts...).ToFunc()
+}
+
+// ByRole orders the results by the role field.
+func ByRole(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRole, opts...).ToFunc()
+}
+
+// ByTeamSize orders the results by the teamSize field.
+func ByTeamSize(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTeamSize, opts...).ToFunc()
+}
+
+// ByOrderIndex orders the results by the orderIndex field.
+func ByOrderIndex(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrderIndex, opts...).ToFunc()
+}
+
+// ByResumeField orders the results by resume field.
+func ByResumeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumeStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newResumeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+	)
 }

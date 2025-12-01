@@ -7,12 +7,14 @@ import (
 	"fmt"
 	"math"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
 	"resume-builder-backend/ent/skill"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // SkillQuery is the builder for querying Skill entities.
@@ -22,6 +24,8 @@ type SkillQuery struct {
 	order      []skill.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Skill
+	withResume *ResumeQuery
+	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +62,28 @@ func (_q *SkillQuery) Order(o ...skill.OrderOption) *SkillQuery {
 	return _q
 }
 
+// QueryResume chains the current query on the "resume" edge.
+func (_q *SkillQuery) QueryResume() *ResumeQuery {
+	query := (&ResumeClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(skill.Table, skill.FieldID, selector),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, skill.ResumeTable, skill.ResumeColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Skill entity from the query.
 // Returns a *NotFoundError when no Skill was found.
 func (_q *SkillQuery) First(ctx context.Context) (*Skill, error) {
@@ -82,8 +108,8 @@ func (_q *SkillQuery) FirstX(ctx context.Context) *Skill {
 
 // FirstID returns the first Skill ID from the query.
 // Returns a *NotFoundError when no Skill ID was found.
-func (_q *SkillQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *SkillQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -95,7 +121,7 @@ func (_q *SkillQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *SkillQuery) FirstIDX(ctx context.Context) int {
+func (_q *SkillQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -133,8 +159,8 @@ func (_q *SkillQuery) OnlyX(ctx context.Context) *Skill {
 // OnlyID is like Only, but returns the only Skill ID in the query.
 // Returns a *NotSingularError when more than one Skill ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *SkillQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *SkillQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -150,7 +176,7 @@ func (_q *SkillQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *SkillQuery) OnlyIDX(ctx context.Context) int {
+func (_q *SkillQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,7 +204,7 @@ func (_q *SkillQuery) AllX(ctx context.Context) []*Skill {
 }
 
 // IDs executes the query and returns a list of Skill IDs.
-func (_q *SkillQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *SkillQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -190,7 +216,7 @@ func (_q *SkillQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *SkillQuery) IDsX(ctx context.Context) []int {
+func (_q *SkillQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -250,14 +276,38 @@ func (_q *SkillQuery) Clone() *SkillQuery {
 		order:      append([]skill.OrderOption{}, _q.order...),
 		inters:     append([]Interceptor{}, _q.inters...),
 		predicates: append([]predicate.Skill{}, _q.predicates...),
+		withResume: _q.withResume.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
 	}
 }
 
+// WithResume tells the query-builder to eager-load the nodes that are connected to
+// the "resume" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SkillQuery) WithResume(opts ...func(*ResumeQuery)) *SkillQuery {
+	query := (&ResumeClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withResume = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Skill.Query().
+//		GroupBy(skill.FieldName).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (_q *SkillQuery) GroupBy(field string, fields ...string) *SkillGroupBy {
 	_q.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &SkillGroupBy{build: _q}
@@ -269,6 +319,16 @@ func (_q *SkillQuery) GroupBy(field string, fields ...string) *SkillGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		Name string `json:"name,omitempty"`
+//	}
+//
+//	client.Skill.Query().
+//		Select(skill.FieldName).
+//		Scan(ctx, &v)
 func (_q *SkillQuery) Select(fields ...string) *SkillSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
 	sbuild := &SkillSelect{SkillQuery: _q}
@@ -310,15 +370,26 @@ func (_q *SkillQuery) prepareQuery(ctx context.Context) error {
 
 func (_q *SkillQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Skill, error) {
 	var (
-		nodes = []*Skill{}
-		_spec = _q.querySpec()
+		nodes       = []*Skill{}
+		withFKs     = _q.withFKs
+		_spec       = _q.querySpec()
+		loadedTypes = [1]bool{
+			_q.withResume != nil,
+		}
 	)
+	if _q.withResume != nil {
+		withFKs = true
+	}
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, skill.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Skill).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Skill{config: _q.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -330,7 +401,46 @@ func (_q *SkillQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Skill,
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withResume; query != nil {
+		if err := _q.loadResume(ctx, query, nodes, nil,
+			func(n *Skill, e *Resume) { n.Edges.Resume = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (_q *SkillQuery) loadResume(ctx context.Context, query *ResumeQuery, nodes []*Skill, init func(*Skill), assign func(*Skill, *Resume)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Skill)
+	for i := range nodes {
+		if nodes[i].resume_skills == nil {
+			continue
+		}
+		fk := *nodes[i].resume_skills
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(resume.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "resume_skills" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (_q *SkillQuery) sqlCount(ctx context.Context) (int, error) {
@@ -343,7 +453,7 @@ func (_q *SkillQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *SkillQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(skill.Table, skill.Columns, sqlgraph.NewFieldSpec(skill.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(skill.Table, skill.Columns, sqlgraph.NewFieldSpec(skill.FieldID, field.TypeUUID))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

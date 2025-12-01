@@ -8,11 +8,13 @@ import (
 	"math"
 	"resume-builder-backend/ent/predicate"
 	"resume-builder-backend/ent/professionalsummary"
+	"resume-builder-backend/ent/resume"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ProfessionalSummaryQuery is the builder for querying ProfessionalSummary entities.
@@ -22,6 +24,7 @@ type ProfessionalSummaryQuery struct {
 	order      []professionalsummary.OrderOption
 	inters     []Interceptor
 	predicates []predicate.ProfessionalSummary
+	withResume *ResumeQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +61,28 @@ func (_q *ProfessionalSummaryQuery) Order(o ...professionalsummary.OrderOption) 
 	return _q
 }
 
+// QueryResume chains the current query on the "resume" edge.
+func (_q *ProfessionalSummaryQuery) QueryResume() *ResumeQuery {
+	query := (&ResumeClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(professionalsummary.Table, professionalsummary.FieldID, selector),
+			sqlgraph.To(resume.Table, resume.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, professionalsummary.ResumeTable, professionalsummary.ResumeColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first ProfessionalSummary entity from the query.
 // Returns a *NotFoundError when no ProfessionalSummary was found.
 func (_q *ProfessionalSummaryQuery) First(ctx context.Context) (*ProfessionalSummary, error) {
@@ -82,8 +107,8 @@ func (_q *ProfessionalSummaryQuery) FirstX(ctx context.Context) *ProfessionalSum
 
 // FirstID returns the first ProfessionalSummary ID from the query.
 // Returns a *NotFoundError when no ProfessionalSummary ID was found.
-func (_q *ProfessionalSummaryQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ProfessionalSummaryQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -95,7 +120,7 @@ func (_q *ProfessionalSummaryQuery) FirstID(ctx context.Context) (id int, err er
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *ProfessionalSummaryQuery) FirstIDX(ctx context.Context) int {
+func (_q *ProfessionalSummaryQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -133,8 +158,8 @@ func (_q *ProfessionalSummaryQuery) OnlyX(ctx context.Context) *ProfessionalSumm
 // OnlyID is like Only, but returns the only ProfessionalSummary ID in the query.
 // Returns a *NotSingularError when more than one ProfessionalSummary ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *ProfessionalSummaryQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ProfessionalSummaryQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -150,7 +175,7 @@ func (_q *ProfessionalSummaryQuery) OnlyID(ctx context.Context) (id int, err err
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *ProfessionalSummaryQuery) OnlyIDX(ctx context.Context) int {
+func (_q *ProfessionalSummaryQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,7 +203,7 @@ func (_q *ProfessionalSummaryQuery) AllX(ctx context.Context) []*ProfessionalSum
 }
 
 // IDs executes the query and returns a list of ProfessionalSummary IDs.
-func (_q *ProfessionalSummaryQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *ProfessionalSummaryQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -190,7 +215,7 @@ func (_q *ProfessionalSummaryQuery) IDs(ctx context.Context) (ids []int, err err
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *ProfessionalSummaryQuery) IDsX(ctx context.Context) []int {
+func (_q *ProfessionalSummaryQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -250,14 +275,38 @@ func (_q *ProfessionalSummaryQuery) Clone() *ProfessionalSummaryQuery {
 		order:      append([]professionalsummary.OrderOption{}, _q.order...),
 		inters:     append([]Interceptor{}, _q.inters...),
 		predicates: append([]predicate.ProfessionalSummary{}, _q.predicates...),
+		withResume: _q.withResume.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
 	}
 }
 
+// WithResume tells the query-builder to eager-load the nodes that are connected to
+// the "resume" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProfessionalSummaryQuery) WithResume(opts ...func(*ResumeQuery)) *ProfessionalSummaryQuery {
+	query := (&ResumeClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withResume = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		ResumeId uuid.UUID `json:"resumeId,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.ProfessionalSummary.Query().
+//		GroupBy(professionalsummary.FieldResumeId).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (_q *ProfessionalSummaryQuery) GroupBy(field string, fields ...string) *ProfessionalSummaryGroupBy {
 	_q.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ProfessionalSummaryGroupBy{build: _q}
@@ -269,6 +318,16 @@ func (_q *ProfessionalSummaryQuery) GroupBy(field string, fields ...string) *Pro
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		ResumeId uuid.UUID `json:"resumeId,omitempty"`
+//	}
+//
+//	client.ProfessionalSummary.Query().
+//		Select(professionalsummary.FieldResumeId).
+//		Scan(ctx, &v)
 func (_q *ProfessionalSummaryQuery) Select(fields ...string) *ProfessionalSummarySelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
 	sbuild := &ProfessionalSummarySelect{ProfessionalSummaryQuery: _q}
@@ -310,8 +369,11 @@ func (_q *ProfessionalSummaryQuery) prepareQuery(ctx context.Context) error {
 
 func (_q *ProfessionalSummaryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*ProfessionalSummary, error) {
 	var (
-		nodes = []*ProfessionalSummary{}
-		_spec = _q.querySpec()
+		nodes       = []*ProfessionalSummary{}
+		_spec       = _q.querySpec()
+		loadedTypes = [1]bool{
+			_q.withResume != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*ProfessionalSummary).scanValues(nil, columns)
@@ -319,6 +381,7 @@ func (_q *ProfessionalSummaryQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &ProfessionalSummary{config: _q.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -330,7 +393,43 @@ func (_q *ProfessionalSummaryQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withResume; query != nil {
+		if err := _q.loadResume(ctx, query, nodes, nil,
+			func(n *ProfessionalSummary, e *Resume) { n.Edges.Resume = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (_q *ProfessionalSummaryQuery) loadResume(ctx context.Context, query *ResumeQuery, nodes []*ProfessionalSummary, init func(*ProfessionalSummary), assign func(*ProfessionalSummary, *Resume)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*ProfessionalSummary)
+	for i := range nodes {
+		fk := nodes[i].ResumeId
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(resume.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "resumeId" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (_q *ProfessionalSummaryQuery) sqlCount(ctx context.Context) (int, error) {
@@ -343,7 +442,7 @@ func (_q *ProfessionalSummaryQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *ProfessionalSummaryQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(professionalsummary.Table, professionalsummary.Columns, sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(professionalsummary.Table, professionalsummary.Columns, sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeUUID))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
@@ -357,6 +456,9 @@ func (_q *ProfessionalSummaryQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != professionalsummary.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if _q.withResume != nil {
+			_spec.Node.AddColumnOnce(professionalsummary.FieldResumeId)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

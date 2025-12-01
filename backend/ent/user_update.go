@@ -7,11 +7,14 @@ import (
 	"errors"
 	"fmt"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
 	"resume-builder-backend/ent/user"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // UserUpdate is the builder for updating User entities.
@@ -27,13 +30,126 @@ func (_u *UserUpdate) Where(ps ...predicate.User) *UserUpdate {
 	return _u
 }
 
+// SetEmail sets the "email" field.
+func (_u *UserUpdate) SetEmail(v string) *UserUpdate {
+	_u.mutation.SetEmail(v)
+	return _u
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableEmail(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetEmail(*v)
+	}
+	return _u
+}
+
+// SetPasswordHash sets the "passwordHash" field.
+func (_u *UserUpdate) SetPasswordHash(v string) *UserUpdate {
+	_u.mutation.SetPasswordHash(v)
+	return _u
+}
+
+// SetNillablePasswordHash sets the "passwordHash" field if the given value is not nil.
+func (_u *UserUpdate) SetNillablePasswordHash(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetPasswordHash(*v)
+	}
+	return _u
+}
+
+// SetFirstName sets the "firstName" field.
+func (_u *UserUpdate) SetFirstName(v string) *UserUpdate {
+	_u.mutation.SetFirstName(v)
+	return _u
+}
+
+// SetNillableFirstName sets the "firstName" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableFirstName(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetFirstName(*v)
+	}
+	return _u
+}
+
+// SetLastName sets the "lastName" field.
+func (_u *UserUpdate) SetLastName(v string) *UserUpdate {
+	_u.mutation.SetLastName(v)
+	return _u
+}
+
+// SetNillableLastName sets the "lastName" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableLastName(v *string) *UserUpdate {
+	if v != nil {
+		_u.SetLastName(*v)
+	}
+	return _u
+}
+
+// SetIsActive sets the "isActive" field.
+func (_u *UserUpdate) SetIsActive(v bool) *UserUpdate {
+	_u.mutation.SetIsActive(v)
+	return _u
+}
+
+// SetNillableIsActive sets the "isActive" field if the given value is not nil.
+func (_u *UserUpdate) SetNillableIsActive(v *bool) *UserUpdate {
+	if v != nil {
+		_u.SetIsActive(*v)
+	}
+	return _u
+}
+
+// SetUpdatedAt sets the "updatedAt" field.
+func (_u *UserUpdate) SetUpdatedAt(v time.Time) *UserUpdate {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
+}
+
+// AddResumeIDs adds the "resumes" edge to the Resume entity by IDs.
+func (_u *UserUpdate) AddResumeIDs(ids ...uuid.UUID) *UserUpdate {
+	_u.mutation.AddResumeIDs(ids...)
+	return _u
+}
+
+// AddResumes adds the "resumes" edges to the Resume entity.
+func (_u *UserUpdate) AddResumes(v ...*Resume) *UserUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddResumeIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (_u *UserUpdate) Mutation() *UserMutation {
 	return _u.mutation
 }
 
+// ClearResumes clears all "resumes" edges to the Resume entity.
+func (_u *UserUpdate) ClearResumes() *UserUpdate {
+	_u.mutation.ClearResumes()
+	return _u
+}
+
+// RemoveResumeIDs removes the "resumes" edge to Resume entities by IDs.
+func (_u *UserUpdate) RemoveResumeIDs(ids ...uuid.UUID) *UserUpdate {
+	_u.mutation.RemoveResumeIDs(ids...)
+	return _u
+}
+
+// RemoveResumes removes "resumes" edges to Resume entities.
+func (_u *UserUpdate) RemoveResumes(v ...*Resume) *UserUpdate {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveResumeIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *UserUpdate) Save(ctx context.Context) (int, error) {
+	_u.defaults()
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -59,14 +175,113 @@ func (_u *UserUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_u *UserUpdate) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
+		v := user.UpdateDefaultUpdatedAt()
+		_u.mutation.SetUpdatedAt(v)
+	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (_u *UserUpdate) check() error {
+	if v, ok := _u.mutation.Email(); ok {
+		if err := user.EmailValidator(v); err != nil {
+			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.PasswordHash(); ok {
+		if err := user.PasswordHashValidator(v); err != nil {
+			return &ValidationError{Name: "passwordHash", err: fmt.Errorf(`ent: validator failed for field "User.passwordHash": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.FirstName(); ok {
+		if err := user.FirstNameValidator(v); err != nil {
+			return &ValidationError{Name: "firstName", err: fmt.Errorf(`ent: validator failed for field "User.firstName": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.LastName(); ok {
+		if err := user.LastNameValidator(v); err != nil {
+			return &ValidationError{Name: "lastName", err: fmt.Errorf(`ent: validator failed for field "User.lastName": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Email(); ok {
+		_spec.SetField(user.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.PasswordHash(); ok {
+		_spec.SetField(user.FieldPasswordHash, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.FirstName(); ok {
+		_spec.SetField(user.FieldFirstName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.LastName(); ok {
+		_spec.SetField(user.FieldLastName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.IsActive(); ok {
+		_spec.SetField(user.FieldIsActive, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.UpdatedAt(); ok {
+		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ResumesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ResumesTable,
+			Columns: []string{user.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedResumesIDs(); len(nodes) > 0 && !_u.mutation.ResumesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ResumesTable,
+			Columns: []string{user.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ResumesTable,
+			Columns: []string{user.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +303,121 @@ type UserUpdateOne struct {
 	mutation *UserMutation
 }
 
+// SetEmail sets the "email" field.
+func (_u *UserUpdateOne) SetEmail(v string) *UserUpdateOne {
+	_u.mutation.SetEmail(v)
+	return _u
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableEmail(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetEmail(*v)
+	}
+	return _u
+}
+
+// SetPasswordHash sets the "passwordHash" field.
+func (_u *UserUpdateOne) SetPasswordHash(v string) *UserUpdateOne {
+	_u.mutation.SetPasswordHash(v)
+	return _u
+}
+
+// SetNillablePasswordHash sets the "passwordHash" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillablePasswordHash(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetPasswordHash(*v)
+	}
+	return _u
+}
+
+// SetFirstName sets the "firstName" field.
+func (_u *UserUpdateOne) SetFirstName(v string) *UserUpdateOne {
+	_u.mutation.SetFirstName(v)
+	return _u
+}
+
+// SetNillableFirstName sets the "firstName" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableFirstName(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetFirstName(*v)
+	}
+	return _u
+}
+
+// SetLastName sets the "lastName" field.
+func (_u *UserUpdateOne) SetLastName(v string) *UserUpdateOne {
+	_u.mutation.SetLastName(v)
+	return _u
+}
+
+// SetNillableLastName sets the "lastName" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableLastName(v *string) *UserUpdateOne {
+	if v != nil {
+		_u.SetLastName(*v)
+	}
+	return _u
+}
+
+// SetIsActive sets the "isActive" field.
+func (_u *UserUpdateOne) SetIsActive(v bool) *UserUpdateOne {
+	_u.mutation.SetIsActive(v)
+	return _u
+}
+
+// SetNillableIsActive sets the "isActive" field if the given value is not nil.
+func (_u *UserUpdateOne) SetNillableIsActive(v *bool) *UserUpdateOne {
+	if v != nil {
+		_u.SetIsActive(*v)
+	}
+	return _u
+}
+
+// SetUpdatedAt sets the "updatedAt" field.
+func (_u *UserUpdateOne) SetUpdatedAt(v time.Time) *UserUpdateOne {
+	_u.mutation.SetUpdatedAt(v)
+	return _u
+}
+
+// AddResumeIDs adds the "resumes" edge to the Resume entity by IDs.
+func (_u *UserUpdateOne) AddResumeIDs(ids ...uuid.UUID) *UserUpdateOne {
+	_u.mutation.AddResumeIDs(ids...)
+	return _u
+}
+
+// AddResumes adds the "resumes" edges to the Resume entity.
+func (_u *UserUpdateOne) AddResumes(v ...*Resume) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddResumeIDs(ids...)
+}
+
 // Mutation returns the UserMutation object of the builder.
 func (_u *UserUpdateOne) Mutation() *UserMutation {
 	return _u.mutation
+}
+
+// ClearResumes clears all "resumes" edges to the Resume entity.
+func (_u *UserUpdateOne) ClearResumes() *UserUpdateOne {
+	_u.mutation.ClearResumes()
+	return _u
+}
+
+// RemoveResumeIDs removes the "resumes" edge to Resume entities by IDs.
+func (_u *UserUpdateOne) RemoveResumeIDs(ids ...uuid.UUID) *UserUpdateOne {
+	_u.mutation.RemoveResumeIDs(ids...)
+	return _u
+}
+
+// RemoveResumes removes "resumes" edges to Resume entities.
+func (_u *UserUpdateOne) RemoveResumes(v ...*Resume) *UserUpdateOne {
+	ids := make([]uuid.UUID, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveResumeIDs(ids...)
 }
 
 // Where appends a list predicates to the UserUpdate builder.
@@ -108,6 +435,7 @@ func (_u *UserUpdateOne) Select(field string, fields ...string) *UserUpdateOne {
 
 // Save executes the query and returns the updated User entity.
 func (_u *UserUpdateOne) Save(ctx context.Context) (*User, error) {
+	_u.defaults()
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -133,8 +461,44 @@ func (_u *UserUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_u *UserUpdateOne) defaults() {
+	if _, ok := _u.mutation.UpdatedAt(); !ok {
+		v := user.UpdateDefaultUpdatedAt()
+		_u.mutation.SetUpdatedAt(v)
+	}
+}
+
+// check runs all checks and user-defined validators on the builder.
+func (_u *UserUpdateOne) check() error {
+	if v, ok := _u.mutation.Email(); ok {
+		if err := user.EmailValidator(v); err != nil {
+			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "User.email": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.PasswordHash(); ok {
+		if err := user.PasswordHashValidator(v); err != nil {
+			return &ValidationError{Name: "passwordHash", err: fmt.Errorf(`ent: validator failed for field "User.passwordHash": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.FirstName(); ok {
+		if err := user.FirstNameValidator(v); err != nil {
+			return &ValidationError{Name: "firstName", err: fmt.Errorf(`ent: validator failed for field "User.firstName": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.LastName(); ok {
+		if err := user.LastNameValidator(v); err != nil {
+			return &ValidationError{Name: "lastName", err: fmt.Errorf(`ent: validator failed for field "User.lastName": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
-	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(user.Table, user.Columns, sqlgraph.NewFieldSpec(user.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "User.id" for update`)}
@@ -158,6 +522,69 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Email(); ok {
+		_spec.SetField(user.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.PasswordHash(); ok {
+		_spec.SetField(user.FieldPasswordHash, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.FirstName(); ok {
+		_spec.SetField(user.FieldFirstName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.LastName(); ok {
+		_spec.SetField(user.FieldLastName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.IsActive(); ok {
+		_spec.SetField(user.FieldIsActive, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.UpdatedAt(); ok {
+		_spec.SetField(user.FieldUpdatedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ResumesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ResumesTable,
+			Columns: []string{user.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedResumesIDs(); len(nodes) > 0 && !_u.mutation.ResumesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ResumesTable,
+			Columns: []string{user.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ResumesTable,
+			Columns: []string{user.ResumesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &User{config: _u.config}
 	_spec.Assign = _node.assignValues

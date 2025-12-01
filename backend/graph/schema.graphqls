@@ -2,27 +2,246 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
-
 type User {
   id: ID!
+  email: String!
+  firstName: String!
+  lastname: String!
+  resumes: [Resume!]!
+}
+
+type Resume {
+  id: ID!
+  title: String!
+  template: Template!
+  isAiGenerated: Boolean!
+  headerContactInfo: HeaderContactInfo!
+  professionalSummary: ProfessionalSummary
+  experiences: [Experience!]!
+  educations: [Education!]!
+  skills: [Skill!]!
+  projects: [Project!]!
+  certifications: [Certification!]!
+  achievements: [Achievement!]!
+  hobbies: [Hobby!]!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type HeaderContactInfo {
+  id: ID!
+  fullName: String!
+  professionalTitle: String
+  email: String!
+  phone: String
+  address: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
+  linkedinUrl: String
+  githubUrl: String
+  portfolioUrl: String
+  personalWebsite: String
+}
+
+type ProfessionalSummary {
+  id: ID!
+  summary: String!
+  yearsOfExperience: Int
+  keyStrengths: [String!]
+  careerObjective: String
+}
+
+type Experience {
+  id: ID!
+  companyName: String!
+  position: String!
+  startDate: Time!
+  endDate: Time
+  isCurrent: Boolean!
+  description: String!
+  location: String
+  achievements: [String!]
+  technologiesUsed: [String!]
+  orderIndex: Int!
+}
+
+type Education {
+  id: ID!
+  institutionName: String!
+  degree: String!
+  fieldOfStudy: String!
+  startDate: Time!
+  endDate: Time
+  gpa: String
+  location: String
+  relevantCoursework: [String!]
+  description: String
+  orderIndex: Int!
+}
+
+type Skill {
+  id: ID!
   name: String!
+  category: String!
+  skillType: SkillType!
+  proficiencyLevel: ProficiencyLevel!
+  yearsOfExperience: Int
+  orderIndex: Int!
 }
 
-type Query {
-  todos: [Todo!]!
+type Project {
+  id: ID!
+  title: String!
+  description: String!
+  startDate: Time
+  endDate: Time
+  projectUrl: String
+  githubUrl: String
+  demoUrl: String
+  technologiesUsed: [String!]!
+  keyFeatures: [String!]
+  role: String
+  teamSize: Int
+  orderIndex: Int!
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
+type Certification {
+  id: ID!
+  name: String!
+  issuingOrganization: String!
+  issueDate: Time!
+  expiryDate: Time
+  credentialId: String
+  description: String
+  orderIndex: Int!
 }
 
+type Achievement {
+  id: ID!
+  title: String!
+  description: String!
+  dateAchieved: Time
+  issuingOrganization: String
+  achievementType: AchievementType!
+  achievementUrl: String
+  impactMetrics: String
+  orderIndex: Int!
+}
+
+type Hobby {
+  id: ID!
+  name: String!
+  description: String
+  skillLevel: String
+  yearsInvolved: Int
+  achievements: String
+  orderIndex: Int!
+}
+
+type Template {
+  id: ID!
+  name: String!
+  description: String!
+  htmlTemplate: String!
+  cssStyles: String!
+  previewImage: String
+}
+
+enum SkillType {
+  TECHNICAL
+  SOFT
+}
+
+enum ProficiencyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum AchievementType {
+  AWARD
+  RECOGNITION
+  PUBLICATION
+  PATENT
+  PROMOTION
+  PERFORMANCE
+  LEADERSHIP
+  OTHER
+}
+
+# Mutations
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  # Auth
+  register(input: RegisterInput!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+
+  # Resume Management
+  createResume(input: CreateResumeInput!): Resume!
+  updateResume(id: ID!, input: UpdateResumeInput!): Resume!
+  deleteResume(id: ID!): Boolean!
+  generateAIResume(input: GenerateAIResumeInput!): Resume!
+
+  # Header / Contact Information
+  updateHeaderContactInfo(
+    input: UpdateHeaderContactInfoInput!
+  ): HeaderContactInfo!
+
+  # Professional Summary
+  updateProfessionalSummary(
+    input: UpdateProfessionalSummaryInput!
+  ): ProfessionalSummary!
+
+  # Experience
+  createExperience(input: CreateExperienceInput!): Experience!
+  updateExperience(id: ID!, input: UpdateExperienceInput!): Experience!
+  deleteExperience(id: ID!): Boolean!
+  reorderExperiences(resumeId: ID!, experienceIds: [ID!]!): Boolean!
+
+  # Education
+  createEducation(input: CreateEducationInput!): Education!
+  updateEducation(id: ID!, input: UpdateEducationInput!): Education!
+  deleteEducation(id: ID!): Boolean!
+  reorderEducations(resumeId: ID!, educationIds: [ID!]!): Boolean!
+
+  # Skills
+  createSkill(input: CreateSkillInput!): Skill!
+  updateSkill(id: ID!, input: UpdateSkillInput!): Skill!
+  deleteSkill(id: ID!): Boolean!
+  reorderSkills(resumeId: ID!, skillIds: [ID!]!): Boolean!
+
+  # Projects
+  createProject(input: CreateProjectInput!): Project!
+  updateProject(id: ID!, input: UpdateProjectInput!): Project!
+  deleteProject(id: ID!): Boolean!
+  reorderProjects(resumeId: ID!, projectIds: [ID!]!): Boolean!
+
+  # Certifications
+  createCertification(input: CreateCertificationInput!): Certification!
+  updateCertification(id: ID!, input: UpdateCertificationInput!): Certification!
+  deleteCertification(id: ID!): Boolean!
+  reorderCertifications(resumeId: ID!, certificationIds: [ID!]!): Boolean!
+
+  # Achievements
+  createAchievement(input: CreateAchievementInput!): Achievement!
+  updateAchievement(id: ID!, input: UpdateAchievementInput!): Achievement!
+  deleteAchievement(id: ID!): Boolean!
+  reorderAchievements(resumeId: ID!, achievementIds: [ID!]!): Boolean!
+
+  # Hobbies
+  createHobby(input: CreateHobbyInput!): Hobby!
+  updateHobby(id: ID!, input: UpdateHobbyInput!): Hobby!
+  deleteHobby(id: ID!): Boolean!
+  reorderHobbies(resumeId: ID!, hobbyIds: [ID!]!): Boolean!
+}
+
+# Queries
+type Query {
+  me: User!
+  resume(id: ID!): Resume!
+  resumes: [Resume!]!
+  templates: [Template!]!
+  template(id: ID!): Template!
 }

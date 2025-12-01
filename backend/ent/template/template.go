@@ -4,6 +4,8 @@ package template
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +13,40 @@ const (
 	Label = "template"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldName holds the string denoting the name field in the database.
+	FieldName = "name"
+	// FieldDescription holds the string denoting the description field in the database.
+	FieldDescription = "description"
+	// FieldHtmlTemplate holds the string denoting the htmltemplate field in the database.
+	FieldHtmlTemplate = "html_template"
+	// FieldCssStyles holds the string denoting the cssstyles field in the database.
+	FieldCssStyles = "css_styles"
+	// FieldIsActive holds the string denoting the isactive field in the database.
+	FieldIsActive = "is_active"
+	// FieldPreviewImage holds the string denoting the previewimage field in the database.
+	FieldPreviewImage = "preview_image"
+	// EdgeResumes holds the string denoting the resumes edge name in mutations.
+	EdgeResumes = "resumes"
 	// Table holds the table name of the template in the database.
 	Table = "templates"
+	// ResumesTable is the table that holds the resumes relation/edge.
+	ResumesTable = "resumes"
+	// ResumesInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumesInverseTable = "resumes"
+	// ResumesColumn is the table column denoting the resumes relation/edge.
+	ResumesColumn = "template_id"
 )
 
 // Columns holds all SQL columns for template fields.
 var Columns = []string{
 	FieldID,
+	FieldName,
+	FieldDescription,
+	FieldHtmlTemplate,
+	FieldCssStyles,
+	FieldIsActive,
+	FieldPreviewImage,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -30,10 +59,74 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// NameValidator is a validator for the "name" field. It is called by the builders before save.
+	NameValidator func(string) error
+	// HtmlTemplateValidator is a validator for the "htmlTemplate" field. It is called by the builders before save.
+	HtmlTemplateValidator func(string) error
+	// CssStylesValidator is a validator for the "cssStyles" field. It is called by the builders before save.
+	CssStylesValidator func(string) error
+	// DefaultIsActive holds the default value on creation for the "isActive" field.
+	DefaultIsActive bool
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
+
 // OrderOption defines the ordering options for the Template queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByName orders the results by the name field.
+func ByName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByDescription orders the results by the description field.
+func ByDescription(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDescription, opts...).ToFunc()
+}
+
+// ByHtmlTemplate orders the results by the htmlTemplate field.
+func ByHtmlTemplate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHtmlTemplate, opts...).ToFunc()
+}
+
+// ByCssStyles orders the results by the cssStyles field.
+func ByCssStyles(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCssStyles, opts...).ToFunc()
+}
+
+// ByIsActive orders the results by the isActive field.
+func ByIsActive(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsActive, opts...).ToFunc()
+}
+
+// ByPreviewImage orders the results by the previewImage field.
+func ByPreviewImage(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPreviewImage, opts...).ToFunc()
+}
+
+// ByResumesCount orders the results by resumes count.
+func ByResumesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newResumesStep(), opts...)
+	}
+}
+
+// ByResumes orders the results by resumes terms.
+func ByResumes(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newResumesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ResumesTable, ResumesColumn),
+	)
 }

@@ -3,7 +3,11 @@
 package resume
 
 import (
+	"time"
+
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +15,136 @@ const (
 	Label = "resume"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldUserId holds the string denoting the userid field in the database.
+	FieldUserId = "user_id"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
+	// FieldTemplateId holds the string denoting the templateid field in the database.
+	FieldTemplateId = "template_id"
+	// FieldIsAiGenerated holds the string denoting the isaigenerated field in the database.
+	FieldIsAiGenerated = "is_ai_generated"
+	// FieldIsPublic holds the string denoting the ispublic field in the database.
+	FieldIsPublic = "is_public"
+	// FieldContent holds the string denoting the content field in the database.
+	FieldContent = "content"
+	// FieldCreatedAt holds the string denoting the createdat field in the database.
+	FieldCreatedAt = "created_at"
+	// FieldUpdatedAt holds the string denoting the updatedat field in the database.
+	FieldUpdatedAt = "updated_at"
+	// EdgeUser holds the string denoting the user edge name in mutations.
+	EdgeUser = "user"
+	// EdgeTemplate holds the string denoting the template edge name in mutations.
+	EdgeTemplate = "template"
+	// EdgeHeaderContanctInfo holds the string denoting the headercontanctinfo edge name in mutations.
+	EdgeHeaderContanctInfo = "headerContanctInfo"
+	// EdgeProfessionalSummary holds the string denoting the professionalsummary edge name in mutations.
+	EdgeProfessionalSummary = "professionalSummary"
+	// EdgeExperiences holds the string denoting the experiences edge name in mutations.
+	EdgeExperiences = "experiences"
+	// EdgeEducations holds the string denoting the educations edge name in mutations.
+	EdgeEducations = "educations"
+	// EdgeSkills holds the string denoting the skills edge name in mutations.
+	EdgeSkills = "skills"
+	// EdgeProjects holds the string denoting the projects edge name in mutations.
+	EdgeProjects = "projects"
+	// EdgeCertifications holds the string denoting the certifications edge name in mutations.
+	EdgeCertifications = "certifications"
+	// EdgeAchievements holds the string denoting the achievements edge name in mutations.
+	EdgeAchievements = "achievements"
+	// EdgeHobbies holds the string denoting the hobbies edge name in mutations.
+	EdgeHobbies = "hobbies"
 	// Table holds the table name of the resume in the database.
 	Table = "resumes"
+	// UserTable is the table that holds the user relation/edge.
+	UserTable = "resumes"
+	// UserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	UserInverseTable = "users"
+	// UserColumn is the table column denoting the user relation/edge.
+	UserColumn = "user_id"
+	// TemplateTable is the table that holds the template relation/edge.
+	TemplateTable = "resumes"
+	// TemplateInverseTable is the table name for the Template entity.
+	// It exists in this package in order to avoid circular dependency with the "template" package.
+	TemplateInverseTable = "templates"
+	// TemplateColumn is the table column denoting the template relation/edge.
+	TemplateColumn = "template_id"
+	// HeaderContanctInfoTable is the table that holds the headerContanctInfo relation/edge.
+	HeaderContanctInfoTable = "header_contact_infos"
+	// HeaderContanctInfoInverseTable is the table name for the HeaderContactInfo entity.
+	// It exists in this package in order to avoid circular dependency with the "headercontactinfo" package.
+	HeaderContanctInfoInverseTable = "header_contact_infos"
+	// HeaderContanctInfoColumn is the table column denoting the headerContanctInfo relation/edge.
+	HeaderContanctInfoColumn = "resume_header_contanct_info"
+	// ProfessionalSummaryTable is the table that holds the professionalSummary relation/edge.
+	ProfessionalSummaryTable = "professional_summaries"
+	// ProfessionalSummaryInverseTable is the table name for the ProfessionalSummary entity.
+	// It exists in this package in order to avoid circular dependency with the "professionalsummary" package.
+	ProfessionalSummaryInverseTable = "professional_summaries"
+	// ProfessionalSummaryColumn is the table column denoting the professionalSummary relation/edge.
+	ProfessionalSummaryColumn = "resume_id"
+	// ExperiencesTable is the table that holds the experiences relation/edge.
+	ExperiencesTable = "experiences"
+	// ExperiencesInverseTable is the table name for the Experience entity.
+	// It exists in this package in order to avoid circular dependency with the "experience" package.
+	ExperiencesInverseTable = "experiences"
+	// ExperiencesColumn is the table column denoting the experiences relation/edge.
+	ExperiencesColumn = "resume_experiences"
+	// EducationsTable is the table that holds the educations relation/edge.
+	EducationsTable = "educations"
+	// EducationsInverseTable is the table name for the Education entity.
+	// It exists in this package in order to avoid circular dependency with the "education" package.
+	EducationsInverseTable = "educations"
+	// EducationsColumn is the table column denoting the educations relation/edge.
+	EducationsColumn = "resume_educations"
+	// SkillsTable is the table that holds the skills relation/edge.
+	SkillsTable = "skills"
+	// SkillsInverseTable is the table name for the Skill entity.
+	// It exists in this package in order to avoid circular dependency with the "skill" package.
+	SkillsInverseTable = "skills"
+	// SkillsColumn is the table column denoting the skills relation/edge.
+	SkillsColumn = "resume_skills"
+	// ProjectsTable is the table that holds the projects relation/edge.
+	ProjectsTable = "projects"
+	// ProjectsInverseTable is the table name for the Project entity.
+	// It exists in this package in order to avoid circular dependency with the "project" package.
+	ProjectsInverseTable = "projects"
+	// ProjectsColumn is the table column denoting the projects relation/edge.
+	ProjectsColumn = "resume_projects"
+	// CertificationsTable is the table that holds the certifications relation/edge.
+	CertificationsTable = "certifications"
+	// CertificationsInverseTable is the table name for the Certification entity.
+	// It exists in this package in order to avoid circular dependency with the "certification" package.
+	CertificationsInverseTable = "certifications"
+	// CertificationsColumn is the table column denoting the certifications relation/edge.
+	CertificationsColumn = "resume_certifications"
+	// AchievementsTable is the table that holds the achievements relation/edge.
+	AchievementsTable = "achievements"
+	// AchievementsInverseTable is the table name for the Achievement entity.
+	// It exists in this package in order to avoid circular dependency with the "achievement" package.
+	AchievementsInverseTable = "achievements"
+	// AchievementsColumn is the table column denoting the achievements relation/edge.
+	AchievementsColumn = "resume_achievements"
+	// HobbiesTable is the table that holds the hobbies relation/edge.
+	HobbiesTable = "hobbies"
+	// HobbiesInverseTable is the table name for the Hobby entity.
+	// It exists in this package in order to avoid circular dependency with the "hobby" package.
+	HobbiesInverseTable = "hobbies"
+	// HobbiesColumn is the table column denoting the hobbies relation/edge.
+	HobbiesColumn = "resume_hobbies"
 )
 
 // Columns holds all SQL columns for resume fields.
 var Columns = []string{
 	FieldID,
+	FieldUserId,
+	FieldTitle,
+	FieldTemplateId,
+	FieldIsAiGenerated,
+	FieldIsPublic,
+	FieldContent,
+	FieldCreatedAt,
+	FieldUpdatedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -30,10 +157,265 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	TitleValidator func(string) error
+	// DefaultIsAiGenerated holds the default value on creation for the "isAiGenerated" field.
+	DefaultIsAiGenerated bool
+	// DefaultIsPublic holds the default value on creation for the "isPublic" field.
+	DefaultIsPublic bool
+	// DefaultCreatedAt holds the default value on creation for the "createdAt" field.
+	DefaultCreatedAt func() time.Time
+	// DefaultUpdatedAt holds the default value on creation for the "updatedAt" field.
+	DefaultUpdatedAt func() time.Time
+	// UpdateDefaultUpdatedAt holds the default value on update for the "updatedAt" field.
+	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
+
 // OrderOption defines the ordering options for the Resume queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByUserId orders the results by the userId field.
+func ByUserId(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUserId, opts...).ToFunc()
+}
+
+// ByTitle orders the results by the title field.
+func ByTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTitle, opts...).ToFunc()
+}
+
+// ByTemplateId orders the results by the templateId field.
+func ByTemplateId(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTemplateId, opts...).ToFunc()
+}
+
+// ByIsAiGenerated orders the results by the isAiGenerated field.
+func ByIsAiGenerated(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsAiGenerated, opts...).ToFunc()
+}
+
+// ByIsPublic orders the results by the isPublic field.
+func ByIsPublic(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsPublic, opts...).ToFunc()
+}
+
+// ByCreatedAt orders the results by the createdAt field.
+func ByCreatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCreatedAt, opts...).ToFunc()
+}
+
+// ByUpdatedAt orders the results by the updatedAt field.
+func ByUpdatedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUpdatedAt, opts...).ToFunc()
+}
+
+// ByUserField orders the results by user field.
+func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByTemplateField orders the results by template field.
+func ByTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTemplateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByHeaderContanctInfoField orders the results by headerContanctInfo field.
+func ByHeaderContanctInfoField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHeaderContanctInfoStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByProfessionalSummaryField orders the results by professionalSummary field.
+func ByProfessionalSummaryField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProfessionalSummaryStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByExperiencesCount orders the results by experiences count.
+func ByExperiencesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newExperiencesStep(), opts...)
+	}
+}
+
+// ByExperiences orders the results by experiences terms.
+func ByExperiences(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newExperiencesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEducationsCount orders the results by educations count.
+func ByEducationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEducationsStep(), opts...)
+	}
+}
+
+// ByEducations orders the results by educations terms.
+func ByEducations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEducationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySkillsCount orders the results by skills count.
+func BySkillsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSkillsStep(), opts...)
+	}
+}
+
+// BySkills orders the results by skills terms.
+func BySkills(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSkillsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProjectsCount orders the results by projects count.
+func ByProjectsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProjectsStep(), opts...)
+	}
+}
+
+// ByProjects orders the results by projects terms.
+func ByProjects(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProjectsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCertificationsCount orders the results by certifications count.
+func ByCertificationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCertificationsStep(), opts...)
+	}
+}
+
+// ByCertifications orders the results by certifications terms.
+func ByCertifications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCertificationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAchievementsCount orders the results by achievements count.
+func ByAchievementsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAchievementsStep(), opts...)
+	}
+}
+
+// ByAchievements orders the results by achievements terms.
+func ByAchievements(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAchievementsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByHobbiesCount orders the results by hobbies count.
+func ByHobbiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newHobbiesStep(), opts...)
+	}
+}
+
+// ByHobbies orders the results by hobbies terms.
+func ByHobbies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newHobbiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+func newUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+	)
+}
+func newTemplateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TemplateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
+	)
+}
+func newHeaderContanctInfoStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HeaderContanctInfoInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, HeaderContanctInfoTable, HeaderContanctInfoColumn),
+	)
+}
+func newProfessionalSummaryStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProfessionalSummaryInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, ProfessionalSummaryTable, ProfessionalSummaryColumn),
+	)
+}
+func newExperiencesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ExperiencesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ExperiencesTable, ExperiencesColumn),
+	)
+}
+func newEducationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EducationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EducationsTable, EducationsColumn),
+	)
+}
+func newSkillsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SkillsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SkillsTable, SkillsColumn),
+	)
+}
+func newProjectsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProjectsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProjectsTable, ProjectsColumn),
+	)
+}
+func newCertificationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CertificationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CertificationsTable, CertificationsColumn),
+	)
+}
+func newAchievementsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AchievementsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AchievementsTable, AchievementsColumn),
+	)
+}
+func newHobbiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(HobbiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, HobbiesTable, HobbiesColumn),
+	)
 }

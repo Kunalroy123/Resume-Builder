@@ -4,11 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"resume-builder-backend/ent/professionalsummary"
+	"resume-builder-backend/ent/resume"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ProfessionalSummaryCreate is the builder for creating a ProfessionalSummary entity.
@@ -18,6 +21,77 @@ type ProfessionalSummaryCreate struct {
 	hooks    []Hook
 }
 
+// SetResumeId sets the "resumeId" field.
+func (_c *ProfessionalSummaryCreate) SetResumeId(v uuid.UUID) *ProfessionalSummaryCreate {
+	_c.mutation.SetResumeId(v)
+	return _c
+}
+
+// SetSummary sets the "summary" field.
+func (_c *ProfessionalSummaryCreate) SetSummary(v string) *ProfessionalSummaryCreate {
+	_c.mutation.SetSummary(v)
+	return _c
+}
+
+// SetYearsOfExperience sets the "yearsOfExperience" field.
+func (_c *ProfessionalSummaryCreate) SetYearsOfExperience(v int) *ProfessionalSummaryCreate {
+	_c.mutation.SetYearsOfExperience(v)
+	return _c
+}
+
+// SetNillableYearsOfExperience sets the "yearsOfExperience" field if the given value is not nil.
+func (_c *ProfessionalSummaryCreate) SetNillableYearsOfExperience(v *int) *ProfessionalSummaryCreate {
+	if v != nil {
+		_c.SetYearsOfExperience(*v)
+	}
+	return _c
+}
+
+// SetKeyStrengths sets the "keyStrengths" field.
+func (_c *ProfessionalSummaryCreate) SetKeyStrengths(v []string) *ProfessionalSummaryCreate {
+	_c.mutation.SetKeyStrengths(v)
+	return _c
+}
+
+// SetCareerObjective sets the "careerObjective" field.
+func (_c *ProfessionalSummaryCreate) SetCareerObjective(v string) *ProfessionalSummaryCreate {
+	_c.mutation.SetCareerObjective(v)
+	return _c
+}
+
+// SetNillableCareerObjective sets the "careerObjective" field if the given value is not nil.
+func (_c *ProfessionalSummaryCreate) SetNillableCareerObjective(v *string) *ProfessionalSummaryCreate {
+	if v != nil {
+		_c.SetCareerObjective(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *ProfessionalSummaryCreate) SetID(v uuid.UUID) *ProfessionalSummaryCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *ProfessionalSummaryCreate) SetNillableID(v *uuid.UUID) *ProfessionalSummaryCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *ProfessionalSummaryCreate) SetResumeID(id uuid.UUID) *ProfessionalSummaryCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *ProfessionalSummaryCreate) SetResume(v *Resume) *ProfessionalSummaryCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the ProfessionalSummaryMutation object of the builder.
 func (_c *ProfessionalSummaryCreate) Mutation() *ProfessionalSummaryMutation {
 	return _c.mutation
@@ -25,6 +99,7 @@ func (_c *ProfessionalSummaryCreate) Mutation() *ProfessionalSummaryMutation {
 
 // Save creates the ProfessionalSummary in the database.
 func (_c *ProfessionalSummaryCreate) Save(ctx context.Context) (*ProfessionalSummary, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +125,30 @@ func (_c *ProfessionalSummaryCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *ProfessionalSummaryCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
+		v := professionalsummary.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *ProfessionalSummaryCreate) check() error {
+	if _, ok := _c.mutation.ResumeId(); !ok {
+		return &ValidationError{Name: "resumeId", err: errors.New(`ent: missing required field "ProfessionalSummary.resumeId"`)}
+	}
+	if _, ok := _c.mutation.Summary(); !ok {
+		return &ValidationError{Name: "summary", err: errors.New(`ent: missing required field "ProfessionalSummary.summary"`)}
+	}
+	if v, ok := _c.mutation.Summary(); ok {
+		if err := professionalsummary.SummaryValidator(v); err != nil {
+			return &ValidationError{Name: "summary", err: fmt.Errorf(`ent: validator failed for field "ProfessionalSummary.summary": %w`, err)}
+		}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "ProfessionalSummary.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +163,13 @@ func (_c *ProfessionalSummaryCreate) sqlSave(ctx context.Context) (*Professional
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +178,45 @@ func (_c *ProfessionalSummaryCreate) sqlSave(ctx context.Context) (*Professional
 func (_c *ProfessionalSummaryCreate) createSpec() (*ProfessionalSummary, *sqlgraph.CreateSpec) {
 	var (
 		_node = &ProfessionalSummary{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(professionalsummary.Table, sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(professionalsummary.Table, sqlgraph.NewFieldSpec(professionalsummary.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Summary(); ok {
+		_spec.SetField(professionalsummary.FieldSummary, field.TypeString, value)
+		_node.Summary = value
+	}
+	if value, ok := _c.mutation.YearsOfExperience(); ok {
+		_spec.SetField(professionalsummary.FieldYearsOfExperience, field.TypeInt, value)
+		_node.YearsOfExperience = &value
+	}
+	if value, ok := _c.mutation.KeyStrengths(); ok {
+		_spec.SetField(professionalsummary.FieldKeyStrengths, field.TypeJSON, value)
+		_node.KeyStrengths = value
+	}
+	if value, ok := _c.mutation.CareerObjective(); ok {
+		_spec.SetField(professionalsummary.FieldCareerObjective, field.TypeString, value)
+		_node.CareerObjective = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   professionalsummary.ResumeTable,
+			Columns: []string{professionalsummary.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ResumeId = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +238,7 @@ func (_c *ProfessionalSummaryCreateBulk) Save(ctx context.Context) ([]*Professio
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ProfessionalSummaryMutation)
 				if !ok {
@@ -125,10 +265,6 @@ func (_c *ProfessionalSummaryCreateBulk) Save(ctx context.Context) ([]*Professio
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

@@ -8,10 +8,13 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/certification"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // CertificationUpdate is the builder for updating Certification entities.
@@ -27,9 +30,187 @@ func (_u *CertificationUpdate) Where(ps ...predicate.Certification) *Certificati
 	return _u
 }
 
+// SetName sets the "name" field.
+func (_u *CertificationUpdate) SetName(v string) *CertificationUpdate {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *CertificationUpdate) SetNillableName(v *string) *CertificationUpdate {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *CertificationUpdate) ClearName() *CertificationUpdate {
+	_u.mutation.ClearName()
+	return _u
+}
+
+// SetIssuingOrganization sets the "issuingOrganization" field.
+func (_u *CertificationUpdate) SetIssuingOrganization(v string) *CertificationUpdate {
+	_u.mutation.SetIssuingOrganization(v)
+	return _u
+}
+
+// SetNillableIssuingOrganization sets the "issuingOrganization" field if the given value is not nil.
+func (_u *CertificationUpdate) SetNillableIssuingOrganization(v *string) *CertificationUpdate {
+	if v != nil {
+		_u.SetIssuingOrganization(*v)
+	}
+	return _u
+}
+
+// ClearIssuingOrganization clears the value of the "issuingOrganization" field.
+func (_u *CertificationUpdate) ClearIssuingOrganization() *CertificationUpdate {
+	_u.mutation.ClearIssuingOrganization()
+	return _u
+}
+
+// SetIssueDate sets the "issueDate" field.
+func (_u *CertificationUpdate) SetIssueDate(v time.Time) *CertificationUpdate {
+	_u.mutation.SetIssueDate(v)
+	return _u
+}
+
+// SetNillableIssueDate sets the "issueDate" field if the given value is not nil.
+func (_u *CertificationUpdate) SetNillableIssueDate(v *time.Time) *CertificationUpdate {
+	if v != nil {
+		_u.SetIssueDate(*v)
+	}
+	return _u
+}
+
+// ClearIssueDate clears the value of the "issueDate" field.
+func (_u *CertificationUpdate) ClearIssueDate() *CertificationUpdate {
+	_u.mutation.ClearIssueDate()
+	return _u
+}
+
+// SetExpiryDate sets the "expiryDate" field.
+func (_u *CertificationUpdate) SetExpiryDate(v time.Time) *CertificationUpdate {
+	_u.mutation.SetExpiryDate(v)
+	return _u
+}
+
+// SetNillableExpiryDate sets the "expiryDate" field if the given value is not nil.
+func (_u *CertificationUpdate) SetNillableExpiryDate(v *time.Time) *CertificationUpdate {
+	if v != nil {
+		_u.SetExpiryDate(*v)
+	}
+	return _u
+}
+
+// ClearExpiryDate clears the value of the "expiryDate" field.
+func (_u *CertificationUpdate) ClearExpiryDate() *CertificationUpdate {
+	_u.mutation.ClearExpiryDate()
+	return _u
+}
+
+// SetCredentialId sets the "credentialId" field.
+func (_u *CertificationUpdate) SetCredentialId(v string) *CertificationUpdate {
+	_u.mutation.SetCredentialId(v)
+	return _u
+}
+
+// SetNillableCredentialId sets the "credentialId" field if the given value is not nil.
+func (_u *CertificationUpdate) SetNillableCredentialId(v *string) *CertificationUpdate {
+	if v != nil {
+		_u.SetCredentialId(*v)
+	}
+	return _u
+}
+
+// ClearCredentialId clears the value of the "credentialId" field.
+func (_u *CertificationUpdate) ClearCredentialId() *CertificationUpdate {
+	_u.mutation.ClearCredentialId()
+	return _u
+}
+
+// SetCredentialUrl sets the "credentialUrl" field.
+func (_u *CertificationUpdate) SetCredentialUrl(v string) *CertificationUpdate {
+	_u.mutation.SetCredentialUrl(v)
+	return _u
+}
+
+// SetNillableCredentialUrl sets the "credentialUrl" field if the given value is not nil.
+func (_u *CertificationUpdate) SetNillableCredentialUrl(v *string) *CertificationUpdate {
+	if v != nil {
+		_u.SetCredentialUrl(*v)
+	}
+	return _u
+}
+
+// ClearCredentialUrl clears the value of the "credentialUrl" field.
+func (_u *CertificationUpdate) ClearCredentialUrl() *CertificationUpdate {
+	_u.mutation.ClearCredentialUrl()
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *CertificationUpdate) SetDescription(v string) *CertificationUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *CertificationUpdate) SetNillableDescription(v *string) *CertificationUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *CertificationUpdate) ClearDescription() *CertificationUpdate {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *CertificationUpdate) SetOrderIndex(v int) *CertificationUpdate {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *CertificationUpdate) SetNillableOrderIndex(v *int) *CertificationUpdate {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *CertificationUpdate) AddOrderIndex(v int) *CertificationUpdate {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *CertificationUpdate) SetResumeID(id uuid.UUID) *CertificationUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *CertificationUpdate) SetResume(v *Resume) *CertificationUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the CertificationMutation object of the builder.
 func (_u *CertificationUpdate) Mutation() *CertificationMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *CertificationUpdate) ClearResume() *CertificationUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +240,102 @@ func (_u *CertificationUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *CertificationUpdate) check() error {
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Certification.resume"`)
+	}
+	return nil
+}
+
 func (_u *CertificationUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(certification.Table, certification.Columns, sqlgraph.NewFieldSpec(certification.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(certification.Table, certification.Columns, sqlgraph.NewFieldSpec(certification.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(certification.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(certification.FieldName, field.TypeString)
+	}
+	if value, ok := _u.mutation.IssuingOrganization(); ok {
+		_spec.SetField(certification.FieldIssuingOrganization, field.TypeString, value)
+	}
+	if _u.mutation.IssuingOrganizationCleared() {
+		_spec.ClearField(certification.FieldIssuingOrganization, field.TypeString)
+	}
+	if value, ok := _u.mutation.IssueDate(); ok {
+		_spec.SetField(certification.FieldIssueDate, field.TypeTime, value)
+	}
+	if _u.mutation.IssueDateCleared() {
+		_spec.ClearField(certification.FieldIssueDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ExpiryDate(); ok {
+		_spec.SetField(certification.FieldExpiryDate, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiryDateCleared() {
+		_spec.ClearField(certification.FieldExpiryDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.CredentialId(); ok {
+		_spec.SetField(certification.FieldCredentialId, field.TypeString, value)
+	}
+	if _u.mutation.CredentialIdCleared() {
+		_spec.ClearField(certification.FieldCredentialId, field.TypeString)
+	}
+	if value, ok := _u.mutation.CredentialUrl(); ok {
+		_spec.SetField(certification.FieldCredentialUrl, field.TypeString, value)
+	}
+	if _u.mutation.CredentialUrlCleared() {
+		_spec.ClearField(certification.FieldCredentialUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(certification.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(certification.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(certification.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(certification.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   certification.ResumeTable,
+			Columns: []string{certification.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   certification.ResumeTable,
+			Columns: []string{certification.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +357,187 @@ type CertificationUpdateOne struct {
 	mutation *CertificationMutation
 }
 
+// SetName sets the "name" field.
+func (_u *CertificationUpdateOne) SetName(v string) *CertificationUpdateOne {
+	_u.mutation.SetName(v)
+	return _u
+}
+
+// SetNillableName sets the "name" field if the given value is not nil.
+func (_u *CertificationUpdateOne) SetNillableName(v *string) *CertificationUpdateOne {
+	if v != nil {
+		_u.SetName(*v)
+	}
+	return _u
+}
+
+// ClearName clears the value of the "name" field.
+func (_u *CertificationUpdateOne) ClearName() *CertificationUpdateOne {
+	_u.mutation.ClearName()
+	return _u
+}
+
+// SetIssuingOrganization sets the "issuingOrganization" field.
+func (_u *CertificationUpdateOne) SetIssuingOrganization(v string) *CertificationUpdateOne {
+	_u.mutation.SetIssuingOrganization(v)
+	return _u
+}
+
+// SetNillableIssuingOrganization sets the "issuingOrganization" field if the given value is not nil.
+func (_u *CertificationUpdateOne) SetNillableIssuingOrganization(v *string) *CertificationUpdateOne {
+	if v != nil {
+		_u.SetIssuingOrganization(*v)
+	}
+	return _u
+}
+
+// ClearIssuingOrganization clears the value of the "issuingOrganization" field.
+func (_u *CertificationUpdateOne) ClearIssuingOrganization() *CertificationUpdateOne {
+	_u.mutation.ClearIssuingOrganization()
+	return _u
+}
+
+// SetIssueDate sets the "issueDate" field.
+func (_u *CertificationUpdateOne) SetIssueDate(v time.Time) *CertificationUpdateOne {
+	_u.mutation.SetIssueDate(v)
+	return _u
+}
+
+// SetNillableIssueDate sets the "issueDate" field if the given value is not nil.
+func (_u *CertificationUpdateOne) SetNillableIssueDate(v *time.Time) *CertificationUpdateOne {
+	if v != nil {
+		_u.SetIssueDate(*v)
+	}
+	return _u
+}
+
+// ClearIssueDate clears the value of the "issueDate" field.
+func (_u *CertificationUpdateOne) ClearIssueDate() *CertificationUpdateOne {
+	_u.mutation.ClearIssueDate()
+	return _u
+}
+
+// SetExpiryDate sets the "expiryDate" field.
+func (_u *CertificationUpdateOne) SetExpiryDate(v time.Time) *CertificationUpdateOne {
+	_u.mutation.SetExpiryDate(v)
+	return _u
+}
+
+// SetNillableExpiryDate sets the "expiryDate" field if the given value is not nil.
+func (_u *CertificationUpdateOne) SetNillableExpiryDate(v *time.Time) *CertificationUpdateOne {
+	if v != nil {
+		_u.SetExpiryDate(*v)
+	}
+	return _u
+}
+
+// ClearExpiryDate clears the value of the "expiryDate" field.
+func (_u *CertificationUpdateOne) ClearExpiryDate() *CertificationUpdateOne {
+	_u.mutation.ClearExpiryDate()
+	return _u
+}
+
+// SetCredentialId sets the "credentialId" field.
+func (_u *CertificationUpdateOne) SetCredentialId(v string) *CertificationUpdateOne {
+	_u.mutation.SetCredentialId(v)
+	return _u
+}
+
+// SetNillableCredentialId sets the "credentialId" field if the given value is not nil.
+func (_u *CertificationUpdateOne) SetNillableCredentialId(v *string) *CertificationUpdateOne {
+	if v != nil {
+		_u.SetCredentialId(*v)
+	}
+	return _u
+}
+
+// ClearCredentialId clears the value of the "credentialId" field.
+func (_u *CertificationUpdateOne) ClearCredentialId() *CertificationUpdateOne {
+	_u.mutation.ClearCredentialId()
+	return _u
+}
+
+// SetCredentialUrl sets the "credentialUrl" field.
+func (_u *CertificationUpdateOne) SetCredentialUrl(v string) *CertificationUpdateOne {
+	_u.mutation.SetCredentialUrl(v)
+	return _u
+}
+
+// SetNillableCredentialUrl sets the "credentialUrl" field if the given value is not nil.
+func (_u *CertificationUpdateOne) SetNillableCredentialUrl(v *string) *CertificationUpdateOne {
+	if v != nil {
+		_u.SetCredentialUrl(*v)
+	}
+	return _u
+}
+
+// ClearCredentialUrl clears the value of the "credentialUrl" field.
+func (_u *CertificationUpdateOne) ClearCredentialUrl() *CertificationUpdateOne {
+	_u.mutation.ClearCredentialUrl()
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *CertificationUpdateOne) SetDescription(v string) *CertificationUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *CertificationUpdateOne) SetNillableDescription(v *string) *CertificationUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *CertificationUpdateOne) ClearDescription() *CertificationUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_u *CertificationUpdateOne) SetOrderIndex(v int) *CertificationUpdateOne {
+	_u.mutation.ResetOrderIndex()
+	_u.mutation.SetOrderIndex(v)
+	return _u
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_u *CertificationUpdateOne) SetNillableOrderIndex(v *int) *CertificationUpdateOne {
+	if v != nil {
+		_u.SetOrderIndex(*v)
+	}
+	return _u
+}
+
+// AddOrderIndex adds value to the "orderIndex" field.
+func (_u *CertificationUpdateOne) AddOrderIndex(v int) *CertificationUpdateOne {
+	_u.mutation.AddOrderIndex(v)
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *CertificationUpdateOne) SetResumeID(id uuid.UUID) *CertificationUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *CertificationUpdateOne) SetResume(v *Resume) *CertificationUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the CertificationMutation object of the builder.
 func (_u *CertificationUpdateOne) Mutation() *CertificationMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *CertificationUpdateOne) ClearResume() *CertificationUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the CertificationUpdate builder.
@@ -133,8 +580,19 @@ func (_u *CertificationUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *CertificationUpdateOne) check() error {
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "Certification.resume"`)
+	}
+	return nil
+}
+
 func (_u *CertificationUpdateOne) sqlSave(ctx context.Context) (_node *Certification, err error) {
-	_spec := sqlgraph.NewUpdateSpec(certification.Table, certification.Columns, sqlgraph.NewFieldSpec(certification.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(certification.Table, certification.Columns, sqlgraph.NewFieldSpec(certification.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Certification.id" for update`)}
@@ -158,6 +616,83 @@ func (_u *CertificationUpdateOne) sqlSave(ctx context.Context) (_node *Certifica
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Name(); ok {
+		_spec.SetField(certification.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.NameCleared() {
+		_spec.ClearField(certification.FieldName, field.TypeString)
+	}
+	if value, ok := _u.mutation.IssuingOrganization(); ok {
+		_spec.SetField(certification.FieldIssuingOrganization, field.TypeString, value)
+	}
+	if _u.mutation.IssuingOrganizationCleared() {
+		_spec.ClearField(certification.FieldIssuingOrganization, field.TypeString)
+	}
+	if value, ok := _u.mutation.IssueDate(); ok {
+		_spec.SetField(certification.FieldIssueDate, field.TypeTime, value)
+	}
+	if _u.mutation.IssueDateCleared() {
+		_spec.ClearField(certification.FieldIssueDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ExpiryDate(); ok {
+		_spec.SetField(certification.FieldExpiryDate, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiryDateCleared() {
+		_spec.ClearField(certification.FieldExpiryDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.CredentialId(); ok {
+		_spec.SetField(certification.FieldCredentialId, field.TypeString, value)
+	}
+	if _u.mutation.CredentialIdCleared() {
+		_spec.ClearField(certification.FieldCredentialId, field.TypeString)
+	}
+	if value, ok := _u.mutation.CredentialUrl(); ok {
+		_spec.SetField(certification.FieldCredentialUrl, field.TypeString, value)
+	}
+	if _u.mutation.CredentialUrlCleared() {
+		_spec.ClearField(certification.FieldCredentialUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(certification.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(certification.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.OrderIndex(); ok {
+		_spec.SetField(certification.FieldOrderIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedOrderIndex(); ok {
+		_spec.AddField(certification.FieldOrderIndex, field.TypeInt, value)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   certification.ResumeTable,
+			Columns: []string{certification.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   certification.ResumeTable,
+			Columns: []string{certification.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Certification{config: _u.config}
 	_spec.Assign = _node.assignValues

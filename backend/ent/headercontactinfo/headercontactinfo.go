@@ -4,6 +4,8 @@ package headercontactinfo
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,13 +13,64 @@ const (
 	Label = "header_contact_info"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldFullname holds the string denoting the fullname field in the database.
+	FieldFullname = "fullname"
+	// FieldProfessionalTitle holds the string denoting the professionaltitle field in the database.
+	FieldProfessionalTitle = "professional_title"
+	// FieldAddress holds the string denoting the address field in the database.
+	FieldAddress = "address"
+	// FieldPhone holds the string denoting the phone field in the database.
+	FieldPhone = "phone"
+	// FieldEmail holds the string denoting the email field in the database.
+	FieldEmail = "email"
+	// FieldCity holds the string denoting the city field in the database.
+	FieldCity = "city"
+	// FieldState holds the string denoting the state field in the database.
+	FieldState = "state"
+	// FieldZipCode holds the string denoting the zipcode field in the database.
+	FieldZipCode = "zip_code"
+	// FieldCountry holds the string denoting the country field in the database.
+	FieldCountry = "country"
+	// FieldLinkedinUrl holds the string denoting the linkedinurl field in the database.
+	FieldLinkedinUrl = "linkedin_url"
+	// FieldGithubUrl holds the string denoting the githuburl field in the database.
+	FieldGithubUrl = "github_url"
+	// FieldPortfolioUrl holds the string denoting the portfoliourl field in the database.
+	FieldPortfolioUrl = "portfolio_url"
+	// EdgeResume holds the string denoting the resume edge name in mutations.
+	EdgeResume = "resume"
 	// Table holds the table name of the headercontactinfo in the database.
 	Table = "header_contact_infos"
+	// ResumeTable is the table that holds the resume relation/edge.
+	ResumeTable = "header_contact_infos"
+	// ResumeInverseTable is the table name for the Resume entity.
+	// It exists in this package in order to avoid circular dependency with the "resume" package.
+	ResumeInverseTable = "resumes"
+	// ResumeColumn is the table column denoting the resume relation/edge.
+	ResumeColumn = "resume_header_contanct_info"
 )
 
 // Columns holds all SQL columns for headercontactinfo fields.
 var Columns = []string{
 	FieldID,
+	FieldFullname,
+	FieldProfessionalTitle,
+	FieldAddress,
+	FieldPhone,
+	FieldEmail,
+	FieldCity,
+	FieldState,
+	FieldZipCode,
+	FieldCountry,
+	FieldLinkedinUrl,
+	FieldGithubUrl,
+	FieldPortfolioUrl,
+}
+
+// ForeignKeys holds the SQL foreign-keys that are owned by the "header_contact_infos"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"resume_header_contanct_info",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -27,8 +80,22 @@ func ValidColumn(column string) bool {
 			return true
 		}
 	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
+			return true
+		}
+	}
 	return false
 }
+
+var (
+	// FullnameValidator is a validator for the "fullname" field. It is called by the builders before save.
+	FullnameValidator func(string) error
+	// EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	EmailValidator func(string) error
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
 
 // OrderOption defines the ordering options for the HeaderContactInfo queries.
 type OrderOption func(*sql.Selector)
@@ -36,4 +103,78 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByFullname orders the results by the fullname field.
+func ByFullname(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFullname, opts...).ToFunc()
+}
+
+// ByProfessionalTitle orders the results by the professionalTitle field.
+func ByProfessionalTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProfessionalTitle, opts...).ToFunc()
+}
+
+// ByAddress orders the results by the address field.
+func ByAddress(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAddress, opts...).ToFunc()
+}
+
+// ByPhone orders the results by the phone field.
+func ByPhone(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPhone, opts...).ToFunc()
+}
+
+// ByEmail orders the results by the email field.
+func ByEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmail, opts...).ToFunc()
+}
+
+// ByCity orders the results by the city field.
+func ByCity(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCity, opts...).ToFunc()
+}
+
+// ByState orders the results by the state field.
+func ByState(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldState, opts...).ToFunc()
+}
+
+// ByZipCode orders the results by the zipCode field.
+func ByZipCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldZipCode, opts...).ToFunc()
+}
+
+// ByCountry orders the results by the country field.
+func ByCountry(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCountry, opts...).ToFunc()
+}
+
+// ByLinkedinUrl orders the results by the linkedinUrl field.
+func ByLinkedinUrl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLinkedinUrl, opts...).ToFunc()
+}
+
+// ByGithubUrl orders the results by the githubUrl field.
+func ByGithubUrl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGithubUrl, opts...).ToFunc()
+}
+
+// ByPortfolioUrl orders the results by the portfolioUrl field.
+func ByPortfolioUrl(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPortfolioUrl, opts...).ToFunc()
+}
+
+// ByResumeField orders the results by resume field.
+func ByResumeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newResumeStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newResumeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ResumeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, true, ResumeTable, ResumeColumn),
+	)
 }

@@ -3,20 +3,68 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"resume-builder-backend/ent/experience"
+	"resume-builder-backend/ent/resume"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Experience is the model entity for the Experience schema.
 type Experience struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID uuid.UUID `json:"id,omitempty"`
+	// CompanyName holds the value of the "companyName" field.
+	CompanyName string `json:"companyName,omitempty"`
+	// Position holds the value of the "position" field.
+	Position string `json:"position,omitempty"`
+	// StartDate holds the value of the "startDate" field.
+	StartDate time.Time `json:"startDate,omitempty"`
+	// EndDate holds the value of the "endDate" field.
+	EndDate *time.Time `json:"endDate,omitempty"`
+	// IsCurrent holds the value of the "isCurrent" field.
+	IsCurrent bool `json:"isCurrent,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// Location holds the value of the "location" field.
+	Location string `json:"location,omitempty"`
+	// Acheivements holds the value of the "acheivements" field.
+	Acheivements map[string]interface{} `json:"acheivements,omitempty"`
+	// TechnologiesUsed holds the value of the "technologiesUsed" field.
+	TechnologiesUsed map[string]interface{} `json:"technologiesUsed,omitempty"`
+	// OrderIndex holds the value of the "orderIndex" field.
+	OrderIndex int `json:"orderIndex,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the ExperienceQuery when eager-loading is set.
+	Edges              ExperienceEdges `json:"edges"`
+	resume_experiences *uuid.UUID
+	selectValues       sql.SelectValues
+}
+
+// ExperienceEdges holds the relations/edges for other nodes in the graph.
+type ExperienceEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ExperienceEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +72,20 @@ func (*Experience) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case experience.FieldID:
+		case experience.FieldAcheivements, experience.FieldTechnologiesUsed:
+			values[i] = new([]byte)
+		case experience.FieldIsCurrent:
+			values[i] = new(sql.NullBool)
+		case experience.FieldOrderIndex:
 			values[i] = new(sql.NullInt64)
+		case experience.FieldCompanyName, experience.FieldPosition, experience.FieldDescription, experience.FieldLocation:
+			values[i] = new(sql.NullString)
+		case experience.FieldStartDate, experience.FieldEndDate:
+			values[i] = new(sql.NullTime)
+		case experience.FieldID:
+			values[i] = new(uuid.UUID)
+		case experience.ForeignKeys[0]: // resume_experiences
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +102,83 @@ func (_m *Experience) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case experience.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case experience.FieldCompanyName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field companyName", values[i])
+			} else if value.Valid {
+				_m.CompanyName = value.String
+			}
+		case experience.FieldPosition:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field position", values[i])
+			} else if value.Valid {
+				_m.Position = value.String
+			}
+		case experience.FieldStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field startDate", values[i])
+			} else if value.Valid {
+				_m.StartDate = value.Time
+			}
+		case experience.FieldEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field endDate", values[i])
+			} else if value.Valid {
+				_m.EndDate = new(time.Time)
+				*_m.EndDate = value.Time
+			}
+		case experience.FieldIsCurrent:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field isCurrent", values[i])
+			} else if value.Valid {
+				_m.IsCurrent = value.Bool
+			}
+		case experience.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
+			}
+		case experience.FieldLocation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field location", values[i])
+			} else if value.Valid {
+				_m.Location = value.String
+			}
+		case experience.FieldAcheivements:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field acheivements", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Acheivements); err != nil {
+					return fmt.Errorf("unmarshal field acheivements: %w", err)
+				}
+			}
+		case experience.FieldTechnologiesUsed:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field technologiesUsed", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.TechnologiesUsed); err != nil {
+					return fmt.Errorf("unmarshal field technologiesUsed: %w", err)
+				}
+			}
+		case experience.FieldOrderIndex:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field orderIndex", values[i])
+			} else if value.Valid {
+				_m.OrderIndex = int(value.Int64)
+			}
+		case experience.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field resume_experiences", values[i])
+			} else if value.Valid {
+				_m.resume_experiences = new(uuid.UUID)
+				*_m.resume_experiences = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +190,11 @@ func (_m *Experience) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Experience) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the Experience entity.
+func (_m *Experience) QueryResume() *ResumeQuery {
+	return NewExperienceClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this Experience.
@@ -82,7 +219,38 @@ func (_m *Experience) Unwrap() *Experience {
 func (_m *Experience) String() string {
 	var builder strings.Builder
 	builder.WriteString("Experience(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("companyName=")
+	builder.WriteString(_m.CompanyName)
+	builder.WriteString(", ")
+	builder.WriteString("position=")
+	builder.WriteString(_m.Position)
+	builder.WriteString(", ")
+	builder.WriteString("startDate=")
+	builder.WriteString(_m.StartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	if v := _m.EndDate; v != nil {
+		builder.WriteString("endDate=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("isCurrent=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsCurrent))
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("location=")
+	builder.WriteString(_m.Location)
+	builder.WriteString(", ")
+	builder.WriteString("acheivements=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Acheivements))
+	builder.WriteString(", ")
+	builder.WriteString("technologiesUsed=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TechnologiesUsed))
+	builder.WriteString(", ")
+	builder.WriteString("orderIndex=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OrderIndex))
 	builder.WriteByte(')')
 	return builder.String()
 }

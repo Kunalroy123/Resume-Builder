@@ -40,7 +40,7 @@ func (_d *HeaderContactInfoDelete) ExecX(ctx context.Context) int {
 }
 
 func (_d *HeaderContactInfoDelete) sqlExec(ctx context.Context) (int, error) {
-	_spec := sqlgraph.NewDeleteSpec(headercontactinfo.Table, sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewDeleteSpec(headercontactinfo.Table, sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeUUID))
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

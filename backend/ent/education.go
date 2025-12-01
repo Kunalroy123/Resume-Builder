@@ -3,20 +3,68 @@
 package ent
 
 import (
+	"encoding/json"
 	"fmt"
 	"resume-builder-backend/ent/education"
+	"resume-builder-backend/ent/resume"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // Education is the model entity for the Education schema.
 type Education struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
-	selectValues sql.SelectValues
+	ID uuid.UUID `json:"id,omitempty"`
+	// InstitutionName holds the value of the "institutionName" field.
+	InstitutionName string `json:"institutionName,omitempty"`
+	// Degree holds the value of the "degree" field.
+	Degree string `json:"degree,omitempty"`
+	// FieldOfStudy holds the value of the "fieldOfStudy" field.
+	FieldOfStudy string `json:"fieldOfStudy,omitempty"`
+	// StartDate holds the value of the "startDate" field.
+	StartDate time.Time `json:"startDate,omitempty"`
+	// EndDate holds the value of the "endDate" field.
+	EndDate *time.Time `json:"endDate,omitempty"`
+	// Gpa holds the value of the "gpa" field.
+	Gpa string `json:"gpa,omitempty"`
+	// Location holds the value of the "location" field.
+	Location string `json:"location,omitempty"`
+	// RelevantCoursework holds the value of the "relevantCoursework" field.
+	RelevantCoursework map[string]interface{} `json:"relevantCoursework,omitempty"`
+	// Description holds the value of the "description" field.
+	Description string `json:"description,omitempty"`
+	// OrderIndex holds the value of the "orderIndex" field.
+	OrderIndex int `json:"orderIndex,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the EducationQuery when eager-loading is set.
+	Edges             EducationEdges `json:"edges"`
+	resume_educations *uuid.UUID
+	selectValues      sql.SelectValues
+}
+
+// EducationEdges holds the relations/edges for other nodes in the graph.
+type EducationEdges struct {
+	// Resume holds the value of the resume edge.
+	Resume *Resume `json:"resume,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumeOrErr returns the Resume value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e EducationEdges) ResumeOrErr() (*Resume, error) {
+	if e.Resume != nil {
+		return e.Resume, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: resume.Label}
+	}
+	return nil, &NotLoadedError{edge: "resume"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +72,18 @@ func (*Education) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case education.FieldID:
+		case education.FieldRelevantCoursework:
+			values[i] = new([]byte)
+		case education.FieldOrderIndex:
 			values[i] = new(sql.NullInt64)
+		case education.FieldInstitutionName, education.FieldDegree, education.FieldFieldOfStudy, education.FieldGpa, education.FieldLocation, education.FieldDescription:
+			values[i] = new(sql.NullString)
+		case education.FieldStartDate, education.FieldEndDate:
+			values[i] = new(sql.NullTime)
+		case education.FieldID:
+			values[i] = new(uuid.UUID)
+		case education.ForeignKeys[0]: // resume_educations
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +100,81 @@ func (_m *Education) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case education.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case education.FieldInstitutionName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field institutionName", values[i])
+			} else if value.Valid {
+				_m.InstitutionName = value.String
+			}
+		case education.FieldDegree:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field degree", values[i])
+			} else if value.Valid {
+				_m.Degree = value.String
+			}
+		case education.FieldFieldOfStudy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field fieldOfStudy", values[i])
+			} else if value.Valid {
+				_m.FieldOfStudy = value.String
+			}
+		case education.FieldStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field startDate", values[i])
+			} else if value.Valid {
+				_m.StartDate = value.Time
+			}
+		case education.FieldEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field endDate", values[i])
+			} else if value.Valid {
+				_m.EndDate = new(time.Time)
+				*_m.EndDate = value.Time
+			}
+		case education.FieldGpa:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field gpa", values[i])
+			} else if value.Valid {
+				_m.Gpa = value.String
+			}
+		case education.FieldLocation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field location", values[i])
+			} else if value.Valid {
+				_m.Location = value.String
+			}
+		case education.FieldRelevantCoursework:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field relevantCoursework", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RelevantCoursework); err != nil {
+					return fmt.Errorf("unmarshal field relevantCoursework: %w", err)
+				}
+			}
+		case education.FieldDescription:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field description", values[i])
+			} else if value.Valid {
+				_m.Description = value.String
+			}
+		case education.FieldOrderIndex:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field orderIndex", values[i])
+			} else if value.Valid {
+				_m.OrderIndex = int(value.Int64)
+			}
+		case education.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field resume_educations", values[i])
+			} else if value.Valid {
+				_m.resume_educations = new(uuid.UUID)
+				*_m.resume_educations = *value.S.(*uuid.UUID)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +186,11 @@ func (_m *Education) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *Education) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResume queries the "resume" edge of the Education entity.
+func (_m *Education) QueryResume() *ResumeQuery {
+	return NewEducationClient(_m.config).QueryResume(_m)
 }
 
 // Update returns a builder for updating this Education.
@@ -82,7 +215,38 @@ func (_m *Education) Unwrap() *Education {
 func (_m *Education) String() string {
 	var builder strings.Builder
 	builder.WriteString("Education(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("institutionName=")
+	builder.WriteString(_m.InstitutionName)
+	builder.WriteString(", ")
+	builder.WriteString("degree=")
+	builder.WriteString(_m.Degree)
+	builder.WriteString(", ")
+	builder.WriteString("fieldOfStudy=")
+	builder.WriteString(_m.FieldOfStudy)
+	builder.WriteString(", ")
+	builder.WriteString("startDate=")
+	builder.WriteString(_m.StartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	if v := _m.EndDate; v != nil {
+		builder.WriteString("endDate=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("gpa=")
+	builder.WriteString(_m.Gpa)
+	builder.WriteString(", ")
+	builder.WriteString("location=")
+	builder.WriteString(_m.Location)
+	builder.WriteString(", ")
+	builder.WriteString("relevantCoursework=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RelevantCoursework))
+	builder.WriteString(", ")
+	builder.WriteString("description=")
+	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("orderIndex=")
+	builder.WriteString(fmt.Sprintf("%v", _m.OrderIndex))
 	builder.WriteByte(')')
 	return builder.String()
 }

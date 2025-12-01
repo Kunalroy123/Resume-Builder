@@ -4,53 +4,569 @@ package resume
 
 import (
 	"resume-builder-backend/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Resume {
+func ID(id uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Resume {
+func IDEQ(id uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Resume {
+func IDNEQ(id uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Resume {
+func IDIn(ids ...uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Resume {
+func IDNotIn(ids ...uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Resume {
+func IDGT(id uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Resume {
+func IDGTE(id uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Resume {
+func IDLT(id uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Resume {
+func IDLTE(id uuid.UUID) predicate.Resume {
 	return predicate.Resume(sql.FieldLTE(FieldID, id))
+}
+
+// UserId applies equality check predicate on the "userId" field. It's identical to UserIdEQ.
+func UserId(v uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldUserId, v))
+}
+
+// Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
+func Title(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldTitle, v))
+}
+
+// TemplateId applies equality check predicate on the "templateId" field. It's identical to TemplateIdEQ.
+func TemplateId(v uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldTemplateId, v))
+}
+
+// IsAiGenerated applies equality check predicate on the "isAiGenerated" field. It's identical to IsAiGeneratedEQ.
+func IsAiGenerated(v bool) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldIsAiGenerated, v))
+}
+
+// IsPublic applies equality check predicate on the "isPublic" field. It's identical to IsPublicEQ.
+func IsPublic(v bool) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldIsPublic, v))
+}
+
+// CreatedAt applies equality check predicate on the "createdAt" field. It's identical to CreatedAtEQ.
+func CreatedAt(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// UpdatedAt applies equality check predicate on the "updatedAt" field. It's identical to UpdatedAtEQ.
+func UpdatedAt(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UserIdEQ applies the EQ predicate on the "userId" field.
+func UserIdEQ(v uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldUserId, v))
+}
+
+// UserIdNEQ applies the NEQ predicate on the "userId" field.
+func UserIdNEQ(v uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldNEQ(FieldUserId, v))
+}
+
+// UserIdIn applies the In predicate on the "userId" field.
+func UserIdIn(vs ...uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldIn(FieldUserId, vs...))
+}
+
+// UserIdNotIn applies the NotIn predicate on the "userId" field.
+func UserIdNotIn(vs ...uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldNotIn(FieldUserId, vs...))
+}
+
+// TitleEQ applies the EQ predicate on the "title" field.
+func TitleEQ(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldTitle, v))
+}
+
+// TitleNEQ applies the NEQ predicate on the "title" field.
+func TitleNEQ(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldNEQ(FieldTitle, v))
+}
+
+// TitleIn applies the In predicate on the "title" field.
+func TitleIn(vs ...string) predicate.Resume {
+	return predicate.Resume(sql.FieldIn(FieldTitle, vs...))
+}
+
+// TitleNotIn applies the NotIn predicate on the "title" field.
+func TitleNotIn(vs ...string) predicate.Resume {
+	return predicate.Resume(sql.FieldNotIn(FieldTitle, vs...))
+}
+
+// TitleGT applies the GT predicate on the "title" field.
+func TitleGT(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldGT(FieldTitle, v))
+}
+
+// TitleGTE applies the GTE predicate on the "title" field.
+func TitleGTE(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldGTE(FieldTitle, v))
+}
+
+// TitleLT applies the LT predicate on the "title" field.
+func TitleLT(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldLT(FieldTitle, v))
+}
+
+// TitleLTE applies the LTE predicate on the "title" field.
+func TitleLTE(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldLTE(FieldTitle, v))
+}
+
+// TitleContains applies the Contains predicate on the "title" field.
+func TitleContains(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldContains(FieldTitle, v))
+}
+
+// TitleHasPrefix applies the HasPrefix predicate on the "title" field.
+func TitleHasPrefix(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldHasPrefix(FieldTitle, v))
+}
+
+// TitleHasSuffix applies the HasSuffix predicate on the "title" field.
+func TitleHasSuffix(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldHasSuffix(FieldTitle, v))
+}
+
+// TitleEqualFold applies the EqualFold predicate on the "title" field.
+func TitleEqualFold(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldEqualFold(FieldTitle, v))
+}
+
+// TitleContainsFold applies the ContainsFold predicate on the "title" field.
+func TitleContainsFold(v string) predicate.Resume {
+	return predicate.Resume(sql.FieldContainsFold(FieldTitle, v))
+}
+
+// TemplateIdEQ applies the EQ predicate on the "templateId" field.
+func TemplateIdEQ(v uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldTemplateId, v))
+}
+
+// TemplateIdNEQ applies the NEQ predicate on the "templateId" field.
+func TemplateIdNEQ(v uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldNEQ(FieldTemplateId, v))
+}
+
+// TemplateIdIn applies the In predicate on the "templateId" field.
+func TemplateIdIn(vs ...uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldIn(FieldTemplateId, vs...))
+}
+
+// TemplateIdNotIn applies the NotIn predicate on the "templateId" field.
+func TemplateIdNotIn(vs ...uuid.UUID) predicate.Resume {
+	return predicate.Resume(sql.FieldNotIn(FieldTemplateId, vs...))
+}
+
+// TemplateIdIsNil applies the IsNil predicate on the "templateId" field.
+func TemplateIdIsNil() predicate.Resume {
+	return predicate.Resume(sql.FieldIsNull(FieldTemplateId))
+}
+
+// TemplateIdNotNil applies the NotNil predicate on the "templateId" field.
+func TemplateIdNotNil() predicate.Resume {
+	return predicate.Resume(sql.FieldNotNull(FieldTemplateId))
+}
+
+// IsAiGeneratedEQ applies the EQ predicate on the "isAiGenerated" field.
+func IsAiGeneratedEQ(v bool) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldIsAiGenerated, v))
+}
+
+// IsAiGeneratedNEQ applies the NEQ predicate on the "isAiGenerated" field.
+func IsAiGeneratedNEQ(v bool) predicate.Resume {
+	return predicate.Resume(sql.FieldNEQ(FieldIsAiGenerated, v))
+}
+
+// IsPublicEQ applies the EQ predicate on the "isPublic" field.
+func IsPublicEQ(v bool) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldIsPublic, v))
+}
+
+// IsPublicNEQ applies the NEQ predicate on the "isPublic" field.
+func IsPublicNEQ(v bool) predicate.Resume {
+	return predicate.Resume(sql.FieldNEQ(FieldIsPublic, v))
+}
+
+// ContentIsNil applies the IsNil predicate on the "content" field.
+func ContentIsNil() predicate.Resume {
+	return predicate.Resume(sql.FieldIsNull(FieldContent))
+}
+
+// ContentNotNil applies the NotNil predicate on the "content" field.
+func ContentNotNil() predicate.Resume {
+	return predicate.Resume(sql.FieldNotNull(FieldContent))
+}
+
+// CreatedAtEQ applies the EQ predicate on the "createdAt" field.
+func CreatedAtEQ(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtNEQ applies the NEQ predicate on the "createdAt" field.
+func CreatedAtNEQ(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldNEQ(FieldCreatedAt, v))
+}
+
+// CreatedAtIn applies the In predicate on the "createdAt" field.
+func CreatedAtIn(vs ...time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtNotIn applies the NotIn predicate on the "createdAt" field.
+func CreatedAtNotIn(vs ...time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldNotIn(FieldCreatedAt, vs...))
+}
+
+// CreatedAtGT applies the GT predicate on the "createdAt" field.
+func CreatedAtGT(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldGT(FieldCreatedAt, v))
+}
+
+// CreatedAtGTE applies the GTE predicate on the "createdAt" field.
+func CreatedAtGTE(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldGTE(FieldCreatedAt, v))
+}
+
+// CreatedAtLT applies the LT predicate on the "createdAt" field.
+func CreatedAtLT(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldLT(FieldCreatedAt, v))
+}
+
+// CreatedAtLTE applies the LTE predicate on the "createdAt" field.
+func CreatedAtLTE(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldLTE(FieldCreatedAt, v))
+}
+
+// UpdatedAtEQ applies the EQ predicate on the "updatedAt" field.
+func UpdatedAtEQ(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtNEQ applies the NEQ predicate on the "updatedAt" field.
+func UpdatedAtNEQ(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldNEQ(FieldUpdatedAt, v))
+}
+
+// UpdatedAtIn applies the In predicate on the "updatedAt" field.
+func UpdatedAtIn(vs ...time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtNotIn applies the NotIn predicate on the "updatedAt" field.
+func UpdatedAtNotIn(vs ...time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldNotIn(FieldUpdatedAt, vs...))
+}
+
+// UpdatedAtGT applies the GT predicate on the "updatedAt" field.
+func UpdatedAtGT(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldGT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtGTE applies the GTE predicate on the "updatedAt" field.
+func UpdatedAtGTE(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldGTE(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLT applies the LT predicate on the "updatedAt" field.
+func UpdatedAtLT(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldLT(FieldUpdatedAt, v))
+}
+
+// UpdatedAtLTE applies the LTE predicate on the "updatedAt" field.
+func UpdatedAtLTE(v time.Time) predicate.Resume {
+	return predicate.Resume(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// HasUser applies the HasEdge predicate on the "user" edge.
+func HasUser() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
+func HasUserWith(preds ...predicate.User) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newUserStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTemplate applies the HasEdge predicate on the "template" edge.
+func HasTemplate() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTemplateWith applies the HasEdge predicate on the "template" edge with a given conditions (other predicates).
+func HasTemplateWith(preds ...predicate.Template) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newTemplateStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasHeaderContanctInfo applies the HasEdge predicate on the "headerContanctInfo" edge.
+func HasHeaderContanctInfo() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, HeaderContanctInfoTable, HeaderContanctInfoColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasHeaderContanctInfoWith applies the HasEdge predicate on the "headerContanctInfo" edge with a given conditions (other predicates).
+func HasHeaderContanctInfoWith(preds ...predicate.HeaderContactInfo) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newHeaderContanctInfoStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProfessionalSummary applies the HasEdge predicate on the "professionalSummary" edge.
+func HasProfessionalSummary() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, ProfessionalSummaryTable, ProfessionalSummaryColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProfessionalSummaryWith applies the HasEdge predicate on the "professionalSummary" edge with a given conditions (other predicates).
+func HasProfessionalSummaryWith(preds ...predicate.ProfessionalSummary) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newProfessionalSummaryStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasExperiences applies the HasEdge predicate on the "experiences" edge.
+func HasExperiences() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ExperiencesTable, ExperiencesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasExperiencesWith applies the HasEdge predicate on the "experiences" edge with a given conditions (other predicates).
+func HasExperiencesWith(preds ...predicate.Experience) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newExperiencesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEducations applies the HasEdge predicate on the "educations" edge.
+func HasEducations() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EducationsTable, EducationsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEducationsWith applies the HasEdge predicate on the "educations" edge with a given conditions (other predicates).
+func HasEducationsWith(preds ...predicate.Education) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newEducationsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSkills applies the HasEdge predicate on the "skills" edge.
+func HasSkills() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SkillsTable, SkillsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSkillsWith applies the HasEdge predicate on the "skills" edge with a given conditions (other predicates).
+func HasSkillsWith(preds ...predicate.Skill) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newSkillsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProjects applies the HasEdge predicate on the "projects" edge.
+func HasProjects() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProjectsTable, ProjectsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProjectsWith applies the HasEdge predicate on the "projects" edge with a given conditions (other predicates).
+func HasProjectsWith(preds ...predicate.Project) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newProjectsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasCertifications applies the HasEdge predicate on the "certifications" edge.
+func HasCertifications() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CertificationsTable, CertificationsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCertificationsWith applies the HasEdge predicate on the "certifications" edge with a given conditions (other predicates).
+func HasCertificationsWith(preds ...predicate.Certification) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newCertificationsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAchievements applies the HasEdge predicate on the "achievements" edge.
+func HasAchievements() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AchievementsTable, AchievementsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAchievementsWith applies the HasEdge predicate on the "achievements" edge with a given conditions (other predicates).
+func HasAchievementsWith(preds ...predicate.Achievement) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newAchievementsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasHobbies applies the HasEdge predicate on the "hobbies" edge.
+func HasHobbies() predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, HobbiesTable, HobbiesColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasHobbiesWith applies the HasEdge predicate on the "hobbies" edge with a given conditions (other predicates).
+func HasHobbiesWith(preds ...predicate.Hobby) predicate.Resume {
+	return predicate.Resume(func(s *sql.Selector) {
+		step := newHobbiesStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

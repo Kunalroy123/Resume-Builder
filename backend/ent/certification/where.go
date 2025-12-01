@@ -4,53 +4,634 @@ package certification
 
 import (
 	"resume-builder-backend/ent/predicate"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Certification {
+func ID(id uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Certification {
+func IDEQ(id uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Certification {
+func IDNEQ(id uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Certification {
+func IDIn(ids ...uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Certification {
+func IDNotIn(ids ...uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Certification {
+func IDGT(id uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Certification {
+func IDGTE(id uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Certification {
+func IDLT(id uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Certification {
+func IDLTE(id uuid.UUID) predicate.Certification {
 	return predicate.Certification(sql.FieldLTE(FieldID, id))
+}
+
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldName, v))
+}
+
+// IssuingOrganization applies equality check predicate on the "issuingOrganization" field. It's identical to IssuingOrganizationEQ.
+func IssuingOrganization(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldIssuingOrganization, v))
+}
+
+// IssueDate applies equality check predicate on the "issueDate" field. It's identical to IssueDateEQ.
+func IssueDate(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldIssueDate, v))
+}
+
+// ExpiryDate applies equality check predicate on the "expiryDate" field. It's identical to ExpiryDateEQ.
+func ExpiryDate(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldExpiryDate, v))
+}
+
+// CredentialId applies equality check predicate on the "credentialId" field. It's identical to CredentialIdEQ.
+func CredentialId(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldCredentialId, v))
+}
+
+// CredentialUrl applies equality check predicate on the "credentialUrl" field. It's identical to CredentialUrlEQ.
+func CredentialUrl(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldCredentialUrl, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldDescription, v))
+}
+
+// OrderIndex applies equality check predicate on the "orderIndex" field. It's identical to OrderIndexEQ.
+func OrderIndex(v int) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldName, v))
+}
+
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldNEQ(FieldName, v))
+}
+
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldIn(FieldName, vs...))
+}
+
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldNotIn(FieldName, vs...))
+}
+
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGT(FieldName, v))
+}
+
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGTE(FieldName, v))
+}
+
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLT(FieldName, v))
+}
+
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLTE(FieldName, v))
+}
+
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContains(FieldName, v))
+}
+
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasPrefix(FieldName, v))
+}
+
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasSuffix(FieldName, v))
+}
+
+// NameIsNil applies the IsNil predicate on the "name" field.
+func NameIsNil() predicate.Certification {
+	return predicate.Certification(sql.FieldIsNull(FieldName))
+}
+
+// NameNotNil applies the NotNil predicate on the "name" field.
+func NameNotNil() predicate.Certification {
+	return predicate.Certification(sql.FieldNotNull(FieldName))
+}
+
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEqualFold(FieldName, v))
+}
+
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContainsFold(FieldName, v))
+}
+
+// IssuingOrganizationEQ applies the EQ predicate on the "issuingOrganization" field.
+func IssuingOrganizationEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationNEQ applies the NEQ predicate on the "issuingOrganization" field.
+func IssuingOrganizationNEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldNEQ(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationIn applies the In predicate on the "issuingOrganization" field.
+func IssuingOrganizationIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldIn(FieldIssuingOrganization, vs...))
+}
+
+// IssuingOrganizationNotIn applies the NotIn predicate on the "issuingOrganization" field.
+func IssuingOrganizationNotIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldNotIn(FieldIssuingOrganization, vs...))
+}
+
+// IssuingOrganizationGT applies the GT predicate on the "issuingOrganization" field.
+func IssuingOrganizationGT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGT(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationGTE applies the GTE predicate on the "issuingOrganization" field.
+func IssuingOrganizationGTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGTE(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationLT applies the LT predicate on the "issuingOrganization" field.
+func IssuingOrganizationLT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLT(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationLTE applies the LTE predicate on the "issuingOrganization" field.
+func IssuingOrganizationLTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLTE(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationContains applies the Contains predicate on the "issuingOrganization" field.
+func IssuingOrganizationContains(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContains(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationHasPrefix applies the HasPrefix predicate on the "issuingOrganization" field.
+func IssuingOrganizationHasPrefix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasPrefix(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationHasSuffix applies the HasSuffix predicate on the "issuingOrganization" field.
+func IssuingOrganizationHasSuffix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasSuffix(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationIsNil applies the IsNil predicate on the "issuingOrganization" field.
+func IssuingOrganizationIsNil() predicate.Certification {
+	return predicate.Certification(sql.FieldIsNull(FieldIssuingOrganization))
+}
+
+// IssuingOrganizationNotNil applies the NotNil predicate on the "issuingOrganization" field.
+func IssuingOrganizationNotNil() predicate.Certification {
+	return predicate.Certification(sql.FieldNotNull(FieldIssuingOrganization))
+}
+
+// IssuingOrganizationEqualFold applies the EqualFold predicate on the "issuingOrganization" field.
+func IssuingOrganizationEqualFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEqualFold(FieldIssuingOrganization, v))
+}
+
+// IssuingOrganizationContainsFold applies the ContainsFold predicate on the "issuingOrganization" field.
+func IssuingOrganizationContainsFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContainsFold(FieldIssuingOrganization, v))
+}
+
+// IssueDateEQ applies the EQ predicate on the "issueDate" field.
+func IssueDateEQ(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldIssueDate, v))
+}
+
+// IssueDateNEQ applies the NEQ predicate on the "issueDate" field.
+func IssueDateNEQ(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldNEQ(FieldIssueDate, v))
+}
+
+// IssueDateIn applies the In predicate on the "issueDate" field.
+func IssueDateIn(vs ...time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldIn(FieldIssueDate, vs...))
+}
+
+// IssueDateNotIn applies the NotIn predicate on the "issueDate" field.
+func IssueDateNotIn(vs ...time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldNotIn(FieldIssueDate, vs...))
+}
+
+// IssueDateGT applies the GT predicate on the "issueDate" field.
+func IssueDateGT(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldGT(FieldIssueDate, v))
+}
+
+// IssueDateGTE applies the GTE predicate on the "issueDate" field.
+func IssueDateGTE(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldGTE(FieldIssueDate, v))
+}
+
+// IssueDateLT applies the LT predicate on the "issueDate" field.
+func IssueDateLT(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldLT(FieldIssueDate, v))
+}
+
+// IssueDateLTE applies the LTE predicate on the "issueDate" field.
+func IssueDateLTE(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldLTE(FieldIssueDate, v))
+}
+
+// IssueDateIsNil applies the IsNil predicate on the "issueDate" field.
+func IssueDateIsNil() predicate.Certification {
+	return predicate.Certification(sql.FieldIsNull(FieldIssueDate))
+}
+
+// IssueDateNotNil applies the NotNil predicate on the "issueDate" field.
+func IssueDateNotNil() predicate.Certification {
+	return predicate.Certification(sql.FieldNotNull(FieldIssueDate))
+}
+
+// ExpiryDateEQ applies the EQ predicate on the "expiryDate" field.
+func ExpiryDateEQ(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldExpiryDate, v))
+}
+
+// ExpiryDateNEQ applies the NEQ predicate on the "expiryDate" field.
+func ExpiryDateNEQ(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldNEQ(FieldExpiryDate, v))
+}
+
+// ExpiryDateIn applies the In predicate on the "expiryDate" field.
+func ExpiryDateIn(vs ...time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldIn(FieldExpiryDate, vs...))
+}
+
+// ExpiryDateNotIn applies the NotIn predicate on the "expiryDate" field.
+func ExpiryDateNotIn(vs ...time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldNotIn(FieldExpiryDate, vs...))
+}
+
+// ExpiryDateGT applies the GT predicate on the "expiryDate" field.
+func ExpiryDateGT(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldGT(FieldExpiryDate, v))
+}
+
+// ExpiryDateGTE applies the GTE predicate on the "expiryDate" field.
+func ExpiryDateGTE(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldGTE(FieldExpiryDate, v))
+}
+
+// ExpiryDateLT applies the LT predicate on the "expiryDate" field.
+func ExpiryDateLT(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldLT(FieldExpiryDate, v))
+}
+
+// ExpiryDateLTE applies the LTE predicate on the "expiryDate" field.
+func ExpiryDateLTE(v time.Time) predicate.Certification {
+	return predicate.Certification(sql.FieldLTE(FieldExpiryDate, v))
+}
+
+// ExpiryDateIsNil applies the IsNil predicate on the "expiryDate" field.
+func ExpiryDateIsNil() predicate.Certification {
+	return predicate.Certification(sql.FieldIsNull(FieldExpiryDate))
+}
+
+// ExpiryDateNotNil applies the NotNil predicate on the "expiryDate" field.
+func ExpiryDateNotNil() predicate.Certification {
+	return predicate.Certification(sql.FieldNotNull(FieldExpiryDate))
+}
+
+// CredentialIdEQ applies the EQ predicate on the "credentialId" field.
+func CredentialIdEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldCredentialId, v))
+}
+
+// CredentialIdNEQ applies the NEQ predicate on the "credentialId" field.
+func CredentialIdNEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldNEQ(FieldCredentialId, v))
+}
+
+// CredentialIdIn applies the In predicate on the "credentialId" field.
+func CredentialIdIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldIn(FieldCredentialId, vs...))
+}
+
+// CredentialIdNotIn applies the NotIn predicate on the "credentialId" field.
+func CredentialIdNotIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldNotIn(FieldCredentialId, vs...))
+}
+
+// CredentialIdGT applies the GT predicate on the "credentialId" field.
+func CredentialIdGT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGT(FieldCredentialId, v))
+}
+
+// CredentialIdGTE applies the GTE predicate on the "credentialId" field.
+func CredentialIdGTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGTE(FieldCredentialId, v))
+}
+
+// CredentialIdLT applies the LT predicate on the "credentialId" field.
+func CredentialIdLT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLT(FieldCredentialId, v))
+}
+
+// CredentialIdLTE applies the LTE predicate on the "credentialId" field.
+func CredentialIdLTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLTE(FieldCredentialId, v))
+}
+
+// CredentialIdContains applies the Contains predicate on the "credentialId" field.
+func CredentialIdContains(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContains(FieldCredentialId, v))
+}
+
+// CredentialIdHasPrefix applies the HasPrefix predicate on the "credentialId" field.
+func CredentialIdHasPrefix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasPrefix(FieldCredentialId, v))
+}
+
+// CredentialIdHasSuffix applies the HasSuffix predicate on the "credentialId" field.
+func CredentialIdHasSuffix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasSuffix(FieldCredentialId, v))
+}
+
+// CredentialIdIsNil applies the IsNil predicate on the "credentialId" field.
+func CredentialIdIsNil() predicate.Certification {
+	return predicate.Certification(sql.FieldIsNull(FieldCredentialId))
+}
+
+// CredentialIdNotNil applies the NotNil predicate on the "credentialId" field.
+func CredentialIdNotNil() predicate.Certification {
+	return predicate.Certification(sql.FieldNotNull(FieldCredentialId))
+}
+
+// CredentialIdEqualFold applies the EqualFold predicate on the "credentialId" field.
+func CredentialIdEqualFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEqualFold(FieldCredentialId, v))
+}
+
+// CredentialIdContainsFold applies the ContainsFold predicate on the "credentialId" field.
+func CredentialIdContainsFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContainsFold(FieldCredentialId, v))
+}
+
+// CredentialUrlEQ applies the EQ predicate on the "credentialUrl" field.
+func CredentialUrlEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldCredentialUrl, v))
+}
+
+// CredentialUrlNEQ applies the NEQ predicate on the "credentialUrl" field.
+func CredentialUrlNEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldNEQ(FieldCredentialUrl, v))
+}
+
+// CredentialUrlIn applies the In predicate on the "credentialUrl" field.
+func CredentialUrlIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldIn(FieldCredentialUrl, vs...))
+}
+
+// CredentialUrlNotIn applies the NotIn predicate on the "credentialUrl" field.
+func CredentialUrlNotIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldNotIn(FieldCredentialUrl, vs...))
+}
+
+// CredentialUrlGT applies the GT predicate on the "credentialUrl" field.
+func CredentialUrlGT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGT(FieldCredentialUrl, v))
+}
+
+// CredentialUrlGTE applies the GTE predicate on the "credentialUrl" field.
+func CredentialUrlGTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGTE(FieldCredentialUrl, v))
+}
+
+// CredentialUrlLT applies the LT predicate on the "credentialUrl" field.
+func CredentialUrlLT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLT(FieldCredentialUrl, v))
+}
+
+// CredentialUrlLTE applies the LTE predicate on the "credentialUrl" field.
+func CredentialUrlLTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLTE(FieldCredentialUrl, v))
+}
+
+// CredentialUrlContains applies the Contains predicate on the "credentialUrl" field.
+func CredentialUrlContains(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContains(FieldCredentialUrl, v))
+}
+
+// CredentialUrlHasPrefix applies the HasPrefix predicate on the "credentialUrl" field.
+func CredentialUrlHasPrefix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasPrefix(FieldCredentialUrl, v))
+}
+
+// CredentialUrlHasSuffix applies the HasSuffix predicate on the "credentialUrl" field.
+func CredentialUrlHasSuffix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasSuffix(FieldCredentialUrl, v))
+}
+
+// CredentialUrlIsNil applies the IsNil predicate on the "credentialUrl" field.
+func CredentialUrlIsNil() predicate.Certification {
+	return predicate.Certification(sql.FieldIsNull(FieldCredentialUrl))
+}
+
+// CredentialUrlNotNil applies the NotNil predicate on the "credentialUrl" field.
+func CredentialUrlNotNil() predicate.Certification {
+	return predicate.Certification(sql.FieldNotNull(FieldCredentialUrl))
+}
+
+// CredentialUrlEqualFold applies the EqualFold predicate on the "credentialUrl" field.
+func CredentialUrlEqualFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEqualFold(FieldCredentialUrl, v))
+}
+
+// CredentialUrlContainsFold applies the ContainsFold predicate on the "credentialUrl" field.
+func CredentialUrlContainsFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContainsFold(FieldCredentialUrl, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Certification {
+	return predicate.Certification(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Certification {
+	return predicate.Certification(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Certification {
+	return predicate.Certification(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Certification {
+	return predicate.Certification(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// OrderIndexEQ applies the EQ predicate on the "orderIndex" field.
+func OrderIndexEQ(v int) predicate.Certification {
+	return predicate.Certification(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexNEQ applies the NEQ predicate on the "orderIndex" field.
+func OrderIndexNEQ(v int) predicate.Certification {
+	return predicate.Certification(sql.FieldNEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexIn applies the In predicate on the "orderIndex" field.
+func OrderIndexIn(vs ...int) predicate.Certification {
+	return predicate.Certification(sql.FieldIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexNotIn applies the NotIn predicate on the "orderIndex" field.
+func OrderIndexNotIn(vs ...int) predicate.Certification {
+	return predicate.Certification(sql.FieldNotIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexGT applies the GT predicate on the "orderIndex" field.
+func OrderIndexGT(v int) predicate.Certification {
+	return predicate.Certification(sql.FieldGT(FieldOrderIndex, v))
+}
+
+// OrderIndexGTE applies the GTE predicate on the "orderIndex" field.
+func OrderIndexGTE(v int) predicate.Certification {
+	return predicate.Certification(sql.FieldGTE(FieldOrderIndex, v))
+}
+
+// OrderIndexLT applies the LT predicate on the "orderIndex" field.
+func OrderIndexLT(v int) predicate.Certification {
+	return predicate.Certification(sql.FieldLT(FieldOrderIndex, v))
+}
+
+// OrderIndexLTE applies the LTE predicate on the "orderIndex" field.
+func OrderIndexLTE(v int) predicate.Certification {
+	return predicate.Certification(sql.FieldLTE(FieldOrderIndex, v))
+}
+
+// HasResume applies the HasEdge predicate on the "resume" edge.
+func HasResume() predicate.Certification {
+	return predicate.Certification(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResumeWith applies the HasEdge predicate on the "resume" edge with a given conditions (other predicates).
+func HasResumeWith(preds ...predicate.Resume) predicate.Certification {
+	return predicate.Certification(func(s *sql.Selector) {
+		step := newResumeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

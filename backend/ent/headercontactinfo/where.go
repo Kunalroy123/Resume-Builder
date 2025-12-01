@@ -6,51 +6,1016 @@ import (
 	"resume-builder-backend/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.HeaderContactInfo {
+func ID(id uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.HeaderContactInfo {
+func IDEQ(id uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.HeaderContactInfo {
+func IDNEQ(id uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.HeaderContactInfo {
+func IDIn(ids ...uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.HeaderContactInfo {
+func IDNotIn(ids ...uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.HeaderContactInfo {
+func IDGT(id uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.HeaderContactInfo {
+func IDGTE(id uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.HeaderContactInfo {
+func IDLT(id uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.HeaderContactInfo {
+func IDLTE(id uuid.UUID) predicate.HeaderContactInfo {
 	return predicate.HeaderContactInfo(sql.FieldLTE(FieldID, id))
+}
+
+// Fullname applies equality check predicate on the "fullname" field. It's identical to FullnameEQ.
+func Fullname(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldFullname, v))
+}
+
+// ProfessionalTitle applies equality check predicate on the "professionalTitle" field. It's identical to ProfessionalTitleEQ.
+func ProfessionalTitle(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldProfessionalTitle, v))
+}
+
+// Address applies equality check predicate on the "address" field. It's identical to AddressEQ.
+func Address(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldAddress, v))
+}
+
+// Phone applies equality check predicate on the "phone" field. It's identical to PhoneEQ.
+func Phone(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldPhone, v))
+}
+
+// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
+func Email(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldEmail, v))
+}
+
+// City applies equality check predicate on the "city" field. It's identical to CityEQ.
+func City(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldCity, v))
+}
+
+// State applies equality check predicate on the "state" field. It's identical to StateEQ.
+func State(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldState, v))
+}
+
+// ZipCode applies equality check predicate on the "zipCode" field. It's identical to ZipCodeEQ.
+func ZipCode(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldZipCode, v))
+}
+
+// Country applies equality check predicate on the "country" field. It's identical to CountryEQ.
+func Country(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldCountry, v))
+}
+
+// LinkedinUrl applies equality check predicate on the "linkedinUrl" field. It's identical to LinkedinUrlEQ.
+func LinkedinUrl(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldLinkedinUrl, v))
+}
+
+// GithubUrl applies equality check predicate on the "githubUrl" field. It's identical to GithubUrlEQ.
+func GithubUrl(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldGithubUrl, v))
+}
+
+// PortfolioUrl applies equality check predicate on the "portfolioUrl" field. It's identical to PortfolioUrlEQ.
+func PortfolioUrl(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldPortfolioUrl, v))
+}
+
+// FullnameEQ applies the EQ predicate on the "fullname" field.
+func FullnameEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldFullname, v))
+}
+
+// FullnameNEQ applies the NEQ predicate on the "fullname" field.
+func FullnameNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldFullname, v))
+}
+
+// FullnameIn applies the In predicate on the "fullname" field.
+func FullnameIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldFullname, vs...))
+}
+
+// FullnameNotIn applies the NotIn predicate on the "fullname" field.
+func FullnameNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldFullname, vs...))
+}
+
+// FullnameGT applies the GT predicate on the "fullname" field.
+func FullnameGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldFullname, v))
+}
+
+// FullnameGTE applies the GTE predicate on the "fullname" field.
+func FullnameGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldFullname, v))
+}
+
+// FullnameLT applies the LT predicate on the "fullname" field.
+func FullnameLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldFullname, v))
+}
+
+// FullnameLTE applies the LTE predicate on the "fullname" field.
+func FullnameLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldFullname, v))
+}
+
+// FullnameContains applies the Contains predicate on the "fullname" field.
+func FullnameContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldFullname, v))
+}
+
+// FullnameHasPrefix applies the HasPrefix predicate on the "fullname" field.
+func FullnameHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldFullname, v))
+}
+
+// FullnameHasSuffix applies the HasSuffix predicate on the "fullname" field.
+func FullnameHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldFullname, v))
+}
+
+// FullnameEqualFold applies the EqualFold predicate on the "fullname" field.
+func FullnameEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldFullname, v))
+}
+
+// FullnameContainsFold applies the ContainsFold predicate on the "fullname" field.
+func FullnameContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldFullname, v))
+}
+
+// ProfessionalTitleEQ applies the EQ predicate on the "professionalTitle" field.
+func ProfessionalTitleEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleNEQ applies the NEQ predicate on the "professionalTitle" field.
+func ProfessionalTitleNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleIn applies the In predicate on the "professionalTitle" field.
+func ProfessionalTitleIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldProfessionalTitle, vs...))
+}
+
+// ProfessionalTitleNotIn applies the NotIn predicate on the "professionalTitle" field.
+func ProfessionalTitleNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldProfessionalTitle, vs...))
+}
+
+// ProfessionalTitleGT applies the GT predicate on the "professionalTitle" field.
+func ProfessionalTitleGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleGTE applies the GTE predicate on the "professionalTitle" field.
+func ProfessionalTitleGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleLT applies the LT predicate on the "professionalTitle" field.
+func ProfessionalTitleLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleLTE applies the LTE predicate on the "professionalTitle" field.
+func ProfessionalTitleLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleContains applies the Contains predicate on the "professionalTitle" field.
+func ProfessionalTitleContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleHasPrefix applies the HasPrefix predicate on the "professionalTitle" field.
+func ProfessionalTitleHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleHasSuffix applies the HasSuffix predicate on the "professionalTitle" field.
+func ProfessionalTitleHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleIsNil applies the IsNil predicate on the "professionalTitle" field.
+func ProfessionalTitleIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldProfessionalTitle))
+}
+
+// ProfessionalTitleNotNil applies the NotNil predicate on the "professionalTitle" field.
+func ProfessionalTitleNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldProfessionalTitle))
+}
+
+// ProfessionalTitleEqualFold applies the EqualFold predicate on the "professionalTitle" field.
+func ProfessionalTitleEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldProfessionalTitle, v))
+}
+
+// ProfessionalTitleContainsFold applies the ContainsFold predicate on the "professionalTitle" field.
+func ProfessionalTitleContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldProfessionalTitle, v))
+}
+
+// AddressEQ applies the EQ predicate on the "address" field.
+func AddressEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldAddress, v))
+}
+
+// AddressNEQ applies the NEQ predicate on the "address" field.
+func AddressNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldAddress, v))
+}
+
+// AddressIn applies the In predicate on the "address" field.
+func AddressIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldAddress, vs...))
+}
+
+// AddressNotIn applies the NotIn predicate on the "address" field.
+func AddressNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldAddress, vs...))
+}
+
+// AddressGT applies the GT predicate on the "address" field.
+func AddressGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldAddress, v))
+}
+
+// AddressGTE applies the GTE predicate on the "address" field.
+func AddressGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldAddress, v))
+}
+
+// AddressLT applies the LT predicate on the "address" field.
+func AddressLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldAddress, v))
+}
+
+// AddressLTE applies the LTE predicate on the "address" field.
+func AddressLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldAddress, v))
+}
+
+// AddressContains applies the Contains predicate on the "address" field.
+func AddressContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldAddress, v))
+}
+
+// AddressHasPrefix applies the HasPrefix predicate on the "address" field.
+func AddressHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldAddress, v))
+}
+
+// AddressHasSuffix applies the HasSuffix predicate on the "address" field.
+func AddressHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldAddress, v))
+}
+
+// AddressIsNil applies the IsNil predicate on the "address" field.
+func AddressIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldAddress))
+}
+
+// AddressNotNil applies the NotNil predicate on the "address" field.
+func AddressNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldAddress))
+}
+
+// AddressEqualFold applies the EqualFold predicate on the "address" field.
+func AddressEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldAddress, v))
+}
+
+// AddressContainsFold applies the ContainsFold predicate on the "address" field.
+func AddressContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldAddress, v))
+}
+
+// PhoneEQ applies the EQ predicate on the "phone" field.
+func PhoneEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldPhone, v))
+}
+
+// PhoneNEQ applies the NEQ predicate on the "phone" field.
+func PhoneNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldPhone, v))
+}
+
+// PhoneIn applies the In predicate on the "phone" field.
+func PhoneIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldPhone, vs...))
+}
+
+// PhoneNotIn applies the NotIn predicate on the "phone" field.
+func PhoneNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldPhone, vs...))
+}
+
+// PhoneGT applies the GT predicate on the "phone" field.
+func PhoneGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldPhone, v))
+}
+
+// PhoneGTE applies the GTE predicate on the "phone" field.
+func PhoneGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldPhone, v))
+}
+
+// PhoneLT applies the LT predicate on the "phone" field.
+func PhoneLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldPhone, v))
+}
+
+// PhoneLTE applies the LTE predicate on the "phone" field.
+func PhoneLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldPhone, v))
+}
+
+// PhoneContains applies the Contains predicate on the "phone" field.
+func PhoneContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldPhone, v))
+}
+
+// PhoneHasPrefix applies the HasPrefix predicate on the "phone" field.
+func PhoneHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldPhone, v))
+}
+
+// PhoneHasSuffix applies the HasSuffix predicate on the "phone" field.
+func PhoneHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldPhone, v))
+}
+
+// PhoneIsNil applies the IsNil predicate on the "phone" field.
+func PhoneIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldPhone))
+}
+
+// PhoneNotNil applies the NotNil predicate on the "phone" field.
+func PhoneNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldPhone))
+}
+
+// PhoneEqualFold applies the EqualFold predicate on the "phone" field.
+func PhoneEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldPhone, v))
+}
+
+// PhoneContainsFold applies the ContainsFold predicate on the "phone" field.
+func PhoneContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldPhone, v))
+}
+
+// EmailEQ applies the EQ predicate on the "email" field.
+func EmailEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldEmail, v))
+}
+
+// EmailNEQ applies the NEQ predicate on the "email" field.
+func EmailNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldEmail, v))
+}
+
+// EmailIn applies the In predicate on the "email" field.
+func EmailIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldEmail, vs...))
+}
+
+// EmailNotIn applies the NotIn predicate on the "email" field.
+func EmailNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldEmail, vs...))
+}
+
+// EmailGT applies the GT predicate on the "email" field.
+func EmailGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldEmail, v))
+}
+
+// EmailGTE applies the GTE predicate on the "email" field.
+func EmailGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldEmail, v))
+}
+
+// EmailLT applies the LT predicate on the "email" field.
+func EmailLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldEmail, v))
+}
+
+// EmailLTE applies the LTE predicate on the "email" field.
+func EmailLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldEmail, v))
+}
+
+// EmailContains applies the Contains predicate on the "email" field.
+func EmailContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldEmail, v))
+}
+
+// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
+func EmailHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldEmail, v))
+}
+
+// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
+func EmailHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldEmail, v))
+}
+
+// EmailEqualFold applies the EqualFold predicate on the "email" field.
+func EmailEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldEmail, v))
+}
+
+// EmailContainsFold applies the ContainsFold predicate on the "email" field.
+func EmailContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldEmail, v))
+}
+
+// CityEQ applies the EQ predicate on the "city" field.
+func CityEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldCity, v))
+}
+
+// CityNEQ applies the NEQ predicate on the "city" field.
+func CityNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldCity, v))
+}
+
+// CityIn applies the In predicate on the "city" field.
+func CityIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldCity, vs...))
+}
+
+// CityNotIn applies the NotIn predicate on the "city" field.
+func CityNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldCity, vs...))
+}
+
+// CityGT applies the GT predicate on the "city" field.
+func CityGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldCity, v))
+}
+
+// CityGTE applies the GTE predicate on the "city" field.
+func CityGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldCity, v))
+}
+
+// CityLT applies the LT predicate on the "city" field.
+func CityLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldCity, v))
+}
+
+// CityLTE applies the LTE predicate on the "city" field.
+func CityLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldCity, v))
+}
+
+// CityContains applies the Contains predicate on the "city" field.
+func CityContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldCity, v))
+}
+
+// CityHasPrefix applies the HasPrefix predicate on the "city" field.
+func CityHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldCity, v))
+}
+
+// CityHasSuffix applies the HasSuffix predicate on the "city" field.
+func CityHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldCity, v))
+}
+
+// CityIsNil applies the IsNil predicate on the "city" field.
+func CityIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldCity))
+}
+
+// CityNotNil applies the NotNil predicate on the "city" field.
+func CityNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldCity))
+}
+
+// CityEqualFold applies the EqualFold predicate on the "city" field.
+func CityEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldCity, v))
+}
+
+// CityContainsFold applies the ContainsFold predicate on the "city" field.
+func CityContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldCity, v))
+}
+
+// StateEQ applies the EQ predicate on the "state" field.
+func StateEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldState, v))
+}
+
+// StateNEQ applies the NEQ predicate on the "state" field.
+func StateNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldState, v))
+}
+
+// StateIn applies the In predicate on the "state" field.
+func StateIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldState, vs...))
+}
+
+// StateNotIn applies the NotIn predicate on the "state" field.
+func StateNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldState, vs...))
+}
+
+// StateGT applies the GT predicate on the "state" field.
+func StateGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldState, v))
+}
+
+// StateGTE applies the GTE predicate on the "state" field.
+func StateGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldState, v))
+}
+
+// StateLT applies the LT predicate on the "state" field.
+func StateLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldState, v))
+}
+
+// StateLTE applies the LTE predicate on the "state" field.
+func StateLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldState, v))
+}
+
+// StateContains applies the Contains predicate on the "state" field.
+func StateContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldState, v))
+}
+
+// StateHasPrefix applies the HasPrefix predicate on the "state" field.
+func StateHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldState, v))
+}
+
+// StateHasSuffix applies the HasSuffix predicate on the "state" field.
+func StateHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldState, v))
+}
+
+// StateIsNil applies the IsNil predicate on the "state" field.
+func StateIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldState))
+}
+
+// StateNotNil applies the NotNil predicate on the "state" field.
+func StateNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldState))
+}
+
+// StateEqualFold applies the EqualFold predicate on the "state" field.
+func StateEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldState, v))
+}
+
+// StateContainsFold applies the ContainsFold predicate on the "state" field.
+func StateContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldState, v))
+}
+
+// ZipCodeEQ applies the EQ predicate on the "zipCode" field.
+func ZipCodeEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldZipCode, v))
+}
+
+// ZipCodeNEQ applies the NEQ predicate on the "zipCode" field.
+func ZipCodeNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldZipCode, v))
+}
+
+// ZipCodeIn applies the In predicate on the "zipCode" field.
+func ZipCodeIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldZipCode, vs...))
+}
+
+// ZipCodeNotIn applies the NotIn predicate on the "zipCode" field.
+func ZipCodeNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldZipCode, vs...))
+}
+
+// ZipCodeGT applies the GT predicate on the "zipCode" field.
+func ZipCodeGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldZipCode, v))
+}
+
+// ZipCodeGTE applies the GTE predicate on the "zipCode" field.
+func ZipCodeGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldZipCode, v))
+}
+
+// ZipCodeLT applies the LT predicate on the "zipCode" field.
+func ZipCodeLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldZipCode, v))
+}
+
+// ZipCodeLTE applies the LTE predicate on the "zipCode" field.
+func ZipCodeLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldZipCode, v))
+}
+
+// ZipCodeContains applies the Contains predicate on the "zipCode" field.
+func ZipCodeContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldZipCode, v))
+}
+
+// ZipCodeHasPrefix applies the HasPrefix predicate on the "zipCode" field.
+func ZipCodeHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldZipCode, v))
+}
+
+// ZipCodeHasSuffix applies the HasSuffix predicate on the "zipCode" field.
+func ZipCodeHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldZipCode, v))
+}
+
+// ZipCodeIsNil applies the IsNil predicate on the "zipCode" field.
+func ZipCodeIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldZipCode))
+}
+
+// ZipCodeNotNil applies the NotNil predicate on the "zipCode" field.
+func ZipCodeNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldZipCode))
+}
+
+// ZipCodeEqualFold applies the EqualFold predicate on the "zipCode" field.
+func ZipCodeEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldZipCode, v))
+}
+
+// ZipCodeContainsFold applies the ContainsFold predicate on the "zipCode" field.
+func ZipCodeContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldZipCode, v))
+}
+
+// CountryEQ applies the EQ predicate on the "country" field.
+func CountryEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldCountry, v))
+}
+
+// CountryNEQ applies the NEQ predicate on the "country" field.
+func CountryNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldCountry, v))
+}
+
+// CountryIn applies the In predicate on the "country" field.
+func CountryIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldCountry, vs...))
+}
+
+// CountryNotIn applies the NotIn predicate on the "country" field.
+func CountryNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldCountry, vs...))
+}
+
+// CountryGT applies the GT predicate on the "country" field.
+func CountryGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldCountry, v))
+}
+
+// CountryGTE applies the GTE predicate on the "country" field.
+func CountryGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldCountry, v))
+}
+
+// CountryLT applies the LT predicate on the "country" field.
+func CountryLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldCountry, v))
+}
+
+// CountryLTE applies the LTE predicate on the "country" field.
+func CountryLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldCountry, v))
+}
+
+// CountryContains applies the Contains predicate on the "country" field.
+func CountryContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldCountry, v))
+}
+
+// CountryHasPrefix applies the HasPrefix predicate on the "country" field.
+func CountryHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldCountry, v))
+}
+
+// CountryHasSuffix applies the HasSuffix predicate on the "country" field.
+func CountryHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldCountry, v))
+}
+
+// CountryIsNil applies the IsNil predicate on the "country" field.
+func CountryIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldCountry))
+}
+
+// CountryNotNil applies the NotNil predicate on the "country" field.
+func CountryNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldCountry))
+}
+
+// CountryEqualFold applies the EqualFold predicate on the "country" field.
+func CountryEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldCountry, v))
+}
+
+// CountryContainsFold applies the ContainsFold predicate on the "country" field.
+func CountryContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldCountry, v))
+}
+
+// LinkedinUrlEQ applies the EQ predicate on the "linkedinUrl" field.
+func LinkedinUrlEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlNEQ applies the NEQ predicate on the "linkedinUrl" field.
+func LinkedinUrlNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlIn applies the In predicate on the "linkedinUrl" field.
+func LinkedinUrlIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldLinkedinUrl, vs...))
+}
+
+// LinkedinUrlNotIn applies the NotIn predicate on the "linkedinUrl" field.
+func LinkedinUrlNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldLinkedinUrl, vs...))
+}
+
+// LinkedinUrlGT applies the GT predicate on the "linkedinUrl" field.
+func LinkedinUrlGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlGTE applies the GTE predicate on the "linkedinUrl" field.
+func LinkedinUrlGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlLT applies the LT predicate on the "linkedinUrl" field.
+func LinkedinUrlLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlLTE applies the LTE predicate on the "linkedinUrl" field.
+func LinkedinUrlLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlContains applies the Contains predicate on the "linkedinUrl" field.
+func LinkedinUrlContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlHasPrefix applies the HasPrefix predicate on the "linkedinUrl" field.
+func LinkedinUrlHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlHasSuffix applies the HasSuffix predicate on the "linkedinUrl" field.
+func LinkedinUrlHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlIsNil applies the IsNil predicate on the "linkedinUrl" field.
+func LinkedinUrlIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldLinkedinUrl))
+}
+
+// LinkedinUrlNotNil applies the NotNil predicate on the "linkedinUrl" field.
+func LinkedinUrlNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldLinkedinUrl))
+}
+
+// LinkedinUrlEqualFold applies the EqualFold predicate on the "linkedinUrl" field.
+func LinkedinUrlEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldLinkedinUrl, v))
+}
+
+// LinkedinUrlContainsFold applies the ContainsFold predicate on the "linkedinUrl" field.
+func LinkedinUrlContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldLinkedinUrl, v))
+}
+
+// GithubUrlEQ applies the EQ predicate on the "githubUrl" field.
+func GithubUrlEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldGithubUrl, v))
+}
+
+// GithubUrlNEQ applies the NEQ predicate on the "githubUrl" field.
+func GithubUrlNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldGithubUrl, v))
+}
+
+// GithubUrlIn applies the In predicate on the "githubUrl" field.
+func GithubUrlIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldGithubUrl, vs...))
+}
+
+// GithubUrlNotIn applies the NotIn predicate on the "githubUrl" field.
+func GithubUrlNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldGithubUrl, vs...))
+}
+
+// GithubUrlGT applies the GT predicate on the "githubUrl" field.
+func GithubUrlGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldGithubUrl, v))
+}
+
+// GithubUrlGTE applies the GTE predicate on the "githubUrl" field.
+func GithubUrlGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldGithubUrl, v))
+}
+
+// GithubUrlLT applies the LT predicate on the "githubUrl" field.
+func GithubUrlLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldGithubUrl, v))
+}
+
+// GithubUrlLTE applies the LTE predicate on the "githubUrl" field.
+func GithubUrlLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldGithubUrl, v))
+}
+
+// GithubUrlContains applies the Contains predicate on the "githubUrl" field.
+func GithubUrlContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldGithubUrl, v))
+}
+
+// GithubUrlHasPrefix applies the HasPrefix predicate on the "githubUrl" field.
+func GithubUrlHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldGithubUrl, v))
+}
+
+// GithubUrlHasSuffix applies the HasSuffix predicate on the "githubUrl" field.
+func GithubUrlHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldGithubUrl, v))
+}
+
+// GithubUrlIsNil applies the IsNil predicate on the "githubUrl" field.
+func GithubUrlIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldGithubUrl))
+}
+
+// GithubUrlNotNil applies the NotNil predicate on the "githubUrl" field.
+func GithubUrlNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldGithubUrl))
+}
+
+// GithubUrlEqualFold applies the EqualFold predicate on the "githubUrl" field.
+func GithubUrlEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldGithubUrl, v))
+}
+
+// GithubUrlContainsFold applies the ContainsFold predicate on the "githubUrl" field.
+func GithubUrlContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldGithubUrl, v))
+}
+
+// PortfolioUrlEQ applies the EQ predicate on the "portfolioUrl" field.
+func PortfolioUrlEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEQ(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlNEQ applies the NEQ predicate on the "portfolioUrl" field.
+func PortfolioUrlNEQ(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNEQ(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlIn applies the In predicate on the "portfolioUrl" field.
+func PortfolioUrlIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIn(FieldPortfolioUrl, vs...))
+}
+
+// PortfolioUrlNotIn applies the NotIn predicate on the "portfolioUrl" field.
+func PortfolioUrlNotIn(vs ...string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotIn(FieldPortfolioUrl, vs...))
+}
+
+// PortfolioUrlGT applies the GT predicate on the "portfolioUrl" field.
+func PortfolioUrlGT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGT(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlGTE applies the GTE predicate on the "portfolioUrl" field.
+func PortfolioUrlGTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldGTE(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlLT applies the LT predicate on the "portfolioUrl" field.
+func PortfolioUrlLT(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLT(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlLTE applies the LTE predicate on the "portfolioUrl" field.
+func PortfolioUrlLTE(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldLTE(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlContains applies the Contains predicate on the "portfolioUrl" field.
+func PortfolioUrlContains(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContains(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlHasPrefix applies the HasPrefix predicate on the "portfolioUrl" field.
+func PortfolioUrlHasPrefix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasPrefix(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlHasSuffix applies the HasSuffix predicate on the "portfolioUrl" field.
+func PortfolioUrlHasSuffix(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldHasSuffix(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlIsNil applies the IsNil predicate on the "portfolioUrl" field.
+func PortfolioUrlIsNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldIsNull(FieldPortfolioUrl))
+}
+
+// PortfolioUrlNotNil applies the NotNil predicate on the "portfolioUrl" field.
+func PortfolioUrlNotNil() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldNotNull(FieldPortfolioUrl))
+}
+
+// PortfolioUrlEqualFold applies the EqualFold predicate on the "portfolioUrl" field.
+func PortfolioUrlEqualFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldEqualFold(FieldPortfolioUrl, v))
+}
+
+// PortfolioUrlContainsFold applies the ContainsFold predicate on the "portfolioUrl" field.
+func PortfolioUrlContainsFold(v string) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(sql.FieldContainsFold(FieldPortfolioUrl, v))
+}
+
+// HasResume applies the HasEdge predicate on the "resume" edge.
+func HasResume() predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, true, ResumeTable, ResumeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResumeWith applies the HasEdge predicate on the "resume" edge with a given conditions (other predicates).
+func HasResumeWith(preds ...predicate.Resume) predicate.HeaderContactInfo {
+	return predicate.HeaderContactInfo(func(s *sql.Selector) {
+		step := newResumeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

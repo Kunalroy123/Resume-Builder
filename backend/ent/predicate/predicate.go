@@ -12,9 +12,6 @@ type Achievement func(*sql.Selector)
 // Certification is the predicate function for certification builders.
 type Certification func(*sql.Selector)
 
-// Course is the predicate function for course builders.
-type Course func(*sql.Selector)
-
 // Education is the predicate function for education builders.
 type Education func(*sql.Selector)
 

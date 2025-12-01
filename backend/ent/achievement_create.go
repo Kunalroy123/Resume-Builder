@@ -4,11 +4,15 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"resume-builder-backend/ent/achievement"
+	"resume-builder-backend/ent/resume"
+	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // AchievementCreate is the builder for creating a Achievement entity.
@@ -18,6 +22,121 @@ type AchievementCreate struct {
 	hooks    []Hook
 }
 
+// SetDiscription sets the "discription" field.
+func (_c *AchievementCreate) SetDiscription(v string) *AchievementCreate {
+	_c.mutation.SetDiscription(v)
+	return _c
+}
+
+// SetDateAchieved sets the "dateAchieved" field.
+func (_c *AchievementCreate) SetDateAchieved(v time.Time) *AchievementCreate {
+	_c.mutation.SetDateAchieved(v)
+	return _c
+}
+
+// SetNillableDateAchieved sets the "dateAchieved" field if the given value is not nil.
+func (_c *AchievementCreate) SetNillableDateAchieved(v *time.Time) *AchievementCreate {
+	if v != nil {
+		_c.SetDateAchieved(*v)
+	}
+	return _c
+}
+
+// SetIssuingOrganization sets the "issuingOrganization" field.
+func (_c *AchievementCreate) SetIssuingOrganization(v string) *AchievementCreate {
+	_c.mutation.SetIssuingOrganization(v)
+	return _c
+}
+
+// SetNillableIssuingOrganization sets the "issuingOrganization" field if the given value is not nil.
+func (_c *AchievementCreate) SetNillableIssuingOrganization(v *string) *AchievementCreate {
+	if v != nil {
+		_c.SetIssuingOrganization(*v)
+	}
+	return _c
+}
+
+// SetAchievementType sets the "achievementType" field.
+func (_c *AchievementCreate) SetAchievementType(v achievement.AchievementType) *AchievementCreate {
+	_c.mutation.SetAchievementType(v)
+	return _c
+}
+
+// SetNillableAchievementType sets the "achievementType" field if the given value is not nil.
+func (_c *AchievementCreate) SetNillableAchievementType(v *achievement.AchievementType) *AchievementCreate {
+	if v != nil {
+		_c.SetAchievementType(*v)
+	}
+	return _c
+}
+
+// SetAchievementUrl sets the "achievementUrl" field.
+func (_c *AchievementCreate) SetAchievementUrl(v string) *AchievementCreate {
+	_c.mutation.SetAchievementUrl(v)
+	return _c
+}
+
+// SetNillableAchievementUrl sets the "achievementUrl" field if the given value is not nil.
+func (_c *AchievementCreate) SetNillableAchievementUrl(v *string) *AchievementCreate {
+	if v != nil {
+		_c.SetAchievementUrl(*v)
+	}
+	return _c
+}
+
+// SetImpactMetrics sets the "impactMetrics" field.
+func (_c *AchievementCreate) SetImpactMetrics(v string) *AchievementCreate {
+	_c.mutation.SetImpactMetrics(v)
+	return _c
+}
+
+// SetNillableImpactMetrics sets the "impactMetrics" field if the given value is not nil.
+func (_c *AchievementCreate) SetNillableImpactMetrics(v *string) *AchievementCreate {
+	if v != nil {
+		_c.SetImpactMetrics(*v)
+	}
+	return _c
+}
+
+// SetOrderIndex sets the "orderIndex" field.
+func (_c *AchievementCreate) SetOrderIndex(v int) *AchievementCreate {
+	_c.mutation.SetOrderIndex(v)
+	return _c
+}
+
+// SetNillableOrderIndex sets the "orderIndex" field if the given value is not nil.
+func (_c *AchievementCreate) SetNillableOrderIndex(v *int) *AchievementCreate {
+	if v != nil {
+		_c.SetOrderIndex(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *AchievementCreate) SetID(v uuid.UUID) *AchievementCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *AchievementCreate) SetNillableID(v *uuid.UUID) *AchievementCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *AchievementCreate) SetResumeID(id uuid.UUID) *AchievementCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *AchievementCreate) SetResume(v *Resume) *AchievementCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the AchievementMutation object of the builder.
 func (_c *AchievementCreate) Mutation() *AchievementMutation {
 	return _c.mutation
@@ -25,6 +144,7 @@ func (_c *AchievementCreate) Mutation() *AchievementMutation {
 
 // Save creates the Achievement in the database.
 func (_c *AchievementCreate) Save(ctx context.Context) (*Achievement, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +170,46 @@ func (_c *AchievementCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *AchievementCreate) defaults() {
+	if _, ok := _c.mutation.AchievementType(); !ok {
+		v := achievement.DefaultAchievementType
+		_c.mutation.SetAchievementType(v)
+	}
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		v := achievement.DefaultOrderIndex
+		_c.mutation.SetOrderIndex(v)
+	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := achievement.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *AchievementCreate) check() error {
+	if _, ok := _c.mutation.Discription(); !ok {
+		return &ValidationError{Name: "discription", err: errors.New(`ent: missing required field "Achievement.discription"`)}
+	}
+	if v, ok := _c.mutation.Discription(); ok {
+		if err := achievement.DiscriptionValidator(v); err != nil {
+			return &ValidationError{Name: "discription", err: fmt.Errorf(`ent: validator failed for field "Achievement.discription": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.AchievementType(); !ok {
+		return &ValidationError{Name: "achievementType", err: errors.New(`ent: missing required field "Achievement.achievementType"`)}
+	}
+	if v, ok := _c.mutation.AchievementType(); ok {
+		if err := achievement.AchievementTypeValidator(v); err != nil {
+			return &ValidationError{Name: "achievementType", err: fmt.Errorf(`ent: validator failed for field "Achievement.achievementType": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.OrderIndex(); !ok {
+		return &ValidationError{Name: "orderIndex", err: errors.New(`ent: missing required field "Achievement.orderIndex"`)}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "Achievement.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +224,13 @@ func (_c *AchievementCreate) sqlSave(ctx context.Context) (*Achievement, error) 
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +239,57 @@ func (_c *AchievementCreate) sqlSave(ctx context.Context) (*Achievement, error) 
 func (_c *AchievementCreate) createSpec() (*Achievement, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Achievement{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(achievement.Table, sqlgraph.NewFieldSpec(achievement.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(achievement.Table, sqlgraph.NewFieldSpec(achievement.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Discription(); ok {
+		_spec.SetField(achievement.FieldDiscription, field.TypeString, value)
+		_node.Discription = value
+	}
+	if value, ok := _c.mutation.DateAchieved(); ok {
+		_spec.SetField(achievement.FieldDateAchieved, field.TypeTime, value)
+		_node.DateAchieved = &value
+	}
+	if value, ok := _c.mutation.IssuingOrganization(); ok {
+		_spec.SetField(achievement.FieldIssuingOrganization, field.TypeString, value)
+		_node.IssuingOrganization = value
+	}
+	if value, ok := _c.mutation.AchievementType(); ok {
+		_spec.SetField(achievement.FieldAchievementType, field.TypeEnum, value)
+		_node.AchievementType = value
+	}
+	if value, ok := _c.mutation.AchievementUrl(); ok {
+		_spec.SetField(achievement.FieldAchievementUrl, field.TypeString, value)
+		_node.AchievementUrl = value
+	}
+	if value, ok := _c.mutation.ImpactMetrics(); ok {
+		_spec.SetField(achievement.FieldImpactMetrics, field.TypeString, value)
+		_node.ImpactMetrics = value
+	}
+	if value, ok := _c.mutation.OrderIndex(); ok {
+		_spec.SetField(achievement.FieldOrderIndex, field.TypeInt, value)
+		_node.OrderIndex = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   achievement.ResumeTable,
+			Columns: []string{achievement.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.resume_achievements = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +311,7 @@ func (_c *AchievementCreateBulk) Save(ctx context.Context) ([]*Achievement, erro
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AchievementMutation)
 				if !ok {
@@ -125,10 +338,6 @@ func (_c *AchievementCreateBulk) Save(ctx context.Context) ([]*Achievement, erro
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

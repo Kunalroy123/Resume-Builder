@@ -4,11 +4,14 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"resume-builder-backend/ent/headercontactinfo"
+	"resume-builder-backend/ent/resume"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // HeaderContactInfoCreate is the builder for creating a HeaderContactInfo entity.
@@ -18,6 +21,183 @@ type HeaderContactInfoCreate struct {
 	hooks    []Hook
 }
 
+// SetFullname sets the "fullname" field.
+func (_c *HeaderContactInfoCreate) SetFullname(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetFullname(v)
+	return _c
+}
+
+// SetProfessionalTitle sets the "professionalTitle" field.
+func (_c *HeaderContactInfoCreate) SetProfessionalTitle(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetProfessionalTitle(v)
+	return _c
+}
+
+// SetNillableProfessionalTitle sets the "professionalTitle" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableProfessionalTitle(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetProfessionalTitle(*v)
+	}
+	return _c
+}
+
+// SetAddress sets the "address" field.
+func (_c *HeaderContactInfoCreate) SetAddress(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetAddress(v)
+	return _c
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableAddress(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetAddress(*v)
+	}
+	return _c
+}
+
+// SetPhone sets the "phone" field.
+func (_c *HeaderContactInfoCreate) SetPhone(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetPhone(v)
+	return _c
+}
+
+// SetNillablePhone sets the "phone" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillablePhone(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetPhone(*v)
+	}
+	return _c
+}
+
+// SetEmail sets the "email" field.
+func (_c *HeaderContactInfoCreate) SetEmail(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetEmail(v)
+	return _c
+}
+
+// SetCity sets the "city" field.
+func (_c *HeaderContactInfoCreate) SetCity(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetCity(v)
+	return _c
+}
+
+// SetNillableCity sets the "city" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableCity(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetCity(*v)
+	}
+	return _c
+}
+
+// SetState sets the "state" field.
+func (_c *HeaderContactInfoCreate) SetState(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetState(v)
+	return _c
+}
+
+// SetNillableState sets the "state" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableState(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetState(*v)
+	}
+	return _c
+}
+
+// SetZipCode sets the "zipCode" field.
+func (_c *HeaderContactInfoCreate) SetZipCode(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetZipCode(v)
+	return _c
+}
+
+// SetNillableZipCode sets the "zipCode" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableZipCode(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetZipCode(*v)
+	}
+	return _c
+}
+
+// SetCountry sets the "country" field.
+func (_c *HeaderContactInfoCreate) SetCountry(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetCountry(v)
+	return _c
+}
+
+// SetNillableCountry sets the "country" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableCountry(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetCountry(*v)
+	}
+	return _c
+}
+
+// SetLinkedinUrl sets the "linkedinUrl" field.
+func (_c *HeaderContactInfoCreate) SetLinkedinUrl(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetLinkedinUrl(v)
+	return _c
+}
+
+// SetNillableLinkedinUrl sets the "linkedinUrl" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableLinkedinUrl(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetLinkedinUrl(*v)
+	}
+	return _c
+}
+
+// SetGithubUrl sets the "githubUrl" field.
+func (_c *HeaderContactInfoCreate) SetGithubUrl(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetGithubUrl(v)
+	return _c
+}
+
+// SetNillableGithubUrl sets the "githubUrl" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableGithubUrl(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetGithubUrl(*v)
+	}
+	return _c
+}
+
+// SetPortfolioUrl sets the "portfolioUrl" field.
+func (_c *HeaderContactInfoCreate) SetPortfolioUrl(v string) *HeaderContactInfoCreate {
+	_c.mutation.SetPortfolioUrl(v)
+	return _c
+}
+
+// SetNillablePortfolioUrl sets the "portfolioUrl" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillablePortfolioUrl(v *string) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetPortfolioUrl(*v)
+	}
+	return _c
+}
+
+// SetID sets the "id" field.
+func (_c *HeaderContactInfoCreate) SetID(v uuid.UUID) *HeaderContactInfoCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *HeaderContactInfoCreate) SetNillableID(v *uuid.UUID) *HeaderContactInfoCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_c *HeaderContactInfoCreate) SetResumeID(id uuid.UUID) *HeaderContactInfoCreate {
+	_c.mutation.SetResumeID(id)
+	return _c
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_c *HeaderContactInfoCreate) SetResume(v *Resume) *HeaderContactInfoCreate {
+	return _c.SetResumeID(v.ID)
+}
+
 // Mutation returns the HeaderContactInfoMutation object of the builder.
 func (_c *HeaderContactInfoCreate) Mutation() *HeaderContactInfoMutation {
 	return _c.mutation
@@ -25,6 +205,7 @@ func (_c *HeaderContactInfoCreate) Mutation() *HeaderContactInfoMutation {
 
 // Save creates the HeaderContactInfo in the database.
 func (_c *HeaderContactInfoCreate) Save(ctx context.Context) (*HeaderContactInfo, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -50,8 +231,35 @@ func (_c *HeaderContactInfoCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *HeaderContactInfoCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
+		v := headercontactinfo.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *HeaderContactInfoCreate) check() error {
+	if _, ok := _c.mutation.Fullname(); !ok {
+		return &ValidationError{Name: "fullname", err: errors.New(`ent: missing required field "HeaderContactInfo.fullname"`)}
+	}
+	if v, ok := _c.mutation.Fullname(); ok {
+		if err := headercontactinfo.FullnameValidator(v); err != nil {
+			return &ValidationError{Name: "fullname", err: fmt.Errorf(`ent: validator failed for field "HeaderContactInfo.fullname": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.Email(); !ok {
+		return &ValidationError{Name: "email", err: errors.New(`ent: missing required field "HeaderContactInfo.email"`)}
+	}
+	if v, ok := _c.mutation.Email(); ok {
+		if err := headercontactinfo.EmailValidator(v); err != nil {
+			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "HeaderContactInfo.email": %w`, err)}
+		}
+	}
+	if len(_c.mutation.ResumeIDs()) == 0 {
+		return &ValidationError{Name: "resume", err: errors.New(`ent: missing required edge "HeaderContactInfo.resume"`)}
+	}
 	return nil
 }
 
@@ -66,8 +274,13 @@ func (_c *HeaderContactInfoCreate) sqlSave(ctx context.Context) (*HeaderContactI
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -76,8 +289,77 @@ func (_c *HeaderContactInfoCreate) sqlSave(ctx context.Context) (*HeaderContactI
 func (_c *HeaderContactInfoCreate) createSpec() (*HeaderContactInfo, *sqlgraph.CreateSpec) {
 	var (
 		_node = &HeaderContactInfo{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(headercontactinfo.Table, sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(headercontactinfo.Table, sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
+	if value, ok := _c.mutation.Fullname(); ok {
+		_spec.SetField(headercontactinfo.FieldFullname, field.TypeString, value)
+		_node.Fullname = value
+	}
+	if value, ok := _c.mutation.ProfessionalTitle(); ok {
+		_spec.SetField(headercontactinfo.FieldProfessionalTitle, field.TypeString, value)
+		_node.ProfessionalTitle = value
+	}
+	if value, ok := _c.mutation.Address(); ok {
+		_spec.SetField(headercontactinfo.FieldAddress, field.TypeString, value)
+		_node.Address = value
+	}
+	if value, ok := _c.mutation.Phone(); ok {
+		_spec.SetField(headercontactinfo.FieldPhone, field.TypeString, value)
+		_node.Phone = value
+	}
+	if value, ok := _c.mutation.Email(); ok {
+		_spec.SetField(headercontactinfo.FieldEmail, field.TypeString, value)
+		_node.Email = value
+	}
+	if value, ok := _c.mutation.City(); ok {
+		_spec.SetField(headercontactinfo.FieldCity, field.TypeString, value)
+		_node.City = value
+	}
+	if value, ok := _c.mutation.State(); ok {
+		_spec.SetField(headercontactinfo.FieldState, field.TypeString, value)
+		_node.State = value
+	}
+	if value, ok := _c.mutation.ZipCode(); ok {
+		_spec.SetField(headercontactinfo.FieldZipCode, field.TypeString, value)
+		_node.ZipCode = value
+	}
+	if value, ok := _c.mutation.Country(); ok {
+		_spec.SetField(headercontactinfo.FieldCountry, field.TypeString, value)
+		_node.Country = value
+	}
+	if value, ok := _c.mutation.LinkedinUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldLinkedinUrl, field.TypeString, value)
+		_node.LinkedinUrl = value
+	}
+	if value, ok := _c.mutation.GithubUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldGithubUrl, field.TypeString, value)
+		_node.GithubUrl = value
+	}
+	if value, ok := _c.mutation.PortfolioUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldPortfolioUrl, field.TypeString, value)
+		_node.PortfolioUrl = value
+	}
+	if nodes := _c.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   headercontactinfo.ResumeTable,
+			Columns: []string{headercontactinfo.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.resume_header_contanct_info = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	return _node, _spec
 }
 
@@ -99,6 +381,7 @@ func (_c *HeaderContactInfoCreateBulk) Save(ctx context.Context) ([]*HeaderConta
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*HeaderContactInfoMutation)
 				if !ok {
@@ -125,10 +408,6 @@ func (_c *HeaderContactInfoCreateBulk) Save(ctx context.Context) ([]*HeaderConta
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

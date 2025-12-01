@@ -6,51 +6,496 @@ import (
 	"resume-builder-backend/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Hobby {
+func ID(id uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Hobby {
+func IDEQ(id uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Hobby {
+func IDNEQ(id uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Hobby {
+func IDIn(ids ...uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Hobby {
+func IDNotIn(ids ...uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Hobby {
+func IDGT(id uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Hobby {
+func IDGTE(id uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Hobby {
+func IDLT(id uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Hobby {
+func IDLTE(id uuid.UUID) predicate.Hobby {
 	return predicate.Hobby(sql.FieldLTE(FieldID, id))
+}
+
+// Name applies equality check predicate on the "name" field. It's identical to NameEQ.
+func Name(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldName, v))
+}
+
+// Description applies equality check predicate on the "description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldDescription, v))
+}
+
+// SkillLevel applies equality check predicate on the "skillLevel" field. It's identical to SkillLevelEQ.
+func SkillLevel(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldSkillLevel, v))
+}
+
+// YearsInvolved applies equality check predicate on the "yearsInvolved" field. It's identical to YearsInvolvedEQ.
+func YearsInvolved(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldYearsInvolved, v))
+}
+
+// Achievements applies equality check predicate on the "achievements" field. It's identical to AchievementsEQ.
+func Achievements(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldAchievements, v))
+}
+
+// OrderIndex applies equality check predicate on the "orderIndex" field. It's identical to OrderIndexEQ.
+func OrderIndex(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// NameEQ applies the EQ predicate on the "name" field.
+func NameEQ(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldName, v))
+}
+
+// NameNEQ applies the NEQ predicate on the "name" field.
+func NameNEQ(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNEQ(FieldName, v))
+}
+
+// NameIn applies the In predicate on the "name" field.
+func NameIn(vs ...string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldIn(FieldName, vs...))
+}
+
+// NameNotIn applies the NotIn predicate on the "name" field.
+func NameNotIn(vs ...string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotIn(FieldName, vs...))
+}
+
+// NameGT applies the GT predicate on the "name" field.
+func NameGT(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGT(FieldName, v))
+}
+
+// NameGTE applies the GTE predicate on the "name" field.
+func NameGTE(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGTE(FieldName, v))
+}
+
+// NameLT applies the LT predicate on the "name" field.
+func NameLT(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLT(FieldName, v))
+}
+
+// NameLTE applies the LTE predicate on the "name" field.
+func NameLTE(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLTE(FieldName, v))
+}
+
+// NameContains applies the Contains predicate on the "name" field.
+func NameContains(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldContains(FieldName, v))
+}
+
+// NameHasPrefix applies the HasPrefix predicate on the "name" field.
+func NameHasPrefix(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldHasPrefix(FieldName, v))
+}
+
+// NameHasSuffix applies the HasSuffix predicate on the "name" field.
+func NameHasSuffix(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldHasSuffix(FieldName, v))
+}
+
+// NameIsNil applies the IsNil predicate on the "name" field.
+func NameIsNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldIsNull(FieldName))
+}
+
+// NameNotNil applies the NotNil predicate on the "name" field.
+func NameNotNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotNull(FieldName))
+}
+
+// NameEqualFold applies the EqualFold predicate on the "name" field.
+func NameEqualFold(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEqualFold(FieldName, v))
+}
+
+// NameContainsFold applies the ContainsFold predicate on the "name" field.
+func NameContainsFold(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldContainsFold(FieldName, v))
+}
+
+// DescriptionEQ applies the EQ predicate on the "description" field.
+func DescriptionEQ(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldDescription, v))
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "description" field.
+func DescriptionNEQ(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNEQ(FieldDescription, v))
+}
+
+// DescriptionIn applies the In predicate on the "description" field.
+func DescriptionIn(vs ...string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldIn(FieldDescription, vs...))
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "description" field.
+func DescriptionNotIn(vs ...string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotIn(FieldDescription, vs...))
+}
+
+// DescriptionGT applies the GT predicate on the "description" field.
+func DescriptionGT(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGT(FieldDescription, v))
+}
+
+// DescriptionGTE applies the GTE predicate on the "description" field.
+func DescriptionGTE(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGTE(FieldDescription, v))
+}
+
+// DescriptionLT applies the LT predicate on the "description" field.
+func DescriptionLT(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLT(FieldDescription, v))
+}
+
+// DescriptionLTE applies the LTE predicate on the "description" field.
+func DescriptionLTE(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLTE(FieldDescription, v))
+}
+
+// DescriptionContains applies the Contains predicate on the "description" field.
+func DescriptionContains(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldContains(FieldDescription, v))
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "description" field.
+func DescriptionHasPrefix(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldHasPrefix(FieldDescription, v))
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "description" field.
+func DescriptionHasSuffix(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldHasSuffix(FieldDescription, v))
+}
+
+// DescriptionIsNil applies the IsNil predicate on the "description" field.
+func DescriptionIsNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldIsNull(FieldDescription))
+}
+
+// DescriptionNotNil applies the NotNil predicate on the "description" field.
+func DescriptionNotNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotNull(FieldDescription))
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "description" field.
+func DescriptionEqualFold(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEqualFold(FieldDescription, v))
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "description" field.
+func DescriptionContainsFold(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldContainsFold(FieldDescription, v))
+}
+
+// SkillLevelEQ applies the EQ predicate on the "skillLevel" field.
+func SkillLevelEQ(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldSkillLevel, v))
+}
+
+// SkillLevelNEQ applies the NEQ predicate on the "skillLevel" field.
+func SkillLevelNEQ(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNEQ(FieldSkillLevel, v))
+}
+
+// SkillLevelIn applies the In predicate on the "skillLevel" field.
+func SkillLevelIn(vs ...string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldIn(FieldSkillLevel, vs...))
+}
+
+// SkillLevelNotIn applies the NotIn predicate on the "skillLevel" field.
+func SkillLevelNotIn(vs ...string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotIn(FieldSkillLevel, vs...))
+}
+
+// SkillLevelGT applies the GT predicate on the "skillLevel" field.
+func SkillLevelGT(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGT(FieldSkillLevel, v))
+}
+
+// SkillLevelGTE applies the GTE predicate on the "skillLevel" field.
+func SkillLevelGTE(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGTE(FieldSkillLevel, v))
+}
+
+// SkillLevelLT applies the LT predicate on the "skillLevel" field.
+func SkillLevelLT(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLT(FieldSkillLevel, v))
+}
+
+// SkillLevelLTE applies the LTE predicate on the "skillLevel" field.
+func SkillLevelLTE(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLTE(FieldSkillLevel, v))
+}
+
+// SkillLevelContains applies the Contains predicate on the "skillLevel" field.
+func SkillLevelContains(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldContains(FieldSkillLevel, v))
+}
+
+// SkillLevelHasPrefix applies the HasPrefix predicate on the "skillLevel" field.
+func SkillLevelHasPrefix(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldHasPrefix(FieldSkillLevel, v))
+}
+
+// SkillLevelHasSuffix applies the HasSuffix predicate on the "skillLevel" field.
+func SkillLevelHasSuffix(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldHasSuffix(FieldSkillLevel, v))
+}
+
+// SkillLevelIsNil applies the IsNil predicate on the "skillLevel" field.
+func SkillLevelIsNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldIsNull(FieldSkillLevel))
+}
+
+// SkillLevelNotNil applies the NotNil predicate on the "skillLevel" field.
+func SkillLevelNotNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotNull(FieldSkillLevel))
+}
+
+// SkillLevelEqualFold applies the EqualFold predicate on the "skillLevel" field.
+func SkillLevelEqualFold(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEqualFold(FieldSkillLevel, v))
+}
+
+// SkillLevelContainsFold applies the ContainsFold predicate on the "skillLevel" field.
+func SkillLevelContainsFold(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldContainsFold(FieldSkillLevel, v))
+}
+
+// YearsInvolvedEQ applies the EQ predicate on the "yearsInvolved" field.
+func YearsInvolvedEQ(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldYearsInvolved, v))
+}
+
+// YearsInvolvedNEQ applies the NEQ predicate on the "yearsInvolved" field.
+func YearsInvolvedNEQ(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNEQ(FieldYearsInvolved, v))
+}
+
+// YearsInvolvedIn applies the In predicate on the "yearsInvolved" field.
+func YearsInvolvedIn(vs ...int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldIn(FieldYearsInvolved, vs...))
+}
+
+// YearsInvolvedNotIn applies the NotIn predicate on the "yearsInvolved" field.
+func YearsInvolvedNotIn(vs ...int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotIn(FieldYearsInvolved, vs...))
+}
+
+// YearsInvolvedGT applies the GT predicate on the "yearsInvolved" field.
+func YearsInvolvedGT(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGT(FieldYearsInvolved, v))
+}
+
+// YearsInvolvedGTE applies the GTE predicate on the "yearsInvolved" field.
+func YearsInvolvedGTE(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGTE(FieldYearsInvolved, v))
+}
+
+// YearsInvolvedLT applies the LT predicate on the "yearsInvolved" field.
+func YearsInvolvedLT(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLT(FieldYearsInvolved, v))
+}
+
+// YearsInvolvedLTE applies the LTE predicate on the "yearsInvolved" field.
+func YearsInvolvedLTE(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLTE(FieldYearsInvolved, v))
+}
+
+// YearsInvolvedIsNil applies the IsNil predicate on the "yearsInvolved" field.
+func YearsInvolvedIsNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldIsNull(FieldYearsInvolved))
+}
+
+// YearsInvolvedNotNil applies the NotNil predicate on the "yearsInvolved" field.
+func YearsInvolvedNotNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotNull(FieldYearsInvolved))
+}
+
+// AchievementsEQ applies the EQ predicate on the "achievements" field.
+func AchievementsEQ(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldAchievements, v))
+}
+
+// AchievementsNEQ applies the NEQ predicate on the "achievements" field.
+func AchievementsNEQ(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNEQ(FieldAchievements, v))
+}
+
+// AchievementsIn applies the In predicate on the "achievements" field.
+func AchievementsIn(vs ...string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldIn(FieldAchievements, vs...))
+}
+
+// AchievementsNotIn applies the NotIn predicate on the "achievements" field.
+func AchievementsNotIn(vs ...string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotIn(FieldAchievements, vs...))
+}
+
+// AchievementsGT applies the GT predicate on the "achievements" field.
+func AchievementsGT(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGT(FieldAchievements, v))
+}
+
+// AchievementsGTE applies the GTE predicate on the "achievements" field.
+func AchievementsGTE(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGTE(FieldAchievements, v))
+}
+
+// AchievementsLT applies the LT predicate on the "achievements" field.
+func AchievementsLT(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLT(FieldAchievements, v))
+}
+
+// AchievementsLTE applies the LTE predicate on the "achievements" field.
+func AchievementsLTE(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLTE(FieldAchievements, v))
+}
+
+// AchievementsContains applies the Contains predicate on the "achievements" field.
+func AchievementsContains(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldContains(FieldAchievements, v))
+}
+
+// AchievementsHasPrefix applies the HasPrefix predicate on the "achievements" field.
+func AchievementsHasPrefix(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldHasPrefix(FieldAchievements, v))
+}
+
+// AchievementsHasSuffix applies the HasSuffix predicate on the "achievements" field.
+func AchievementsHasSuffix(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldHasSuffix(FieldAchievements, v))
+}
+
+// AchievementsIsNil applies the IsNil predicate on the "achievements" field.
+func AchievementsIsNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldIsNull(FieldAchievements))
+}
+
+// AchievementsNotNil applies the NotNil predicate on the "achievements" field.
+func AchievementsNotNil() predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotNull(FieldAchievements))
+}
+
+// AchievementsEqualFold applies the EqualFold predicate on the "achievements" field.
+func AchievementsEqualFold(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEqualFold(FieldAchievements, v))
+}
+
+// AchievementsContainsFold applies the ContainsFold predicate on the "achievements" field.
+func AchievementsContainsFold(v string) predicate.Hobby {
+	return predicate.Hobby(sql.FieldContainsFold(FieldAchievements, v))
+}
+
+// OrderIndexEQ applies the EQ predicate on the "orderIndex" field.
+func OrderIndexEQ(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexNEQ applies the NEQ predicate on the "orderIndex" field.
+func OrderIndexNEQ(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNEQ(FieldOrderIndex, v))
+}
+
+// OrderIndexIn applies the In predicate on the "orderIndex" field.
+func OrderIndexIn(vs ...int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexNotIn applies the NotIn predicate on the "orderIndex" field.
+func OrderIndexNotIn(vs ...int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldNotIn(FieldOrderIndex, vs...))
+}
+
+// OrderIndexGT applies the GT predicate on the "orderIndex" field.
+func OrderIndexGT(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGT(FieldOrderIndex, v))
+}
+
+// OrderIndexGTE applies the GTE predicate on the "orderIndex" field.
+func OrderIndexGTE(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldGTE(FieldOrderIndex, v))
+}
+
+// OrderIndexLT applies the LT predicate on the "orderIndex" field.
+func OrderIndexLT(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLT(FieldOrderIndex, v))
+}
+
+// OrderIndexLTE applies the LTE predicate on the "orderIndex" field.
+func OrderIndexLTE(v int) predicate.Hobby {
+	return predicate.Hobby(sql.FieldLTE(FieldOrderIndex, v))
+}
+
+// HasResume applies the HasEdge predicate on the "resume" edge.
+func HasResume() predicate.Hobby {
+	return predicate.Hobby(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ResumeTable, ResumeColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasResumeWith applies the HasEdge predicate on the "resume" edge with a given conditions (other predicates).
+func HasResumeWith(preds ...predicate.Resume) predicate.Hobby {
+	return predicate.Hobby(func(s *sql.Selector) {
+		step := newResumeStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

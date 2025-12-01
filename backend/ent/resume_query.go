@@ -4,24 +4,48 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
+	"resume-builder-backend/ent/achievement"
+	"resume-builder-backend/ent/certification"
+	"resume-builder-backend/ent/education"
+	"resume-builder-backend/ent/experience"
+	"resume-builder-backend/ent/headercontactinfo"
+	"resume-builder-backend/ent/hobby"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/professionalsummary"
+	"resume-builder-backend/ent/project"
 	"resume-builder-backend/ent/resume"
+	"resume-builder-backend/ent/skill"
+	"resume-builder-backend/ent/template"
+	"resume-builder-backend/ent/user"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // ResumeQuery is the builder for querying Resume entities.
 type ResumeQuery struct {
 	config
-	ctx        *QueryContext
-	order      []resume.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Resume
+	ctx                     *QueryContext
+	order                   []resume.OrderOption
+	inters                  []Interceptor
+	predicates              []predicate.Resume
+	withUser                *UserQuery
+	withTemplate            *TemplateQuery
+	withHeaderContanctInfo  *HeaderContactInfoQuery
+	withProfessionalSummary *ProfessionalSummaryQuery
+	withExperiences         *ExperienceQuery
+	withEducations          *EducationQuery
+	withSkills              *SkillQuery
+	withProjects            *ProjectQuery
+	withCertifications      *CertificationQuery
+	withAchievements        *AchievementQuery
+	withHobbies             *HobbyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -58,6 +82,248 @@ func (_q *ResumeQuery) Order(o ...resume.OrderOption) *ResumeQuery {
 	return _q
 }
 
+// QueryUser chains the current query on the "user" edge.
+func (_q *ResumeQuery) QueryUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, resume.UserTable, resume.UserColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTemplate chains the current query on the "template" edge.
+func (_q *ResumeQuery) QueryTemplate() *TemplateQuery {
+	query := (&TemplateClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(template.Table, template.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, resume.TemplateTable, resume.TemplateColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryHeaderContanctInfo chains the current query on the "headerContanctInfo" edge.
+func (_q *ResumeQuery) QueryHeaderContanctInfo() *HeaderContactInfoQuery {
+	query := (&HeaderContactInfoClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(headercontactinfo.Table, headercontactinfo.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, resume.HeaderContanctInfoTable, resume.HeaderContanctInfoColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProfessionalSummary chains the current query on the "professionalSummary" edge.
+func (_q *ResumeQuery) QueryProfessionalSummary() *ProfessionalSummaryQuery {
+	query := (&ProfessionalSummaryClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(professionalsummary.Table, professionalsummary.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, resume.ProfessionalSummaryTable, resume.ProfessionalSummaryColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryExperiences chains the current query on the "experiences" edge.
+func (_q *ResumeQuery) QueryExperiences() *ExperienceQuery {
+	query := (&ExperienceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(experience.Table, experience.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.ExperiencesTable, resume.ExperiencesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEducations chains the current query on the "educations" edge.
+func (_q *ResumeQuery) QueryEducations() *EducationQuery {
+	query := (&EducationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(education.Table, education.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.EducationsTable, resume.EducationsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySkills chains the current query on the "skills" edge.
+func (_q *ResumeQuery) QuerySkills() *SkillQuery {
+	query := (&SkillClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(skill.Table, skill.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.SkillsTable, resume.SkillsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProjects chains the current query on the "projects" edge.
+func (_q *ResumeQuery) QueryProjects() *ProjectQuery {
+	query := (&ProjectClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(project.Table, project.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.ProjectsTable, resume.ProjectsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCertifications chains the current query on the "certifications" edge.
+func (_q *ResumeQuery) QueryCertifications() *CertificationQuery {
+	query := (&CertificationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(certification.Table, certification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.CertificationsTable, resume.CertificationsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAchievements chains the current query on the "achievements" edge.
+func (_q *ResumeQuery) QueryAchievements() *AchievementQuery {
+	query := (&AchievementClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(achievement.Table, achievement.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.AchievementsTable, resume.AchievementsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryHobbies chains the current query on the "hobbies" edge.
+func (_q *ResumeQuery) QueryHobbies() *HobbyQuery {
+	query := (&HobbyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(resume.Table, resume.FieldID, selector),
+			sqlgraph.To(hobby.Table, hobby.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, resume.HobbiesTable, resume.HobbiesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Resume entity from the query.
 // Returns a *NotFoundError when no Resume was found.
 func (_q *ResumeQuery) First(ctx context.Context) (*Resume, error) {
@@ -82,8 +348,8 @@ func (_q *ResumeQuery) FirstX(ctx context.Context) *Resume {
 
 // FirstID returns the first Resume ID from the query.
 // Returns a *NotFoundError when no Resume ID was found.
-func (_q *ResumeQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ResumeQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -95,7 +361,7 @@ func (_q *ResumeQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *ResumeQuery) FirstIDX(ctx context.Context) int {
+func (_q *ResumeQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -133,8 +399,8 @@ func (_q *ResumeQuery) OnlyX(ctx context.Context) *Resume {
 // OnlyID is like Only, but returns the only Resume ID in the query.
 // Returns a *NotSingularError when more than one Resume ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *ResumeQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ResumeQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -150,7 +416,7 @@ func (_q *ResumeQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *ResumeQuery) OnlyIDX(ctx context.Context) int {
+func (_q *ResumeQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,7 +444,7 @@ func (_q *ResumeQuery) AllX(ctx context.Context) []*Resume {
 }
 
 // IDs executes the query and returns a list of Resume IDs.
-func (_q *ResumeQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *ResumeQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -190,7 +456,7 @@ func (_q *ResumeQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *ResumeQuery) IDsX(ctx context.Context) []int {
+func (_q *ResumeQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -245,19 +511,163 @@ func (_q *ResumeQuery) Clone() *ResumeQuery {
 		return nil
 	}
 	return &ResumeQuery{
-		config:     _q.config,
-		ctx:        _q.ctx.Clone(),
-		order:      append([]resume.OrderOption{}, _q.order...),
-		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.Resume{}, _q.predicates...),
+		config:                  _q.config,
+		ctx:                     _q.ctx.Clone(),
+		order:                   append([]resume.OrderOption{}, _q.order...),
+		inters:                  append([]Interceptor{}, _q.inters...),
+		predicates:              append([]predicate.Resume{}, _q.predicates...),
+		withUser:                _q.withUser.Clone(),
+		withTemplate:            _q.withTemplate.Clone(),
+		withHeaderContanctInfo:  _q.withHeaderContanctInfo.Clone(),
+		withProfessionalSummary: _q.withProfessionalSummary.Clone(),
+		withExperiences:         _q.withExperiences.Clone(),
+		withEducations:          _q.withEducations.Clone(),
+		withSkills:              _q.withSkills.Clone(),
+		withProjects:            _q.withProjects.Clone(),
+		withCertifications:      _q.withCertifications.Clone(),
+		withAchievements:        _q.withAchievements.Clone(),
+		withHobbies:             _q.withHobbies.Clone(),
 		// clone intermediate query.
 		sql:  _q.sql.Clone(),
 		path: _q.path,
 	}
 }
 
+// WithUser tells the query-builder to eager-load the nodes that are connected to
+// the "user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithUser(opts ...func(*UserQuery)) *ResumeQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withUser = query
+	return _q
+}
+
+// WithTemplate tells the query-builder to eager-load the nodes that are connected to
+// the "template" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithTemplate(opts ...func(*TemplateQuery)) *ResumeQuery {
+	query := (&TemplateClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTemplate = query
+	return _q
+}
+
+// WithHeaderContanctInfo tells the query-builder to eager-load the nodes that are connected to
+// the "headerContanctInfo" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithHeaderContanctInfo(opts ...func(*HeaderContactInfoQuery)) *ResumeQuery {
+	query := (&HeaderContactInfoClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withHeaderContanctInfo = query
+	return _q
+}
+
+// WithProfessionalSummary tells the query-builder to eager-load the nodes that are connected to
+// the "professionalSummary" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithProfessionalSummary(opts ...func(*ProfessionalSummaryQuery)) *ResumeQuery {
+	query := (&ProfessionalSummaryClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withProfessionalSummary = query
+	return _q
+}
+
+// WithExperiences tells the query-builder to eager-load the nodes that are connected to
+// the "experiences" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithExperiences(opts ...func(*ExperienceQuery)) *ResumeQuery {
+	query := (&ExperienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withExperiences = query
+	return _q
+}
+
+// WithEducations tells the query-builder to eager-load the nodes that are connected to
+// the "educations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithEducations(opts ...func(*EducationQuery)) *ResumeQuery {
+	query := (&EducationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEducations = query
+	return _q
+}
+
+// WithSkills tells the query-builder to eager-load the nodes that are connected to
+// the "skills" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithSkills(opts ...func(*SkillQuery)) *ResumeQuery {
+	query := (&SkillClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSkills = query
+	return _q
+}
+
+// WithProjects tells the query-builder to eager-load the nodes that are connected to
+// the "projects" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithProjects(opts ...func(*ProjectQuery)) *ResumeQuery {
+	query := (&ProjectClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withProjects = query
+	return _q
+}
+
+// WithCertifications tells the query-builder to eager-load the nodes that are connected to
+// the "certifications" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithCertifications(opts ...func(*CertificationQuery)) *ResumeQuery {
+	query := (&CertificationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCertifications = query
+	return _q
+}
+
+// WithAchievements tells the query-builder to eager-load the nodes that are connected to
+// the "achievements" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithAchievements(opts ...func(*AchievementQuery)) *ResumeQuery {
+	query := (&AchievementClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAchievements = query
+	return _q
+}
+
+// WithHobbies tells the query-builder to eager-load the nodes that are connected to
+// the "hobbies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ResumeQuery) WithHobbies(opts ...func(*HobbyQuery)) *ResumeQuery {
+	query := (&HobbyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withHobbies = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
+//
+// Example:
+//
+//	var v []struct {
+//		UserId uuid.UUID `json:"userId,omitempty"`
+//		Count int `json:"count,omitempty"`
+//	}
+//
+//	client.Resume.Query().
+//		GroupBy(resume.FieldUserId).
+//		Aggregate(ent.Count()).
+//		Scan(ctx, &v)
 func (_q *ResumeQuery) GroupBy(field string, fields ...string) *ResumeGroupBy {
 	_q.ctx.Fields = append([]string{field}, fields...)
 	grbuild := &ResumeGroupBy{build: _q}
@@ -269,6 +679,16 @@ func (_q *ResumeQuery) GroupBy(field string, fields ...string) *ResumeGroupBy {
 
 // Select allows the selection one or more fields/columns for the given query,
 // instead of selecting all fields in the entity.
+//
+// Example:
+//
+//	var v []struct {
+//		UserId uuid.UUID `json:"userId,omitempty"`
+//	}
+//
+//	client.Resume.Query().
+//		Select(resume.FieldUserId).
+//		Scan(ctx, &v)
 func (_q *ResumeQuery) Select(fields ...string) *ResumeSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
 	sbuild := &ResumeSelect{ResumeQuery: _q}
@@ -310,8 +730,21 @@ func (_q *ResumeQuery) prepareQuery(ctx context.Context) error {
 
 func (_q *ResumeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Resume, error) {
 	var (
-		nodes = []*Resume{}
-		_spec = _q.querySpec()
+		nodes       = []*Resume{}
+		_spec       = _q.querySpec()
+		loadedTypes = [11]bool{
+			_q.withUser != nil,
+			_q.withTemplate != nil,
+			_q.withHeaderContanctInfo != nil,
+			_q.withProfessionalSummary != nil,
+			_q.withExperiences != nil,
+			_q.withEducations != nil,
+			_q.withSkills != nil,
+			_q.withProjects != nil,
+			_q.withCertifications != nil,
+			_q.withAchievements != nil,
+			_q.withHobbies != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Resume).scanValues(nil, columns)
@@ -319,6 +752,7 @@ func (_q *ResumeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Resum
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Resume{config: _q.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -330,7 +764,414 @@ func (_q *ResumeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Resum
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withUser; query != nil {
+		if err := _q.loadUser(ctx, query, nodes, nil,
+			func(n *Resume, e *User) { n.Edges.User = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTemplate; query != nil {
+		if err := _q.loadTemplate(ctx, query, nodes, nil,
+			func(n *Resume, e *Template) { n.Edges.Template = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withHeaderContanctInfo; query != nil {
+		if err := _q.loadHeaderContanctInfo(ctx, query, nodes, nil,
+			func(n *Resume, e *HeaderContactInfo) { n.Edges.HeaderContanctInfo = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withProfessionalSummary; query != nil {
+		if err := _q.loadProfessionalSummary(ctx, query, nodes, nil,
+			func(n *Resume, e *ProfessionalSummary) { n.Edges.ProfessionalSummary = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withExperiences; query != nil {
+		if err := _q.loadExperiences(ctx, query, nodes,
+			func(n *Resume) { n.Edges.Experiences = []*Experience{} },
+			func(n *Resume, e *Experience) { n.Edges.Experiences = append(n.Edges.Experiences, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEducations; query != nil {
+		if err := _q.loadEducations(ctx, query, nodes,
+			func(n *Resume) { n.Edges.Educations = []*Education{} },
+			func(n *Resume, e *Education) { n.Edges.Educations = append(n.Edges.Educations, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSkills; query != nil {
+		if err := _q.loadSkills(ctx, query, nodes,
+			func(n *Resume) { n.Edges.Skills = []*Skill{} },
+			func(n *Resume, e *Skill) { n.Edges.Skills = append(n.Edges.Skills, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withProjects; query != nil {
+		if err := _q.loadProjects(ctx, query, nodes,
+			func(n *Resume) { n.Edges.Projects = []*Project{} },
+			func(n *Resume, e *Project) { n.Edges.Projects = append(n.Edges.Projects, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCertifications; query != nil {
+		if err := _q.loadCertifications(ctx, query, nodes,
+			func(n *Resume) { n.Edges.Certifications = []*Certification{} },
+			func(n *Resume, e *Certification) { n.Edges.Certifications = append(n.Edges.Certifications, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAchievements; query != nil {
+		if err := _q.loadAchievements(ctx, query, nodes,
+			func(n *Resume) { n.Edges.Achievements = []*Achievement{} },
+			func(n *Resume, e *Achievement) { n.Edges.Achievements = append(n.Edges.Achievements, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withHobbies; query != nil {
+		if err := _q.loadHobbies(ctx, query, nodes,
+			func(n *Resume) { n.Edges.Hobbies = []*Hobby{} },
+			func(n *Resume, e *Hobby) { n.Edges.Hobbies = append(n.Edges.Hobbies, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (_q *ResumeQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *User)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Resume)
+	for i := range nodes {
+		fk := nodes[i].UserId
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "userId" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadTemplate(ctx context.Context, query *TemplateQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *Template)) error {
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Resume)
+	for i := range nodes {
+		if nodes[i].TemplateId == nil {
+			continue
+		}
+		fk := *nodes[i].TemplateId
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(template.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "templateId" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadHeaderContanctInfo(ctx context.Context, query *HeaderContactInfoQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *HeaderContactInfo)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	query.withFKs = true
+	query.Where(predicate.HeaderContactInfo(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.HeaderContanctInfoColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.resume_header_contanct_info
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "resume_header_contanct_info" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resume_header_contanct_info" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadProfessionalSummary(ctx context.Context, query *ProfessionalSummaryQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *ProfessionalSummary)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(professionalsummary.FieldResumeId)
+	}
+	query.Where(predicate.ProfessionalSummary(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.ProfessionalSummaryColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ResumeId
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resumeId" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadExperiences(ctx context.Context, query *ExperienceQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *Experience)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Experience(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.ExperiencesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.resume_experiences
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "resume_experiences" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resume_experiences" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadEducations(ctx context.Context, query *EducationQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *Education)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Education(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.EducationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.resume_educations
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "resume_educations" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resume_educations" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadSkills(ctx context.Context, query *SkillQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *Skill)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Skill(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.SkillsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.resume_skills
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "resume_skills" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resume_skills" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadProjects(ctx context.Context, query *ProjectQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *Project)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Project(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.ProjectsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.resume_projects
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "resume_projects" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resume_projects" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadCertifications(ctx context.Context, query *CertificationQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *Certification)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Certification(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.CertificationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.resume_certifications
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "resume_certifications" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resume_certifications" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadAchievements(ctx context.Context, query *AchievementQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *Achievement)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Achievement(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.AchievementsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.resume_achievements
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "resume_achievements" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resume_achievements" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ResumeQuery) loadHobbies(ctx context.Context, query *HobbyQuery, nodes []*Resume, init func(*Resume), assign func(*Resume, *Hobby)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Resume)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Hobby(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(resume.HobbiesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.resume_hobbies
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "resume_hobbies" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "resume_hobbies" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (_q *ResumeQuery) sqlCount(ctx context.Context) (int, error) {
@@ -343,7 +1184,7 @@ func (_q *ResumeQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *ResumeQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(resume.Table, resume.Columns, sqlgraph.NewFieldSpec(resume.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(resume.Table, resume.Columns, sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
@@ -357,6 +1198,12 @@ func (_q *ResumeQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != resume.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if _q.withUser != nil {
+			_spec.Node.AddColumnOnce(resume.FieldUserId)
+		}
+		if _q.withTemplate != nil {
+			_spec.Node.AddColumnOnce(resume.FieldTemplateId)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

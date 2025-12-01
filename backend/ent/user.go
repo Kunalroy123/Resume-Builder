@@ -6,17 +6,54 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/user"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // User is the model entity for the User schema.
 type User struct {
-	config
+	config `json:"-"`
 	// ID of the ent.
-	ID           int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
+	// Email holds the value of the "email" field.
+	Email string `json:"email,omitempty"`
+	// PasswordHash holds the value of the "passwordHash" field.
+	PasswordHash string `json:"-"`
+	// FirstName holds the value of the "firstName" field.
+	FirstName string `json:"firstName,omitempty"`
+	// LastName holds the value of the "lastName" field.
+	LastName string `json:"lastName,omitempty"`
+	// IsActive holds the value of the "isActive" field.
+	IsActive bool `json:"isActive,omitempty"`
+	// CreatedAt holds the value of the "createdAt" field.
+	CreatedAt time.Time `json:"createdAt,omitempty"`
+	// UpdatedAt holds the value of the "updatedAt" field.
+	UpdatedAt time.Time `json:"updatedAt,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the UserQuery when eager-loading is set.
+	Edges        UserEdges `json:"edges"`
 	selectValues sql.SelectValues
+}
+
+// UserEdges holds the relations/edges for other nodes in the graph.
+type UserEdges struct {
+	// Resumes holds the value of the resumes edge.
+	Resumes []*Resume `json:"resumes,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// ResumesOrErr returns the Resumes value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ResumesOrErr() ([]*Resume, error) {
+	if e.loadedTypes[0] {
+		return e.Resumes, nil
+	}
+	return nil, &NotLoadedError{edge: "resumes"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -24,8 +61,14 @@ func (*User) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case user.FieldIsActive:
+			values[i] = new(sql.NullBool)
+		case user.FieldEmail, user.FieldPasswordHash, user.FieldFirstName, user.FieldLastName:
+			values[i] = new(sql.NullString)
+		case user.FieldCreatedAt, user.FieldUpdatedAt:
+			values[i] = new(sql.NullTime)
 		case user.FieldID:
-			values[i] = new(sql.NullInt64)
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -42,11 +85,53 @@ func (_m *User) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case user.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
+		case user.FieldEmail:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field email", values[i])
+			} else if value.Valid {
+				_m.Email = value.String
+			}
+		case user.FieldPasswordHash:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field passwordHash", values[i])
+			} else if value.Valid {
+				_m.PasswordHash = value.String
+			}
+		case user.FieldFirstName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field firstName", values[i])
+			} else if value.Valid {
+				_m.FirstName = value.String
+			}
+		case user.FieldLastName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field lastName", values[i])
+			} else if value.Valid {
+				_m.LastName = value.String
+			}
+		case user.FieldIsActive:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field isActive", values[i])
+			} else if value.Valid {
+				_m.IsActive = value.Bool
+			}
+		case user.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field createdAt", values[i])
+			} else if value.Valid {
+				_m.CreatedAt = value.Time
+			}
+		case user.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field updatedAt", values[i])
+			} else if value.Valid {
+				_m.UpdatedAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -58,6 +143,11 @@ func (_m *User) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (_m *User) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
+}
+
+// QueryResumes queries the "resumes" edge of the User entity.
+func (_m *User) QueryResumes() *ResumeQuery {
+	return NewUserClient(_m.config).QueryResumes(_m)
 }
 
 // Update returns a builder for updating this User.
@@ -82,7 +172,26 @@ func (_m *User) Unwrap() *User {
 func (_m *User) String() string {
 	var builder strings.Builder
 	builder.WriteString("User(")
-	builder.WriteString(fmt.Sprintf("id=%v", _m.ID))
+	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
+	builder.WriteString("email=")
+	builder.WriteString(_m.Email)
+	builder.WriteString(", ")
+	builder.WriteString("passwordHash=<sensitive>")
+	builder.WriteString(", ")
+	builder.WriteString("firstName=")
+	builder.WriteString(_m.FirstName)
+	builder.WriteString(", ")
+	builder.WriteString("lastName=")
+	builder.WriteString(_m.LastName)
+	builder.WriteString(", ")
+	builder.WriteString("isActive=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsActive))
+	builder.WriteString(", ")
+	builder.WriteString("createdAt=")
+	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("updatedAt=")
+	builder.WriteString(_m.UpdatedAt.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }

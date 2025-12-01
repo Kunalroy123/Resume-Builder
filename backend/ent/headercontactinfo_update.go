@@ -8,10 +8,12 @@ import (
 	"fmt"
 	"resume-builder-backend/ent/headercontactinfo"
 	"resume-builder-backend/ent/predicate"
+	"resume-builder-backend/ent/resume"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // HeaderContactInfoUpdate is the builder for updating HeaderContactInfo entities.
@@ -27,9 +29,254 @@ func (_u *HeaderContactInfoUpdate) Where(ps ...predicate.HeaderContactInfo) *Hea
 	return _u
 }
 
+// SetFullname sets the "fullname" field.
+func (_u *HeaderContactInfoUpdate) SetFullname(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetFullname(v)
+	return _u
+}
+
+// SetNillableFullname sets the "fullname" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableFullname(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetFullname(*v)
+	}
+	return _u
+}
+
+// SetProfessionalTitle sets the "professionalTitle" field.
+func (_u *HeaderContactInfoUpdate) SetProfessionalTitle(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetProfessionalTitle(v)
+	return _u
+}
+
+// SetNillableProfessionalTitle sets the "professionalTitle" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableProfessionalTitle(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetProfessionalTitle(*v)
+	}
+	return _u
+}
+
+// ClearProfessionalTitle clears the value of the "professionalTitle" field.
+func (_u *HeaderContactInfoUpdate) ClearProfessionalTitle() *HeaderContactInfoUpdate {
+	_u.mutation.ClearProfessionalTitle()
+	return _u
+}
+
+// SetAddress sets the "address" field.
+func (_u *HeaderContactInfoUpdate) SetAddress(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetAddress(v)
+	return _u
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableAddress(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetAddress(*v)
+	}
+	return _u
+}
+
+// ClearAddress clears the value of the "address" field.
+func (_u *HeaderContactInfoUpdate) ClearAddress() *HeaderContactInfoUpdate {
+	_u.mutation.ClearAddress()
+	return _u
+}
+
+// SetPhone sets the "phone" field.
+func (_u *HeaderContactInfoUpdate) SetPhone(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetPhone(v)
+	return _u
+}
+
+// SetNillablePhone sets the "phone" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillablePhone(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetPhone(*v)
+	}
+	return _u
+}
+
+// ClearPhone clears the value of the "phone" field.
+func (_u *HeaderContactInfoUpdate) ClearPhone() *HeaderContactInfoUpdate {
+	_u.mutation.ClearPhone()
+	return _u
+}
+
+// SetEmail sets the "email" field.
+func (_u *HeaderContactInfoUpdate) SetEmail(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetEmail(v)
+	return _u
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableEmail(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetEmail(*v)
+	}
+	return _u
+}
+
+// SetCity sets the "city" field.
+func (_u *HeaderContactInfoUpdate) SetCity(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetCity(v)
+	return _u
+}
+
+// SetNillableCity sets the "city" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableCity(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetCity(*v)
+	}
+	return _u
+}
+
+// ClearCity clears the value of the "city" field.
+func (_u *HeaderContactInfoUpdate) ClearCity() *HeaderContactInfoUpdate {
+	_u.mutation.ClearCity()
+	return _u
+}
+
+// SetState sets the "state" field.
+func (_u *HeaderContactInfoUpdate) SetState(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetState(v)
+	return _u
+}
+
+// SetNillableState sets the "state" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableState(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetState(*v)
+	}
+	return _u
+}
+
+// ClearState clears the value of the "state" field.
+func (_u *HeaderContactInfoUpdate) ClearState() *HeaderContactInfoUpdate {
+	_u.mutation.ClearState()
+	return _u
+}
+
+// SetZipCode sets the "zipCode" field.
+func (_u *HeaderContactInfoUpdate) SetZipCode(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetZipCode(v)
+	return _u
+}
+
+// SetNillableZipCode sets the "zipCode" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableZipCode(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetZipCode(*v)
+	}
+	return _u
+}
+
+// ClearZipCode clears the value of the "zipCode" field.
+func (_u *HeaderContactInfoUpdate) ClearZipCode() *HeaderContactInfoUpdate {
+	_u.mutation.ClearZipCode()
+	return _u
+}
+
+// SetCountry sets the "country" field.
+func (_u *HeaderContactInfoUpdate) SetCountry(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetCountry(v)
+	return _u
+}
+
+// SetNillableCountry sets the "country" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableCountry(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetCountry(*v)
+	}
+	return _u
+}
+
+// ClearCountry clears the value of the "country" field.
+func (_u *HeaderContactInfoUpdate) ClearCountry() *HeaderContactInfoUpdate {
+	_u.mutation.ClearCountry()
+	return _u
+}
+
+// SetLinkedinUrl sets the "linkedinUrl" field.
+func (_u *HeaderContactInfoUpdate) SetLinkedinUrl(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetLinkedinUrl(v)
+	return _u
+}
+
+// SetNillableLinkedinUrl sets the "linkedinUrl" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableLinkedinUrl(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetLinkedinUrl(*v)
+	}
+	return _u
+}
+
+// ClearLinkedinUrl clears the value of the "linkedinUrl" field.
+func (_u *HeaderContactInfoUpdate) ClearLinkedinUrl() *HeaderContactInfoUpdate {
+	_u.mutation.ClearLinkedinUrl()
+	return _u
+}
+
+// SetGithubUrl sets the "githubUrl" field.
+func (_u *HeaderContactInfoUpdate) SetGithubUrl(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetGithubUrl(v)
+	return _u
+}
+
+// SetNillableGithubUrl sets the "githubUrl" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillableGithubUrl(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetGithubUrl(*v)
+	}
+	return _u
+}
+
+// ClearGithubUrl clears the value of the "githubUrl" field.
+func (_u *HeaderContactInfoUpdate) ClearGithubUrl() *HeaderContactInfoUpdate {
+	_u.mutation.ClearGithubUrl()
+	return _u
+}
+
+// SetPortfolioUrl sets the "portfolioUrl" field.
+func (_u *HeaderContactInfoUpdate) SetPortfolioUrl(v string) *HeaderContactInfoUpdate {
+	_u.mutation.SetPortfolioUrl(v)
+	return _u
+}
+
+// SetNillablePortfolioUrl sets the "portfolioUrl" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdate) SetNillablePortfolioUrl(v *string) *HeaderContactInfoUpdate {
+	if v != nil {
+		_u.SetPortfolioUrl(*v)
+	}
+	return _u
+}
+
+// ClearPortfolioUrl clears the value of the "portfolioUrl" field.
+func (_u *HeaderContactInfoUpdate) ClearPortfolioUrl() *HeaderContactInfoUpdate {
+	_u.mutation.ClearPortfolioUrl()
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *HeaderContactInfoUpdate) SetResumeID(id uuid.UUID) *HeaderContactInfoUpdate {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *HeaderContactInfoUpdate) SetResume(v *Resume) *HeaderContactInfoUpdate {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the HeaderContactInfoMutation object of the builder.
 func (_u *HeaderContactInfoUpdate) Mutation() *HeaderContactInfoMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *HeaderContactInfoUpdate) ClearResume() *HeaderContactInfoUpdate {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -59,14 +306,130 @@ func (_u *HeaderContactInfoUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *HeaderContactInfoUpdate) check() error {
+	if v, ok := _u.mutation.Fullname(); ok {
+		if err := headercontactinfo.FullnameValidator(v); err != nil {
+			return &ValidationError{Name: "fullname", err: fmt.Errorf(`ent: validator failed for field "HeaderContactInfo.fullname": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Email(); ok {
+		if err := headercontactinfo.EmailValidator(v); err != nil {
+			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "HeaderContactInfo.email": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "HeaderContactInfo.resume"`)
+	}
+	return nil
+}
+
 func (_u *HeaderContactInfoUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(headercontactinfo.Table, headercontactinfo.Columns, sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(headercontactinfo.Table, headercontactinfo.Columns, sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Fullname(); ok {
+		_spec.SetField(headercontactinfo.FieldFullname, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.ProfessionalTitle(); ok {
+		_spec.SetField(headercontactinfo.FieldProfessionalTitle, field.TypeString, value)
+	}
+	if _u.mutation.ProfessionalTitleCleared() {
+		_spec.ClearField(headercontactinfo.FieldProfessionalTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.Address(); ok {
+		_spec.SetField(headercontactinfo.FieldAddress, field.TypeString, value)
+	}
+	if _u.mutation.AddressCleared() {
+		_spec.ClearField(headercontactinfo.FieldAddress, field.TypeString)
+	}
+	if value, ok := _u.mutation.Phone(); ok {
+		_spec.SetField(headercontactinfo.FieldPhone, field.TypeString, value)
+	}
+	if _u.mutation.PhoneCleared() {
+		_spec.ClearField(headercontactinfo.FieldPhone, field.TypeString)
+	}
+	if value, ok := _u.mutation.Email(); ok {
+		_spec.SetField(headercontactinfo.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.City(); ok {
+		_spec.SetField(headercontactinfo.FieldCity, field.TypeString, value)
+	}
+	if _u.mutation.CityCleared() {
+		_spec.ClearField(headercontactinfo.FieldCity, field.TypeString)
+	}
+	if value, ok := _u.mutation.State(); ok {
+		_spec.SetField(headercontactinfo.FieldState, field.TypeString, value)
+	}
+	if _u.mutation.StateCleared() {
+		_spec.ClearField(headercontactinfo.FieldState, field.TypeString)
+	}
+	if value, ok := _u.mutation.ZipCode(); ok {
+		_spec.SetField(headercontactinfo.FieldZipCode, field.TypeString, value)
+	}
+	if _u.mutation.ZipCodeCleared() {
+		_spec.ClearField(headercontactinfo.FieldZipCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.Country(); ok {
+		_spec.SetField(headercontactinfo.FieldCountry, field.TypeString, value)
+	}
+	if _u.mutation.CountryCleared() {
+		_spec.ClearField(headercontactinfo.FieldCountry, field.TypeString)
+	}
+	if value, ok := _u.mutation.LinkedinUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldLinkedinUrl, field.TypeString, value)
+	}
+	if _u.mutation.LinkedinUrlCleared() {
+		_spec.ClearField(headercontactinfo.FieldLinkedinUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.GithubUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldGithubUrl, field.TypeString, value)
+	}
+	if _u.mutation.GithubUrlCleared() {
+		_spec.ClearField(headercontactinfo.FieldGithubUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.PortfolioUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldPortfolioUrl, field.TypeString, value)
+	}
+	if _u.mutation.PortfolioUrlCleared() {
+		_spec.ClearField(headercontactinfo.FieldPortfolioUrl, field.TypeString)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   headercontactinfo.ResumeTable,
+			Columns: []string{headercontactinfo.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   headercontactinfo.ResumeTable,
+			Columns: []string{headercontactinfo.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -88,9 +451,254 @@ type HeaderContactInfoUpdateOne struct {
 	mutation *HeaderContactInfoMutation
 }
 
+// SetFullname sets the "fullname" field.
+func (_u *HeaderContactInfoUpdateOne) SetFullname(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetFullname(v)
+	return _u
+}
+
+// SetNillableFullname sets the "fullname" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableFullname(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetFullname(*v)
+	}
+	return _u
+}
+
+// SetProfessionalTitle sets the "professionalTitle" field.
+func (_u *HeaderContactInfoUpdateOne) SetProfessionalTitle(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetProfessionalTitle(v)
+	return _u
+}
+
+// SetNillableProfessionalTitle sets the "professionalTitle" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableProfessionalTitle(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetProfessionalTitle(*v)
+	}
+	return _u
+}
+
+// ClearProfessionalTitle clears the value of the "professionalTitle" field.
+func (_u *HeaderContactInfoUpdateOne) ClearProfessionalTitle() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearProfessionalTitle()
+	return _u
+}
+
+// SetAddress sets the "address" field.
+func (_u *HeaderContactInfoUpdateOne) SetAddress(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetAddress(v)
+	return _u
+}
+
+// SetNillableAddress sets the "address" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableAddress(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetAddress(*v)
+	}
+	return _u
+}
+
+// ClearAddress clears the value of the "address" field.
+func (_u *HeaderContactInfoUpdateOne) ClearAddress() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearAddress()
+	return _u
+}
+
+// SetPhone sets the "phone" field.
+func (_u *HeaderContactInfoUpdateOne) SetPhone(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetPhone(v)
+	return _u
+}
+
+// SetNillablePhone sets the "phone" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillablePhone(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetPhone(*v)
+	}
+	return _u
+}
+
+// ClearPhone clears the value of the "phone" field.
+func (_u *HeaderContactInfoUpdateOne) ClearPhone() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearPhone()
+	return _u
+}
+
+// SetEmail sets the "email" field.
+func (_u *HeaderContactInfoUpdateOne) SetEmail(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetEmail(v)
+	return _u
+}
+
+// SetNillableEmail sets the "email" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableEmail(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetEmail(*v)
+	}
+	return _u
+}
+
+// SetCity sets the "city" field.
+func (_u *HeaderContactInfoUpdateOne) SetCity(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetCity(v)
+	return _u
+}
+
+// SetNillableCity sets the "city" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableCity(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetCity(*v)
+	}
+	return _u
+}
+
+// ClearCity clears the value of the "city" field.
+func (_u *HeaderContactInfoUpdateOne) ClearCity() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearCity()
+	return _u
+}
+
+// SetState sets the "state" field.
+func (_u *HeaderContactInfoUpdateOne) SetState(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetState(v)
+	return _u
+}
+
+// SetNillableState sets the "state" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableState(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetState(*v)
+	}
+	return _u
+}
+
+// ClearState clears the value of the "state" field.
+func (_u *HeaderContactInfoUpdateOne) ClearState() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearState()
+	return _u
+}
+
+// SetZipCode sets the "zipCode" field.
+func (_u *HeaderContactInfoUpdateOne) SetZipCode(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetZipCode(v)
+	return _u
+}
+
+// SetNillableZipCode sets the "zipCode" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableZipCode(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetZipCode(*v)
+	}
+	return _u
+}
+
+// ClearZipCode clears the value of the "zipCode" field.
+func (_u *HeaderContactInfoUpdateOne) ClearZipCode() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearZipCode()
+	return _u
+}
+
+// SetCountry sets the "country" field.
+func (_u *HeaderContactInfoUpdateOne) SetCountry(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetCountry(v)
+	return _u
+}
+
+// SetNillableCountry sets the "country" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableCountry(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetCountry(*v)
+	}
+	return _u
+}
+
+// ClearCountry clears the value of the "country" field.
+func (_u *HeaderContactInfoUpdateOne) ClearCountry() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearCountry()
+	return _u
+}
+
+// SetLinkedinUrl sets the "linkedinUrl" field.
+func (_u *HeaderContactInfoUpdateOne) SetLinkedinUrl(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetLinkedinUrl(v)
+	return _u
+}
+
+// SetNillableLinkedinUrl sets the "linkedinUrl" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableLinkedinUrl(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetLinkedinUrl(*v)
+	}
+	return _u
+}
+
+// ClearLinkedinUrl clears the value of the "linkedinUrl" field.
+func (_u *HeaderContactInfoUpdateOne) ClearLinkedinUrl() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearLinkedinUrl()
+	return _u
+}
+
+// SetGithubUrl sets the "githubUrl" field.
+func (_u *HeaderContactInfoUpdateOne) SetGithubUrl(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetGithubUrl(v)
+	return _u
+}
+
+// SetNillableGithubUrl sets the "githubUrl" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillableGithubUrl(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetGithubUrl(*v)
+	}
+	return _u
+}
+
+// ClearGithubUrl clears the value of the "githubUrl" field.
+func (_u *HeaderContactInfoUpdateOne) ClearGithubUrl() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearGithubUrl()
+	return _u
+}
+
+// SetPortfolioUrl sets the "portfolioUrl" field.
+func (_u *HeaderContactInfoUpdateOne) SetPortfolioUrl(v string) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetPortfolioUrl(v)
+	return _u
+}
+
+// SetNillablePortfolioUrl sets the "portfolioUrl" field if the given value is not nil.
+func (_u *HeaderContactInfoUpdateOne) SetNillablePortfolioUrl(v *string) *HeaderContactInfoUpdateOne {
+	if v != nil {
+		_u.SetPortfolioUrl(*v)
+	}
+	return _u
+}
+
+// ClearPortfolioUrl clears the value of the "portfolioUrl" field.
+func (_u *HeaderContactInfoUpdateOne) ClearPortfolioUrl() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearPortfolioUrl()
+	return _u
+}
+
+// SetResumeID sets the "resume" edge to the Resume entity by ID.
+func (_u *HeaderContactInfoUpdateOne) SetResumeID(id uuid.UUID) *HeaderContactInfoUpdateOne {
+	_u.mutation.SetResumeID(id)
+	return _u
+}
+
+// SetResume sets the "resume" edge to the Resume entity.
+func (_u *HeaderContactInfoUpdateOne) SetResume(v *Resume) *HeaderContactInfoUpdateOne {
+	return _u.SetResumeID(v.ID)
+}
+
 // Mutation returns the HeaderContactInfoMutation object of the builder.
 func (_u *HeaderContactInfoUpdateOne) Mutation() *HeaderContactInfoMutation {
 	return _u.mutation
+}
+
+// ClearResume clears the "resume" edge to the Resume entity.
+func (_u *HeaderContactInfoUpdateOne) ClearResume() *HeaderContactInfoUpdateOne {
+	_u.mutation.ClearResume()
+	return _u
 }
 
 // Where appends a list predicates to the HeaderContactInfoUpdate builder.
@@ -133,8 +741,29 @@ func (_u *HeaderContactInfoUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *HeaderContactInfoUpdateOne) check() error {
+	if v, ok := _u.mutation.Fullname(); ok {
+		if err := headercontactinfo.FullnameValidator(v); err != nil {
+			return &ValidationError{Name: "fullname", err: fmt.Errorf(`ent: validator failed for field "HeaderContactInfo.fullname": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.Email(); ok {
+		if err := headercontactinfo.EmailValidator(v); err != nil {
+			return &ValidationError{Name: "email", err: fmt.Errorf(`ent: validator failed for field "HeaderContactInfo.email": %w`, err)}
+		}
+	}
+	if _u.mutation.ResumeCleared() && len(_u.mutation.ResumeIDs()) > 0 {
+		return errors.New(`ent: clearing a required unique edge "HeaderContactInfo.resume"`)
+	}
+	return nil
+}
+
 func (_u *HeaderContactInfoUpdateOne) sqlSave(ctx context.Context) (_node *HeaderContactInfo, err error) {
-	_spec := sqlgraph.NewUpdateSpec(headercontactinfo.Table, headercontactinfo.Columns, sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeInt))
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(headercontactinfo.Table, headercontactinfo.Columns, sqlgraph.NewFieldSpec(headercontactinfo.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "HeaderContactInfo.id" for update`)}
@@ -158,6 +787,101 @@ func (_u *HeaderContactInfoUpdateOne) sqlSave(ctx context.Context) (_node *Heade
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := _u.mutation.Fullname(); ok {
+		_spec.SetField(headercontactinfo.FieldFullname, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.ProfessionalTitle(); ok {
+		_spec.SetField(headercontactinfo.FieldProfessionalTitle, field.TypeString, value)
+	}
+	if _u.mutation.ProfessionalTitleCleared() {
+		_spec.ClearField(headercontactinfo.FieldProfessionalTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.Address(); ok {
+		_spec.SetField(headercontactinfo.FieldAddress, field.TypeString, value)
+	}
+	if _u.mutation.AddressCleared() {
+		_spec.ClearField(headercontactinfo.FieldAddress, field.TypeString)
+	}
+	if value, ok := _u.mutation.Phone(); ok {
+		_spec.SetField(headercontactinfo.FieldPhone, field.TypeString, value)
+	}
+	if _u.mutation.PhoneCleared() {
+		_spec.ClearField(headercontactinfo.FieldPhone, field.TypeString)
+	}
+	if value, ok := _u.mutation.Email(); ok {
+		_spec.SetField(headercontactinfo.FieldEmail, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.City(); ok {
+		_spec.SetField(headercontactinfo.FieldCity, field.TypeString, value)
+	}
+	if _u.mutation.CityCleared() {
+		_spec.ClearField(headercontactinfo.FieldCity, field.TypeString)
+	}
+	if value, ok := _u.mutation.State(); ok {
+		_spec.SetField(headercontactinfo.FieldState, field.TypeString, value)
+	}
+	if _u.mutation.StateCleared() {
+		_spec.ClearField(headercontactinfo.FieldState, field.TypeString)
+	}
+	if value, ok := _u.mutation.ZipCode(); ok {
+		_spec.SetField(headercontactinfo.FieldZipCode, field.TypeString, value)
+	}
+	if _u.mutation.ZipCodeCleared() {
+		_spec.ClearField(headercontactinfo.FieldZipCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.Country(); ok {
+		_spec.SetField(headercontactinfo.FieldCountry, field.TypeString, value)
+	}
+	if _u.mutation.CountryCleared() {
+		_spec.ClearField(headercontactinfo.FieldCountry, field.TypeString)
+	}
+	if value, ok := _u.mutation.LinkedinUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldLinkedinUrl, field.TypeString, value)
+	}
+	if _u.mutation.LinkedinUrlCleared() {
+		_spec.ClearField(headercontactinfo.FieldLinkedinUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.GithubUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldGithubUrl, field.TypeString, value)
+	}
+	if _u.mutation.GithubUrlCleared() {
+		_spec.ClearField(headercontactinfo.FieldGithubUrl, field.TypeString)
+	}
+	if value, ok := _u.mutation.PortfolioUrl(); ok {
+		_spec.SetField(headercontactinfo.FieldPortfolioUrl, field.TypeString, value)
+	}
+	if _u.mutation.PortfolioUrlCleared() {
+		_spec.ClearField(headercontactinfo.FieldPortfolioUrl, field.TypeString)
+	}
+	if _u.mutation.ResumeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   headercontactinfo.ResumeTable,
+			Columns: []string{headercontactinfo.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ResumeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: true,
+			Table:   headercontactinfo.ResumeTable,
+			Columns: []string{headercontactinfo.ResumeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(resume.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &HeaderContactInfo{config: _u.config}
 	_spec.Assign = _node.assignValues
